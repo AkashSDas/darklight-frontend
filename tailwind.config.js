@@ -68,6 +68,11 @@ module.exports = {
         green1: "#E2FFDB",
         green2: "#11BF6D",
       },
+      boxShadow: {
+        sm: "0px 4px 8px 0px rgba(0, 0, 0, 0.12)",
+        md: "0px 6px 12px 0px rgba(0, 0, 0, 0.12)",
+        lg: "0px 8px 16px 0px rgba(0, 0, 0, 0.12)",
+      },
     },
   },
   plugins: [],

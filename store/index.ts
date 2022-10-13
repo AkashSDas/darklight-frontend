@@ -1,11 +1,10 @@
 import { AnyAction, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import userReducer from "@store/user/slice";
+import auth from "@store/auth/slice";
+import user from "@store/user/slice";
 
 /** Redux store */
 var store = configureStore({
-  reducer: {
-    user: userReducer,
-  },
+  reducer: { user, auth },
 });
 
 // Types

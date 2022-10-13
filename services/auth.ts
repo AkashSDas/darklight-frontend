@@ -20,11 +20,20 @@ export async function signupService(payload: ISignupPayload) {
     data: payload,
   });
   if (response.status < 300 && response.data) {
-    return "Your account is created. Please check your email to verify your account";
+    return {
+      success: true,
+      msg: "Your account is created. Please check your email to verify your account",
+    };
   } else if (response.status >= 500 && response.data?.user) {
-    return "Your account is created successfully";
+    return {
+      success: true,
+      msg: "Your account is created successfully",
+    };
   } else {
-    return response.msg || "Something went wrong, please try again";
+    return {
+      success: false,
+      msg: response.msg || "Something went wrong, please try again",
+    };
   }
 }
 

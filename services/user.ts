@@ -7,7 +7,7 @@ const baseURL = "/user";
 // ====================
 
 export async function checkUserAvailabilityService(
-  field: string,
+  field: "username" | "email",
   value: string
 ) {
   var response = await fetchAPI(`${baseURL}/check/${field}/${value}`, {

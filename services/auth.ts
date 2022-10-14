@@ -37,6 +37,29 @@ export async function signupService(payload: ISignupPayload) {
   }
 }
 
+export interface ICompleteOAuthSignupPayload {
+  fullName: string;
+  username: string;
+  email: string;
+}
+
+export async function completeOAuthSignupService(
+  payload: ICompleteOAuthSignupPayload
+) {
+  var response = await fetchAPI(`${baseURL}/complete-oauth`, {
+    method: "post",
+    data: payload,
+  });
+
+  if (response.status < 300) {
+    return { success: true, msg: "Your account is successfully created" };
+  }
+  return {
+    success: false,
+    msg: response.msg || "Something went wrong, please try again",
+  };
+}
+
 export interface ILoginPayload {
   email: string;
   password: string;

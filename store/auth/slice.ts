@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { signupThunk } from "./thunk";
+import { completeOAuthSignupThunk, signupThunk } from "./thunk";
 
 export interface AuthState {
   signupLoading: boolean;
@@ -23,6 +23,17 @@ export const authSlice = createSlice({
       state.signupLoading = false;
     });
     builder.addCase(signupThunk.rejected, (state) => {
+      state.signupLoading = false;
+    });
+
+    // Complete OAuth signup loading
+    builder.addCase(completeOAuthSignupThunk.pending, (state) => {
+      state.signupLoading = true;
+    });
+    builder.addCase(completeOAuthSignupThunk.fulfilled, (state) => {
+      state.signupLoading = false;
+    });
+    builder.addCase(completeOAuthSignupThunk.rejected, (state) => {
       state.signupLoading = false;
     });
   },

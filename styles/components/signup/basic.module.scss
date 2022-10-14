@@ -13,3 +13,13 @@
     @apply px-3 py-2 border border-grey3 rounded-md text-grey8;
   }
 }
+
+.success_msg {
+  @apply text-green2;
+}
+.info_msg {
+  @apply text-grey7;
+}
+.error_msg {
+  @apply text-red2;
+}

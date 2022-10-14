@@ -77,3 +77,11 @@ export async function loginService(payload: ILoginPayload) {
     return response.msg || "Something went wrong, please try again";
   }
 }
+
+export async function cancelOAuthSignupService() {
+  var response = await fetchAPI(`${baseURL}/cancel-oauth`, {
+    method: "post",
+  });
+  if (response.status < 300) return true;
+  return false;
+}

@@ -5,20 +5,35 @@ import OutlineIconButton from "@components/buttons/outline-icon-button";
 import AuthLayout from "@components/layout/auth";
 import BasicSignup from "@components/signup/basic";
 import CompleteOAuthSignup from "@components/signup/complete-oauth";
-import { useAppSelector } from "@hooks/store";
+import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { oauthSignup } from "@lib/oauth";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Twitter from "@public/brand-svg/twitter.svg";
+import { cancelOAuthSignupThunk } from "@store/auth/thunk";
 import styles from "@styles/components/pages/signup.module.scss";
 
 function SignupPage() {
   var user = useAppSelector((state) => state.user.data);
+  var dispatch = useAppDispatch();
 
   return (
     <section className={styles.container}>
       <h1 className="-text-h3 mb-4">
         {user?.id ? "Complete your signup 👨🏻‍🚀" : "Create Account 👨🏻‍🚀"}
       </h1>
+
+      {user?.id ? (
+        <p>
+          Your account {user.fullName} will be connected to your new DarkLight
+          account. Wrong identity?{" "}
+          <span
+            className="text-blue2 cursor-pointer"
+            onClick={() => dispatch(cancelOAuthSignupThunk())}
+          >
+            Start over
+          </span>
+        </p>
+      ) : null}
 
       {user?.id ? null : (
         <div className={styles.oauth_providers}>

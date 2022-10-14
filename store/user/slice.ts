@@ -52,6 +52,9 @@ export const userSlice = createSlice({
     updateUser(state: UserState, action: PayloadAction<UserState["data"]>) {
       state.data = action.payload;
     },
+    clearUser(state: UserState) {
+      state.data = null;
+    },
   },
   extraReducers: (builder) => {
     // Username availability loading
@@ -89,6 +92,6 @@ export const userSlice = createSlice({
   },
 });
 
-export var { userAvailability, updateUser } = userSlice.actions;
+export var { userAvailability, updateUser, clearUser } = userSlice.actions;
 export var userSliceName = userSlice.name;
 export default userSlice.reducer;

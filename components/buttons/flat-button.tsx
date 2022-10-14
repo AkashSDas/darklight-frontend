@@ -7,9 +7,10 @@ interface Props {
   label: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
-function FlatButton({ size, label, onClick, type }: Props) {
+function FlatButton({ size, label, onClick, type, disabled }: Props) {
   if (size == "sm") {
     var sizeClass = `${styles.sm} -text-body2`;
   } else if (size == "lg") {
@@ -18,6 +19,7 @@ function FlatButton({ size, label, onClick, type }: Props) {
 
   return (
     <button
+      disabled={disabled}
       type={type}
       onClick={onClick}
       className={`${styles.btn} ${sizeClass}`}

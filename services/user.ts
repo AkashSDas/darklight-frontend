@@ -16,3 +16,8 @@ export async function checkUserAvailabilityService(
   if (response.data) return response.data.available;
   else return false;
 }
+
+export async function getLoggedInUserService() {
+  var resposne = await fetchAPI(`${baseURL}/me`, { method: "get" });
+  return resposne.data?.user || null;
+}

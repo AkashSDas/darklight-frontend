@@ -1,8 +1,8 @@
-import { checkUserAvailabilityService } from "services/user";
+import { checkUserAvailabilityService, getLoggedInUserService } from "services/user";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { userAvailability, userSliceName } from "./slice";
+import { updateUser, userAvailability, userSliceName, UserState } from "./slice";
 
 export var usernameAvailabilityCheckThunk = createAsyncThunk(
   `${userSliceName}/username-availability`,
@@ -17,5 +17,28 @@ export var emailAvailabilityCheckThunk = createAsyncThunk(
   async function (value: string, { dispatch }) {
     var isAvailable = await checkUserAvailabilityService("email", value);
     dispatch(userAvailability({ field: "email", value: isAvailable }));
+  }
+);
+
+export var getUserOAuthInfoThunk = createAsyncThunk(
+  `${userSliceName}/get-oauth-info`,
+  async function (_, { dispatch }) {
+    var response = await getLoggedInUserService();
+    if (response) {
+      var user: UserState["data"] = {
+        id: response.id,
+        fullName: response.fullName,
+        username: response.username,
+        email: response.email,
+        isEmailVerified: response.isEmailVerified,
+        isActive: response.isActive,
+        roles: response.roles,
+        createdAt: response.createdAt,
+        profileImage: response.profileImage,
+        oauthProviders: response.oauthProviders,
+      };
+
+      dispatch(updateUser(user));
+    }
   }
 );

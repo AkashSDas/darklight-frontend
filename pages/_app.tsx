@@ -6,6 +6,7 @@ import { ReactElement, ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 
+import OAuthPrefetch from "@components/auth/oauth-prefetch";
 import store from "@store/index";
 
 /** Page type for pages which has a `layout` */
@@ -24,7 +25,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): ReactElement {
   return (
     <>
       <Provider store={store}>
-        {getLayout(<Component {...pageProps} />)}
+        <OAuthPrefetch>{getLayout(<Component {...pageProps} />)}</OAuthPrefetch>
       </Provider>
       <Toaster />
     </>

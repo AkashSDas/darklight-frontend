@@ -4,6 +4,7 @@ import GoogleButton from "@components/buttons/google-button";
 import OutlineIconButton from "@components/buttons/outline-icon-button";
 import AuthLayout from "@components/layout/auth";
 import BasicSignup from "@components/signup/basic";
+import { useAppSelector } from "@hooks/store";
 import { oauthSignup } from "@lib/oauth";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Twitter from "@public/brand-svg/twitter.svg";

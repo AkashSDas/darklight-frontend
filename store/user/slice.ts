@@ -1,12 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { emailAvailabilityCheckThunk, usernameAvailabilityCheckThunk } from "./thunk";
+import { emailAvailabilityCheckThunk, getUserOAuthInfoThunk, usernameAvailabilityCheckThunk } from "./thunk";
 
 export interface UserState {
   isUsernameAvailable: boolean;
   checkingUsernameAvailable: boolean;
   isEmailAvailable: boolean;
   checkingEmailAvailable: boolean;
+
+  data: {
+    id: string;
+    fullName?: string;
+    username?: string;
+    email?: string;
+    isEmailVerified: boolean;
+    isActive: boolean;
+    roles: ("student" | "instructor" | "admin")[];
+    createdAt: string;
+    profileImage?: { id?: string; URL: string };
+    oauthProviders: {
+      id: string;
+      provider: "google" | "facebook" | "twitter";
+    }[];
+  } | null;
+  fetchingOAuthInfo: boolean;
 }
 
 var initialState: UserState = {
@@ -14,6 +31,8 @@ var initialState: UserState = {
   checkingUsernameAvailable: false,
   isEmailAvailable: false,
   checkingEmailAvailable: false,
+  data: null,
+  fetchingOAuthInfo: false,
 };
 
 export const userSlice = createSlice({
@@ -29,6 +48,9 @@ export const userSlice = createSlice({
       } else if (action.payload.field == "email") {
         state.isEmailAvailable = action.payload.value;
       }
+    },
+    updateUser(state: UserState, action: PayloadAction<UserState["data"]>) {
+      state.data = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -53,9 +75,20 @@ export const userSlice = createSlice({
     builder.addCase(emailAvailabilityCheckThunk.rejected, (state) => {
       state.checkingEmailAvailable = false;
     });
+
+    // Fetching user OAuth info
+    builder.addCase(getUserOAuthInfoThunk.pending, (state) => {
+      state.fetchingOAuthInfo = true;
+    });
+    builder.addCase(getUserOAuthInfoThunk.fulfilled, (state) => {
+      state.fetchingOAuthInfo = false;
+    });
+    builder.addCase(getUserOAuthInfoThunk.rejected, (state) => {
+      state.fetchingOAuthInfo = false;
+    });
   },
 });
 
-export var { userAvailability } = userSlice.actions;
+export var { userAvailability, updateUser } = userSlice.actions;
 export var userSliceName = userSlice.name;
 export default userSlice.reducer;

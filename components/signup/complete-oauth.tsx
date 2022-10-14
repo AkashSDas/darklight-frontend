@@ -173,7 +173,7 @@ function CompleteOAuthSignup() {
           onBlur={handleBlur}
           disabled={user.email ? true : false}
         />
-        {user.email ? <InputValidationMsg name="email" /> : null}
+        <InputValidationMsg name="email" />
       </div>
 
       <FlatButton

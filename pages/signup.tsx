@@ -26,8 +26,14 @@ function SignupPage() {
             label="Signup with Google"
             onClick={() => oauthSignup("google")}
           />
-          <OutlineIconButton icon={<Twitter />} />
-          <OutlineIconButton icon={<Facebook />} />
+          <OutlineIconButton
+            icon={<Twitter />}
+            onClick={() => oauthSignup("twitter")}
+          />
+          <OutlineIconButton
+            icon={<Facebook />}
+            onClick={() => oauthSignup("facebook")}
+          />
         </div>
       )}
 

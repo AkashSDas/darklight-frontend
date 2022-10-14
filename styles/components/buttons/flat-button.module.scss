@@ -1,0 +1,11 @@
+.btn {
+  @apply rounded-full bg-purple2 text-grey0;
+}
+
+.sm {
+  @apply px-6 py-2 h-11;
+}
+
+.lg {
+  @apply px-8 py-2 h-[65px];
+}

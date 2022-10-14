@@ -1,0 +1,17 @@
+.container {
+  @apply flex flex-col items-center gap-4;
+}
+
+// OAuth providers
+.oauth_providers {
+  @apply flex gap-8 items-center;
+}
+
+// Divider
+.or_divider {
+  @apply w-full text-grey7 flex items-center gap-8;
+
+  hr {
+    @apply w-full max-w-[256px] border-grey5;
+  }
+}

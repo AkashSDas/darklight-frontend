@@ -33,15 +33,15 @@ function AuthLayout({ children }) {
           <OutlineButton
             size="sm"
             label={
-              user?.email
+              user?.email && user?.username
                 ? "Logout"
                 : router.pathname == "/login"
                 ? "Signup"
                 : "Login"
             }
-            onClick={() => {
-              if (user?.email) {
-                dispatch(logoutThunk());
+            onClick={async () => {
+              if (user?.email && user?.username) {
+                await dispatch(logoutThunk());
               } else {
                 if (router.pathname == "/login") router.push("/signup");
                 else router.push("/login");

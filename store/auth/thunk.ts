@@ -55,7 +55,8 @@ export var loginThunk = createAsyncThunk(
     var response = await loginService(payload);
     if (response.data) {
       dispatch(updateAccessToken(response.data.accessToken));
-      var data = response.data;
+      var data = response.data.user;
+      console.log(data);
       var user: UserState["data"] = {
         id: data.id,
         fullName: data.fullName,
@@ -107,8 +108,10 @@ export var logoutThunk = createAsyncThunk(
       dispatch(clearUser());
       dispatch(updateAccessToken(null));
       toast.success("You have been logged out");
+      return true;
     } else {
       toast.error("Something went wrong, please try again");
+      return false;
     }
   }
 );

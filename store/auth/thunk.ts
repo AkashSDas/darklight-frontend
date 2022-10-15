@@ -15,6 +15,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { clearUser, updateUser, UserState } from "@store/user/slice";
 
 import { updateAccessToken } from "./slice";
+import { getLoggedInUserService } from "services/user";
 
 export var signupThunk = createAsyncThunk(
   `auth/signup`,
@@ -27,9 +28,24 @@ export var signupThunk = createAsyncThunk(
 
 export var completeOAuthSignupThunk = createAsyncThunk(
   `auth/complete-oauth`,
-  async function (payload: ICompleteOAuthSignupPayload) {
+  async function (payload: ICompleteOAuthSignupPayload, { dispatch }) {
     var response = await completeOAuthSignupService(payload);
     if (response.success) {
+      var data = await getLoggedInUserService();
+      var user: UserState["data"] = {
+        id: data.id,
+        fullName: data.fullName,
+        username: data.username,
+        email: data.email,
+        isEmailVerified: data.isEmailVerified,
+        isActive: data.isActive,
+        roles: data.roles,
+        createdAt: data.createdAt,
+        profileImage: data.profileImage,
+        oauthProviders: data.oauthProviders,
+      };
+      dispatch(updateUser(user));
+
       toast.success(response.msg);
       return true;
     } else {

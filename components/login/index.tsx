@@ -6,9 +6,11 @@ import { loginThunk } from "@store/auth/thunk";
 import styles from "@styles/components/signup/basic.module.scss";
 import { useFormik } from "formik";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ILoginPayload } from "services/auth";
 
 function LoginForm() {
+  var router = useRouter();
   var dispatch = useAppDispatch();
   var { loginLoading } = useAppSelector((state) => state.auth);
 
@@ -23,7 +25,8 @@ function LoginForm() {
   };
 
   async function handleSubmit(values: ILoginPayload) {
-    await dispatch(loginThunk(values));
+    var hasLoggedIn = await dispatch(loginThunk(values));
+    if (hasLoggedIn) router.push("/");
   }
 
   var formik = useFormik({

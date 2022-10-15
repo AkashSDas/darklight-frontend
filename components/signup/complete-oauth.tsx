@@ -8,10 +8,15 @@ import FormLabel from "@components/form/label";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { completeOAuthSignupValidation } from "@lib/validations";
 import { completeOAuthSignupThunk } from "@store/auth/thunk";
-import { emailAvailabilityCheckThunk, usernameAvailabilityCheckThunk } from "@store/user/thunk";
+import {
+  emailAvailabilityCheckThunk,
+  usernameAvailabilityCheckThunk,
+} from "@store/user/thunk";
 import styles from "@styles/components/signup/basic.module.scss";
+import { useRouter } from "next/router";
 
 function CompleteOAuthSignup() {
+  var router = useRouter();
   var dispatch = useAppDispatch();
   var user = useAppSelector((state) => state.user.data);
   var { signupLoading } = useAppSelector((state) => state.auth);
@@ -33,7 +38,8 @@ function CompleteOAuthSignup() {
   };
 
   async function handleSubmit(values: ICompleteOAuthSignupPayload) {
-    await dispatch(completeOAuthSignupThunk(values));
+    var hasSignedUp = await dispatch(completeOAuthSignupThunk(values));
+    if (hasSignedUp) router.replace("/");
   }
 
   var formik = useFormik({

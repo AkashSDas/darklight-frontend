@@ -105,3 +105,23 @@ export async function logoutService() {
   if (response.status < 300) return true;
   return false;
 }
+
+export interface IForgotPasswordPayload {
+  email: string;
+}
+
+export async function forgotPasswordService(payload: IForgotPasswordPayload) {
+  var response = await fetchAPI(`${baseURL}/forgot-password`, {
+    method: "post",
+    data: payload,
+  });
+
+  if (response.status < 300 && response.data) {
+    return { success: true, msg: response.msg };
+  } else {
+    return {
+      success: false,
+      msg: response.msg || "Something went wrong, please try again",
+    };
+  }
+}

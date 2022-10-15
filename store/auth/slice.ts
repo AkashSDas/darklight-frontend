@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import {
   completeOAuthSignupThunk,
+  forgotPasswordThunk,
   getNewAccessTokenThunk,
   loginThunk,
   signupThunk,
@@ -12,6 +13,7 @@ export interface AuthState {
   loginLoading: boolean;
   accessToken: string | null;
   accessTokenLoading: boolean;
+  forgotPasswordLoading: boolean;
 }
 
 var initialState: AuthState = {
@@ -19,6 +21,7 @@ var initialState: AuthState = {
   loginLoading: false,
   accessToken: null,
   accessTokenLoading: false,
+  forgotPasswordLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -72,6 +75,17 @@ export const authSlice = createSlice({
     });
     builder.addCase(getNewAccessTokenThunk.rejected, (state) => {
       state.loginLoading = false;
+    });
+
+    // Forgot password loading
+    builder.addCase(forgotPasswordThunk.pending, (state) => {
+      state.forgotPasswordLoading = true;
+    });
+    builder.addCase(forgotPasswordThunk.fulfilled, (state) => {
+      state.forgotPasswordLoading = false;
+    });
+    builder.addCase(forgotPasswordThunk.rejected, (state) => {
+      state.forgotPasswordLoading = false;
     });
   },
 });

@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import {
   cancelOAuthSignupService,
   completeOAuthSignupService,
+  forgotPasswordService,
   getNewAccessTokenService,
   ICompleteOAuthSignupPayload,
   ILoginPayload,
@@ -129,5 +130,14 @@ export var logoutThunk = createAsyncThunk(
       toast.error("Something went wrong, please try again");
       return false;
     }
+  }
+);
+
+export var forgotPasswordThunk = createAsyncThunk(
+  `auth/forgot-password`,
+  async function (email: string) {
+    var response = await forgotPasswordService({ email });
+    if (response.success) toast.success(response.msg);
+    else toast.error(response.msg);
   }
 );

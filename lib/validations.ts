@@ -49,3 +49,9 @@ export var loginValidation = Yup.object({
     .required("Confirm password is required")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
 });
+
+export var forgotPasswordValidation = Yup.object({
+  email: Yup.string()
+    .required("Email is required")
+    .email("Invalid email address"),
+});

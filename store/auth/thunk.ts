@@ -14,10 +14,10 @@ import {
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { clearUser, updateUser, UserState } from "@store/user/slice";
 
-import { authSliceName, updateAccessToken } from "./slice";
+import { updateAccessToken } from "./slice";
 
 export var signupThunk = createAsyncThunk(
-  `${authSliceName}/signup`,
+  `auth/signup`,
   async function (payload: ISignupPayload) {
     var response = await signupService(payload);
     if (response.success) toast.success(response.msg);
@@ -26,16 +26,21 @@ export var signupThunk = createAsyncThunk(
 );
 
 export var completeOAuthSignupThunk = createAsyncThunk(
-  `${authSliceName}/complete-oauth`,
+  `auth/complete-oauth`,
   async function (payload: ICompleteOAuthSignupPayload) {
     var response = await completeOAuthSignupService(payload);
-    if (response.success) toast.success(response.msg);
-    else toast.error(response.msg);
+    if (response.success) {
+      toast.success(response.msg);
+      return true;
+    } else {
+      toast.error(response.msg);
+      return false;
+    }
   }
 );
 
 export var cancelOAuthSignupThunk = createAsyncThunk(
-  `${authSliceName}/cancel-oauth`,
+  `auth/cancel-oauth`,
   async function (_, { dispatch }) {
     var response = await cancelOAuthSignupService();
     if (response) {
@@ -45,7 +50,7 @@ export var cancelOAuthSignupThunk = createAsyncThunk(
 );
 
 export var loginThunk = createAsyncThunk(
-  `${authSliceName}/login`,
+  `auth/login`,
   async function (payload: ILoginPayload, { dispatch }) {
     var response = await loginService(payload);
     if (response.data) {
@@ -71,13 +76,12 @@ export var loginThunk = createAsyncThunk(
 );
 
 export var getNewAccessTokenThunk = createAsyncThunk(
-  `${authSliceName}/access-token`,
+  `auth/access-token`,
   async function (_, { dispatch }) {
     var response = await getNewAccessTokenService();
-    console.log(response);
-    if (response.data) {
+    if (response.data?.accessToken) {
       dispatch(updateAccessToken(response.data.accessToken));
-      var data = response.data;
+      var data = response.data.user;
       var user: UserState["data"] = {
         id: data.id,
         fullName: data.fullName,
@@ -96,7 +100,7 @@ export var getNewAccessTokenThunk = createAsyncThunk(
 );
 
 export var logoutThunk = createAsyncThunk(
-  `${authSliceName}/logout`,
+  `auth/logout`,
   async function (_, { dispatch }) {
     var response = await logoutService();
     if (response) {

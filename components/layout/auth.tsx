@@ -19,13 +19,8 @@ function AuthLayout({ children }) {
 
       <main className={styles.content}>
         <nav>
-          <Link href="/">
-            <Logo />
-          </Link>
-
-          <Link href="/login">
-            <OutlineButton size="sm" label="Login" />
-          </Link>
+          <Logo />
+          <OutlineButton size="sm" label="Login" />
         </nav>
 
         {children}

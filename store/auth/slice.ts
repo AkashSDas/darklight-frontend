@@ -1,17 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { completeOAuthSignupThunk, loginThunk, signupThunk } from "./thunk";
+import {
+  completeOAuthSignupThunk,
+  getNewAccessTokenThunk,
+  loginThunk,
+  signupThunk,
+} from "./thunk";
 
 export interface AuthState {
   signupLoading: boolean;
   loginLoading: boolean;
   accessToken: string | null;
+  accessTokenLoading: boolean;
 }
 
 var initialState: AuthState = {
   signupLoading: false,
   loginLoading: false,
   accessToken: null,
+  accessTokenLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -53,6 +60,17 @@ export const authSlice = createSlice({
       state.loginLoading = false;
     });
     builder.addCase(loginThunk.rejected, (state) => {
+      state.loginLoading = false;
+    });
+
+    // Get new access token loading
+    builder.addCase(getNewAccessTokenThunk.pending, (state) => {
+      state.loginLoading = true;
+    });
+    builder.addCase(getNewAccessTokenThunk.fulfilled, (state) => {
+      state.loginLoading = false;
+    });
+    builder.addCase(getNewAccessTokenThunk.rejected, (state) => {
       state.loginLoading = false;
     });
   },

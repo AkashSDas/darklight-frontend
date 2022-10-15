@@ -60,6 +60,14 @@ export async function completeOAuthSignupService(
   };
 }
 
+export async function cancelOAuthSignupService() {
+  var response = await fetchAPI(`${baseURL}/cancel-oauth`, {
+    method: "post",
+  });
+  if (response.status < 300) return true;
+  return false;
+}
+
 export interface ILoginPayload {
   email: string;
   password: string;
@@ -70,6 +78,7 @@ export async function loginService(payload: ILoginPayload) {
   var response = await fetchAPI(`${baseURL}/login`, {
     method: "post",
     data: payload,
+    headers: { "Content-Type": "application/json" },
   });
 
   if (response.status < 300 && response.data) {
@@ -82,10 +91,11 @@ export async function loginService(payload: ILoginPayload) {
   }
 }
 
-export async function cancelOAuthSignupService() {
-  var response = await fetchAPI(`${baseURL}/cancel-oauth`, {
-    method: "post",
-  });
-  if (response.status < 300) return true;
-  return false;
+export async function getNewAccessTokenService() {
+  var response = await fetchAPI(`${baseURL}/access-token`, { method: "get" });
+  if (response.status < 300 && response.data) {
+    return { success: true, data: response.data };
+  } else {
+    return { success: false, data: null };
+  }
 }

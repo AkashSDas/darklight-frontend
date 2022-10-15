@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import {
   cancelOAuthSignupService,
   completeOAuthSignupService,
+  getNewAccessTokenService,
   ICompleteOAuthSignupPayload,
   ILoginPayload,
   ISignupPayload,
@@ -65,5 +66,30 @@ export var loginThunk = createAsyncThunk(
 
       toast.success(response.msg);
     } else toast.error(response.msg);
+  }
+);
+
+export var getNewAccessTokenThunk = createAsyncThunk(
+  `${authSliceName}/access-token`,
+  async function (_, { dispatch }) {
+    var response = await getNewAccessTokenService();
+    console.log(response);
+    if (response.data) {
+      dispatch(updateAccessToken(response.data.accessToken));
+      var data = response.data;
+      var user: UserState["data"] = {
+        id: data.id,
+        fullName: data.fullName,
+        username: data.username,
+        email: data.email,
+        isEmailVerified: data.isEmailVerified,
+        isActive: data.isActive,
+        roles: data.roles,
+        createdAt: data.createdAt,
+        profileImage: data.profileImage,
+        oauthProviders: data.oauthProviders,
+      };
+      dispatch(updateUser(user));
+    }
   }
 );

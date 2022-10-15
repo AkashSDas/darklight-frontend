@@ -7,8 +7,11 @@ import { oauthSignup } from "@lib/oauth";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Twitter from "@public/brand-svg/twitter.svg";
 import LoginForm from "@components/login";
+import { useAppSelector } from "@hooks/store";
 
 function LoginPage() {
+  var token = useAppSelector((state) => state.auth.accessToken);
+
   return (
     <section className={styles.container}>
       <h1 className="-text-h3 mb-4">Login 👨🏻‍🚀</h1>
@@ -33,7 +36,6 @@ function LoginPage() {
         <span>or</span>
         <hr />
       </div>
-
       <LoginForm />
     </section>
   );

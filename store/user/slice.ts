@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { emailAvailabilityCheckThunk, getUserOAuthInfoThunk, usernameAvailabilityCheckThunk } from "./thunk";
+import {
+  emailAvailabilityCheckThunk,
+  getUserOAuthInfoThunk,
+  usernameAvailabilityCheckThunk,
+} from "./thunk";
 
 export interface UserState {
   isUsernameAvailable: boolean;

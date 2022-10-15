@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 
 import OAuthPrefetch from "@components/auth/oauth-prefetch";
 import store from "@store/index";
+import BasicAuthPrefetch from "@components/auth/basic-auth-prefetch";
 
 /** Page type for pages which has a `layout` */
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -25,7 +26,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): ReactElement {
   return (
     <>
       <Provider store={store}>
-        <OAuthPrefetch>{getLayout(<Component {...pageProps} />)}</OAuthPrefetch>
+        <OAuthPrefetch>
+          <BasicAuthPrefetch>
+            {getLayout(<Component {...pageProps} />)}
+          </BasicAuthPrefetch>
+        </OAuthPrefetch>
       </Provider>
       <Toaster />
     </>

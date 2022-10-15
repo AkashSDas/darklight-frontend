@@ -5,6 +5,7 @@ import {
   forgotPasswordThunk,
   getNewAccessTokenThunk,
   loginThunk,
+  passwordResetThunk,
   signupThunk,
 } from "./thunk";
 
@@ -14,6 +15,7 @@ export interface AuthState {
   accessToken: string | null;
   accessTokenLoading: boolean;
   forgotPasswordLoading: boolean;
+  passwordResetLoading: boolean;
 }
 
 var initialState: AuthState = {
@@ -22,6 +24,7 @@ var initialState: AuthState = {
   accessToken: null,
   accessTokenLoading: false,
   forgotPasswordLoading: false,
+  passwordResetLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -86,6 +89,17 @@ export const authSlice = createSlice({
     });
     builder.addCase(forgotPasswordThunk.rejected, (state) => {
       state.forgotPasswordLoading = false;
+    });
+
+    // Password reset loading
+    builder.addCase(passwordResetThunk.pending, (state) => {
+      state.passwordResetLoading = true;
+    });
+    builder.addCase(passwordResetThunk.fulfilled, (state) => {
+      state.passwordResetLoading = false;
+    });
+    builder.addCase(passwordResetThunk.rejected, (state) => {
+      state.passwordResetLoading = false;
     });
   },
 });

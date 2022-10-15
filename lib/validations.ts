@@ -55,3 +55,12 @@ export var forgotPasswordValidation = Yup.object({
     .required("Email is required")
     .email("Invalid email address"),
 });
+
+export var passwordResetValidation = Yup.object({
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password is too short"),
+  confirmPassword: Yup.string()
+    .required("Confirm password is required")
+    .oneOf([Yup.ref("password"), null], "Passwords must match"),
+});

@@ -125,3 +125,28 @@ export async function forgotPasswordService(payload: IForgotPasswordPayload) {
     };
   }
 }
+
+export interface IPasswordResetPayload {
+  token: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export async function passwordResetService(payload: IPasswordResetPayload) {
+  var response = await fetchAPI(`${baseURL}/reset-password/${payload.token}`, {
+    method: "post",
+    data: {
+      password: payload.password,
+      confirmPassword: payload.confirmPassword,
+    },
+  });
+
+  if (response.status < 300 && response.data) {
+    return { success: true, msg: response.msg };
+  } else {
+    return {
+      success: false,
+      msg: response.msg || "Something went wrong, please try again",
+    };
+  }
+}

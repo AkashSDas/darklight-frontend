@@ -6,9 +6,11 @@ import {
   getNewAccessTokenService,
   ICompleteOAuthSignupPayload,
   ILoginPayload,
+  IPasswordResetPayload,
   ISignupPayload,
   loginService,
   logoutService,
+  passwordResetService,
   signupService,
 } from "services/auth";
 
@@ -137,6 +139,15 @@ export var forgotPasswordThunk = createAsyncThunk(
   `auth/forgot-password`,
   async function (email: string) {
     var response = await forgotPasswordService({ email });
+    if (response.success) toast.success(response.msg);
+    else toast.error(response.msg);
+  }
+);
+
+export var passwordResetThunk = createAsyncThunk(
+  `auth/password-reset`,
+  async function (payload: IPasswordResetPayload) {
+    var response = await passwordResetService(payload);
     if (response.success) toast.success(response.msg);
     else toast.error(response.msg);
   }

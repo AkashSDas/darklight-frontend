@@ -71,7 +71,7 @@ export async function loginService(payload: ILoginPayload) {
     method: "post",
     data: payload,
   });
-  console.log(response);
+
   if (response.status < 300 && response.data) {
     return { data: response.data, msg: "You are logged in successfully" };
   } else {

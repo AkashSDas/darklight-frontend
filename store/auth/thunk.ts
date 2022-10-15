@@ -1,10 +1,18 @@
 import toast from "react-hot-toast";
-import { cancelOAuthSignupService, completeOAuthSignupService, ICompleteOAuthSignupPayload, ISignupPayload, signupService } from "services/auth";
+import {
+  cancelOAuthSignupService,
+  completeOAuthSignupService,
+  ICompleteOAuthSignupPayload,
+  ILoginPayload,
+  ISignupPayload,
+  loginService,
+  signupService,
+} from "services/auth";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { clearUser } from "@store/user/slice";
+import { clearUser, updateUser, UserState } from "@store/user/slice";
 
-import { authSliceName } from "./slice";
+import { authSliceName, updateAccessToken } from "./slice";
 
 export var signupThunk = createAsyncThunk(
   `${authSliceName}/signup`,
@@ -31,5 +39,31 @@ export var cancelOAuthSignupThunk = createAsyncThunk(
     if (response) {
       dispatch(clearUser());
     } else toast.error("Something went wrong, please try again");
+  }
+);
+
+export var loginThunk = createAsyncThunk(
+  `${authSliceName}/login`,
+  async function (payload: ILoginPayload, { dispatch }) {
+    var response = await loginService(payload);
+    if (response.data) {
+      dispatch(updateAccessToken(response.data.accessToken));
+      var data = response.data;
+      var user: UserState["data"] = {
+        id: data.id,
+        fullName: data.fullName,
+        username: data.username,
+        email: data.email,
+        isEmailVerified: data.isEmailVerified,
+        isActive: data.isActive,
+        roles: data.roles,
+        createdAt: data.createdAt,
+        profileImage: data.profileImage,
+        oauthProviders: data.oauthProviders,
+      };
+      dispatch(updateUser(user));
+
+      toast.success(response.msg);
+    } else toast.error(response.msg);
   }
 );

@@ -71,10 +71,14 @@ export async function loginService(payload: ILoginPayload) {
     method: "post",
     data: payload,
   });
+  console.log(response);
   if (response.status < 300 && response.data) {
-    return "You're logged in";
+    return { data: response.data, msg: "You are logged in successfully" };
   } else {
-    return response.msg || "Something went wrong, please try again";
+    return {
+      data: null,
+      msg: response.msg || "Something went wrong, please try again",
+    };
   }
 }
 

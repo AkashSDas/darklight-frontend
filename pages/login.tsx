@@ -1,16 +1,27 @@
 import AuthLayout from "@components/layout/auth";
-import { ReactElement } from "react";
+import touch from "react-hot-toast";
+import { ReactElement, useEffect } from "react";
 import styles from "@styles/components/pages/signup.module.scss";
 import GoogleButton from "@components/buttons/google-button";
 import OutlineIconButton from "@components/buttons/outline-icon-button";
-import { oauthSignup } from "@lib/oauth";
+import { oauthLogin, oauthSignup } from "@lib/oauth";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Twitter from "@public/brand-svg/twitter.svg";
 import LoginForm from "@components/login";
-import { useAppSelector } from "@hooks/store";
+import { useRouter } from "next/router";
 
 function LoginPage() {
-  var token = useAppSelector((state) => state.auth.accessToken);
+  var router = useRouter();
+
+  useEffect(
+    function checkOAuthLoginFailure() {
+      var { info } = router.query;
+      if (info && info == "signup-invalid") {
+        touch.error("You don't have an account OR your signup is incomplete");
+      }
+    },
+    [router.query]
+  );
 
   return (
     <section className={styles.container}>
@@ -18,16 +29,16 @@ function LoginPage() {
 
       <div className={styles.oauth_providers}>
         <GoogleButton
-          label="Signup with Google"
-          onClick={() => oauthSignup("google")}
+          label="Login with Google"
+          onClick={() => oauthLogin("google")}
         />
         <OutlineIconButton
           icon={<Twitter />}
-          onClick={() => oauthSignup("twitter")}
+          onClick={() => oauthLogin("twitter")}
         />
         <OutlineIconButton
           icon={<Facebook />}
-          onClick={() => oauthSignup("facebook")}
+          onClick={() => oauthLogin("facebook")}
         />
       </div>
 

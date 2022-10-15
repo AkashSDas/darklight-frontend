@@ -10,7 +10,7 @@ import { logoutThunk } from "@store/auth/thunk";
 
 function AuthLayout({ children }) {
   var router = useRouter();
-  var { accessToken: token } = useAppSelector((state) => state.auth);
+  var user = useAppSelector((state) => state.user.data);
   var dispatch = useAppDispatch();
 
   return (
@@ -33,14 +33,14 @@ function AuthLayout({ children }) {
           <OutlineButton
             size="sm"
             label={
-              token
+              user?.email
                 ? "Logout"
                 : router.pathname == "/login"
                 ? "Signup"
                 : "Login"
             }
             onClick={() => {
-              if (token) {
+              if (user?.email) {
                 dispatch(logoutThunk());
               } else {
                 if (router.pathname == "/login") router.push("/signup");

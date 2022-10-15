@@ -4,8 +4,15 @@ import Link from "next/link";
 import OutlineButton from "@components/buttons/outline-button";
 import Logo from "@public/brand-svg/darklight.svg";
 import styles from "@styles/components/layout/auth.module.scss";
+import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { logoutThunk } from "@store/auth/thunk";
 
 function AuthLayout({ children }) {
+  var router = useRouter();
+  var { accessToken: token } = useAppSelector((state) => state.auth);
+  var dispatch = useAppDispatch();
+
   return (
     <div className={styles.container}>
       <div className={styles.poster_container}>
@@ -19,8 +26,28 @@ function AuthLayout({ children }) {
 
       <main className={styles.content}>
         <nav>
-          <Logo />
-          <OutlineButton size="sm" label="Login" />
+          <div className="cursor-pointer" onClick={() => router.push("/")}>
+            <Logo />
+          </div>
+
+          <OutlineButton
+            size="sm"
+            label={
+              token
+                ? "Logout"
+                : router.pathname == "/login"
+                ? "Signup"
+                : "Login"
+            }
+            onClick={() => {
+              if (token) {
+                dispatch(logoutThunk());
+              } else {
+                if (router.pathname == "/login") router.push("/signup");
+                else router.push("/login");
+              }
+            }}
+          />
         </nav>
 
         {children}

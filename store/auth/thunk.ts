@@ -7,6 +7,7 @@ import {
   ILoginPayload,
   ISignupPayload,
   loginService,
+  logoutService,
   signupService,
 } from "services/auth";
 
@@ -90,6 +91,20 @@ export var getNewAccessTokenThunk = createAsyncThunk(
         oauthProviders: data.oauthProviders,
       };
       dispatch(updateUser(user));
+    }
+  }
+);
+
+export var logoutThunk = createAsyncThunk(
+  `${authSliceName}/logout`,
+  async function (_, { dispatch }) {
+    var response = await logoutService();
+    if (response) {
+      dispatch(clearUser());
+      dispatch(updateAccessToken(null));
+      toast.success("You have been logged out");
+    } else {
+      toast.error("Something went wrong, please try again");
     }
   }
 );

@@ -99,3 +99,9 @@ export async function getNewAccessTokenService() {
     return { success: false, data: null };
   }
 }
+
+export async function logoutService() {
+  var response = await fetchAPI(`${baseURL}/logout`, { method: "post" });
+  if (response.status < 300) return true;
+  return false;
+}

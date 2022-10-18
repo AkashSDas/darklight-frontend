@@ -36,13 +36,13 @@
       "$2",
       "}",
       "",
-      "function ${3:Component}Button({ $4 }: ${1:Name}Props) {",
+      "function ${3:Component}({ $4 }: ${1:Name}Props) {",
       "return (",
       "$5",
       ")",
       "}",
       "",
-      "export default ${3:Component}Button;"
+      "export default ${3:Component};"
     ],
     "description": "Create a component"
   }

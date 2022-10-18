@@ -1,0 +1,11 @@
+.btn {
+  @apply rounded-full text-grey8 flex items-center justify-center gap-2;
+}
+
+.sm {
+  @apply px-4 py-2 h-11;
+}
+
+.lg {
+  @apply px-8 py-2 h-[65px];
+}

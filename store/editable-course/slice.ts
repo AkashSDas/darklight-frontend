@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@store/user/slice";
 
+import { RootState } from "../";
+import { getCourseThunk } from "./thunk";
+
 export interface CourseLesson {
   id: string;
   emoji?: string;
@@ -58,9 +61,21 @@ export const editableCourseSlice = createSlice({
       state.course = action.payload;
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    // Getting course
+    builder.addCase(getCourseThunk.pending, (state, action) => {
+      state.isUpdating = true;
+    });
+    builder.addCase(getCourseThunk.fulfilled, (state, action) => {
+      state.isUpdating = false;
+    });
+    builder.addCase(getCourseThunk.rejected, (state, action) => {
+      state.isUpdating = false;
+    });
+  },
 });
 
 export var { setCourse } = editableCourseSlice.actions;
+export var selectEditableCourse = (state: RootState) => state.editableCourse;
 export var editableCourseSliceName = editableCourseSlice.name;
 export default editableCourseSlice.reducer;

@@ -1,16 +1,21 @@
 import { ReactElement, useRef, useState } from "react";
 
-import { SchoolBagIcon } from "@components/icons";
-import UserProfile from "@components/user/profile-pic";
+import FlatButton from "@components/buttons/flat-button";
 import { useOutsideAlerter } from "@hooks/outsider-alerter";
-import { useAppSelector } from "@hooks/store";
+import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { verifyEmailThunk } from "@store/auth/thunk";
+import { instructorSignupThunk } from "@store/user/thunk";
 
 import ModalBase from "./";
 
 type Setting = "account" | "enrolled-in" | "billing" | "teacher" | "courses";
 
 function SettingsModal({ handleClose }) {
-  var user = useAppSelector((state) => state.user.data);
+  var { data: user, instructorSignupLoading } = useAppSelector(
+    (state) => state.user
+  );
+  var { verifyEmailLoading } = useAppSelector((state) => state.auth);
+  var dispatch = useAppDispatch();
   var [content, setContent] = useState<Setting>("account");
 
   var wrapperRef = useRef(null);
@@ -153,9 +158,46 @@ function SettingsModal({ handleClose }) {
     );
   }
 
+  function TeacherSettings() {
+    return (
+      <>
+        <div className="-text-intro">Teacher account</div>
+        <div className="h-[1px] w-full bg-grey5 rounded-full"></div>
+        {user?.roles?.includes("instructor") ? (
+          <p className="-text-body1 text-grey7">You are a 👨🏻‍🚀 Teacher now!</p>
+        ) : user?.isEmailVerified ? (
+          <div className="w-max">
+            <FlatButton
+              onClick={async () => await dispatch(instructorSignupThunk())}
+              size="lg"
+              label={
+                instructorSignupLoading ? "Signing you up" : "Become a teacher"
+              }
+            />
+          </div>
+        ) : (
+          <p className="-text-body1 text-grey7">
+            Your email is not verified.{" "}
+            <span
+              onClick={async () =>
+                await dispatch(verifyEmailThunk(user?.email || undefined))
+              }
+              className="text-blue2 cursor-pointer"
+            >
+              {verifyEmailLoading
+                ? "Sending you an email..."
+                : "Verify it and activate my account?"}
+            </span>
+          </p>
+        )}
+      </>
+    );
+  }
+
   function Content() {
     function getContent() {
       if (content == "account") return <AccountSettings />;
+      if (content == "teacher") return <TeacherSettings />;
       return null;
     }
 

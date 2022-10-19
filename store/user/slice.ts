@@ -2,6 +2,22 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { emailAvailabilityCheckThunk, getUserOAuthInfoThunk, instructorSignupThunk, usernameAvailabilityCheckThunk } from "./thunk";
 
+export interface User {
+  id: string;
+  fullName?: string;
+  username?: string;
+  email?: string;
+  isEmailVerified: boolean;
+  isActive: boolean;
+  roles: ("student" | "instructor" | "admin")[];
+  createdAt: string;
+  profileImage?: { id?: string; URL: string };
+  oauthProviders: {
+    id: string;
+    provider: "google" | "facebook" | "twitter";
+  };
+}
+
 export interface UserState {
   isUsernameAvailable: boolean;
   checkingUsernameAvailable: boolean;
@@ -9,21 +25,7 @@ export interface UserState {
   checkingEmailAvailable: boolean;
   instructorSignupLoading: boolean;
 
-  data: {
-    id: string;
-    fullName?: string;
-    username?: string;
-    email?: string;
-    isEmailVerified: boolean;
-    isActive: boolean;
-    roles: ("student" | "instructor" | "admin")[];
-    createdAt: string;
-    profileImage?: { id?: string; URL: string };
-    oauthProviders: {
-      id: string;
-      provider: "google" | "facebook" | "twitter";
-    }[];
-  } | null;
+  data: User | null;
   fetchingOAuthInfo: boolean;
 }
 

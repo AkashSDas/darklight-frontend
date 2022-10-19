@@ -1,13 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import {
-  completeOAuthSignupThunk,
-  forgotPasswordThunk,
-  getNewAccessTokenThunk,
-  loginThunk,
-  passwordResetThunk,
-  signupThunk,
-} from "./thunk";
+import { completeOAuthSignupThunk, forgotPasswordThunk, getNewAccessTokenThunk, loginThunk, passwordResetThunk, signupThunk, verifyEmailThunk } from "./thunk";
 
 export interface AuthState {
   signupLoading: boolean;
@@ -16,6 +9,7 @@ export interface AuthState {
   accessTokenLoading: boolean;
   forgotPasswordLoading: boolean;
   passwordResetLoading: boolean;
+  verifyEmailLoading: boolean;
 }
 
 var initialState: AuthState = {
@@ -25,6 +19,7 @@ var initialState: AuthState = {
   accessTokenLoading: false,
   forgotPasswordLoading: false,
   passwordResetLoading: false,
+  verifyEmailLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -100,6 +95,17 @@ export const authSlice = createSlice({
     });
     builder.addCase(passwordResetThunk.rejected, (state) => {
       state.passwordResetLoading = false;
+    });
+
+    // Email verify loading
+    builder.addCase(verifyEmailThunk.pending, (state) => {
+      state.verifyEmailLoading = true;
+    });
+    builder.addCase(verifyEmailThunk.fulfilled, (state) => {
+      state.verifyEmailLoading = false;
+    });
+    builder.addCase(verifyEmailThunk.rejected, (state) => {
+      state.verifyEmailLoading = false;
     });
   },
 });

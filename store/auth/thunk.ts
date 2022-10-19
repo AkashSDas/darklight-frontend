@@ -1,24 +1,11 @@
 import toast from "react-hot-toast";
-import {
-  cancelOAuthSignupService,
-  completeOAuthSignupService,
-  forgotPasswordService,
-  getNewAccessTokenService,
-  ICompleteOAuthSignupPayload,
-  ILoginPayload,
-  IPasswordResetPayload,
-  ISignupPayload,
-  loginService,
-  logoutService,
-  passwordResetService,
-  signupService,
-} from "services/auth";
+import { cancelOAuthSignupService, completeOAuthSignupService, forgotPasswordService, getNewAccessTokenService, ICompleteOAuthSignupPayload, ILoginPayload, IPasswordResetPayload, ISignupPayload, loginService, logoutService, passwordResetService, signupService, verifyEmailService } from "services/auth";
+import { getLoggedInUserService } from "services/user";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { clearUser, updateUser, UserState } from "@store/user/slice";
 
 import { updateAccessToken } from "./slice";
-import { getLoggedInUserService } from "services/user";
 
 export var signupThunk = createAsyncThunk(
   `auth/signup`,
@@ -148,6 +135,15 @@ export var passwordResetThunk = createAsyncThunk(
   `auth/password-reset`,
   async function (payload: IPasswordResetPayload) {
     var response = await passwordResetService(payload);
+    if (response.success) toast.success(response.msg);
+    else toast.error(response.msg);
+  }
+);
+
+export var verifyEmailThunk = createAsyncThunk(
+  `auth/verify-email`,
+  async function (email: string) {
+    var response = await verifyEmailService(email);
     if (response.success) toast.success(response.msg);
     else toast.error(response.msg);
   }

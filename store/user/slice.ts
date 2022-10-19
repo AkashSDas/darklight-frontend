@@ -1,16 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import {
-  emailAvailabilityCheckThunk,
-  getUserOAuthInfoThunk,
-  usernameAvailabilityCheckThunk,
-} from "./thunk";
+import { emailAvailabilityCheckThunk, getUserOAuthInfoThunk, instructorSignupThunk, usernameAvailabilityCheckThunk } from "./thunk";
 
 export interface UserState {
   isUsernameAvailable: boolean;
   checkingUsernameAvailable: boolean;
   isEmailAvailable: boolean;
   checkingEmailAvailable: boolean;
+  instructorSignupLoading: boolean;
 
   data: {
     id: string;
@@ -37,6 +34,7 @@ var initialState: UserState = {
   checkingEmailAvailable: false,
   data: null,
   fetchingOAuthInfo: false,
+  instructorSignupLoading: false,
 };
 
 export const userSlice = createSlice({
@@ -92,6 +90,17 @@ export const userSlice = createSlice({
     });
     builder.addCase(getUserOAuthInfoThunk.rejected, (state) => {
       state.fetchingOAuthInfo = false;
+    });
+
+    // Instructor loading
+    builder.addCase(instructorSignupThunk.pending, (state) => {
+      state.instructorSignupLoading = true;
+    });
+    builder.addCase(instructorSignupThunk.fulfilled, (state) => {
+      state.instructorSignupLoading = false;
+    });
+    builder.addCase(instructorSignupThunk.rejected, (state) => {
+      state.instructorSignupLoading = false;
     });
   },
 });

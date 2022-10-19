@@ -18,6 +18,16 @@ export async function checkUserAvailabilityService(
 }
 
 export async function getLoggedInUserService() {
-  var resposne = await fetchAPI(`${baseURL}/me`, { method: "get" });
-  return resposne.data?.user || null;
+  var response = await fetchAPI(`${baseURL}/me`, { method: "get" });
+  return response.data?.user || null;
+}
+
+export async function instructorSignupService(token?: string) {
+  var response = await fetchAPI(`${baseURL}/instructor-signup`, {
+    method: "post",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (response.status < 300) return true;
+  else return false;
 }

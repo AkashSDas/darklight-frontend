@@ -150,3 +150,19 @@ export async function passwordResetService(payload: IPasswordResetPayload) {
     };
   }
 }
+
+export async function verifyEmailService(email: string) {
+  var response = await fetchAPI(`${baseURL}/verify-email`, {
+    method: "post",
+    data: { email },
+  });
+
+  if (response.status < 300) {
+    return { success: true, msg: response.msg };
+  } else {
+    return {
+      success: false,
+      msg: response.msg || "Something went wrong, please try again",
+    };
+  }
+}

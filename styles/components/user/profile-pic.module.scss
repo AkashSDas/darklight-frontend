@@ -1,8 +1,0 @@
-.container {
-  @apply h-11 w-11 rounded-xl cursor-pointer hover:bg-grey1 active:bg-grey2
-  flex justify-center items-center;
-
-  img {
-    @apply rounded-xl object-cover w-[36px] h-[36px];
-  }
-}

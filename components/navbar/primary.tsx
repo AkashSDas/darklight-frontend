@@ -7,7 +7,7 @@ import IconButton from "@components/buttons/icon-button";
 import OutlineButton from "@components/buttons/outline-button";
 import OutlineIconButton from "@components/buttons/outline-icon-button";
 import TextIconButton from "@components/buttons/text-icon-button";
-import ProfilePicDropdown from "@components/dropdown/profile-pic";
+import ProfileDropdown from "@components/dropdown/profile-dropdown";
 import { CompassIcon, DarkLight, GlobeIcon, SearchIcon, SettingsIcon } from "@components/icons";
 import SettingsModal from "@components/modal/settings";
 import UserProfile from "@components/user/profile-pic";
@@ -54,15 +54,10 @@ function PrimaryNavbar() {
   function ActionElement() {
     return (
       <RenderAuth onAuth={true}>
-        <IconButton
-          icon={<SettingsIcon className="h-6 w-6" />}
-          onClick={() => {
-            setIsOpen(true);
-          }}
-        />
-        <ProfilePicDropdown>
+        <IconButton icon={<SettingsIcon />} onClick={() => setIsOpen(true)} />
+        <ProfileDropdown>
           <UserProfile />
-        </ProfilePicDropdown>
+        </ProfileDropdown>
       </RenderAuth>
     );
   }
@@ -73,9 +68,9 @@ function PrimaryNavbar() {
         <DarkLight />
 
         <div className={styles.mid_items}>
-          <TextIconButton size="sm" icon={<GlobeIcon />} label="Explore" />
-          <TextIconButton size="sm" icon={<CompassIcon />} label="Teach" />
-          <TextIconButton size="sm" icon={<SearchIcon />} label="Search" />
+          <TextIconButton icon={<GlobeIcon />} label="Explore" />
+          <TextIconButton icon={<CompassIcon />} label="Teach" />
+          <TextIconButton icon={<SearchIcon />} label="Search" />
         </div>
 
         <div className={styles.right_items}>

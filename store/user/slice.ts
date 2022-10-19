@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { RootState } from "../";
 import { emailAvailabilityCheckThunk, getUserOAuthInfoThunk, instructorSignupThunk, usernameAvailabilityCheckThunk } from "./thunk";
 
 export interface User {
@@ -108,5 +109,6 @@ export const userSlice = createSlice({
 });
 
 export var { userAvailability, updateUser, clearUser } = userSlice.actions;
+export var selectUser = (state: RootState) => state.user;
 export var userSliceName = userSlice.name;
 export default userSlice.reducer;

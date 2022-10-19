@@ -1,23 +1,17 @@
 import { MouseEventHandler, ReactElement } from "react";
 
-import styles from "@styles/components/buttons/icon-button.module.scss";
-
 interface Props {
   icon: ReactElement;
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  type?: "button" | "submit" | "reset";
-  disabled?: boolean;
 }
 
-function IconButton({ icon, onClick, type, disabled }: Props) {
+function IconButton({ icon, onClick }: Props) {
   return (
     <button
-      disabled={disabled}
-      type={type}
       onClick={onClick}
-      className={styles.btn}
+      className="h-[38px] w-[38px] rounded-[4px] hover:bg-grey2 active:bg-grey3 p-2 flex items-center justify-center"
     >
-      <span>{icon}</span>
+      <span className="w-[24px] h-[24px] fill-grey7">{icon}</span>
     </button>
   );
 }

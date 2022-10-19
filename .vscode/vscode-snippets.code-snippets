@@ -45,5 +45,18 @@
       "export default ${3:Component};"
     ],
     "description": "Create a component"
+  },
+  "Thunk": {
+    "scope": "typescript",
+    "prefix": "thunk",
+    "body": [
+      "export var ${1:name}Thunk = createAsyncThunk(",
+      "   '${2:name}',",
+      "   async function($3, {getState, dispatch}) {",
+      "       var state = (getState() as RootState).$4",
+      "       $5",
+      "})"
+    ],
+    "description": "Create a thunk"
   }
 }

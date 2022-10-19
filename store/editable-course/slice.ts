@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@store/user/slice";
 
 export interface CourseLesson {
@@ -41,20 +41,26 @@ interface Course {
 export interface EditableCourseState {
   course: Course | null;
   isUpdating: boolean;
+  createLoading: boolean;
 }
 
 var initialState: EditableCourseState = {
   course: null,
   isUpdating: false,
+  createLoading: false,
 };
 
 export const editableCourseSlice = createSlice({
   name: "course",
   initialState,
-  reducers: {},
+  reducers: {
+    setCourse(state, action: PayloadAction<Course | null>) {
+      state.course = action.payload;
+    },
+  },
   extraReducers: (builder) => {},
 });
 
-export var {} = editableCourseSlice.actions;
+export var { setCourse } = editableCourseSlice.actions;
 export var editableCourseSliceName = editableCourseSlice.name;
 export default editableCourseSlice.reducer;

@@ -13,8 +13,8 @@ export async function createCourseService(token: string) {
   });
 
   if (response.status < 300) {
-    return { success: true, course: response.data.course };
+    return { success: true, msg: response.msg, course: response.data.course };
   } else {
-    return { success: false, course: undefined };
+    return { success: false, msg: response.msg, course: undefined };
   }
 }

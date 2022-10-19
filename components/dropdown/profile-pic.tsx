@@ -1,14 +1,17 @@
-import { ReactElement } from "react";
+import { useRouter } from "next/router";
+import { MouseEventHandler, ReactElement } from "react";
 
 import { CollectionIcon, LogoutIcon, PlusIcon, SchoolBagIcon, StudentCardIcon, UserIcon } from "@components/icons";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { logoutThunk } from "@store/auth/thunk";
+import { createCourseThunk } from "@store/editable-course/thunk";
 
 import DropDown from "./";
 
 function ProfilePicDropdown({ children }) {
   var user = useAppSelector((state) => state.user.data);
   var dispatch = useAppDispatch();
+  var router = useRouter();
 
   function Divider() {
     return <div className="w-full h-[1px] rounded-full bg-grey5"></div>;
@@ -21,12 +24,17 @@ function ProfilePicDropdown({ children }) {
   function DropdownItem({
     children,
     label,
+    onClick,
   }: {
     children: ReactElement;
     label: string;
+    onClick?: MouseEventHandler<HTMLDivElement>;
   }) {
     return (
-      <div className="h-7 w-full rounded-md flex items-center gap-[10px] hover:bg-grey2 active:bg-grey3 cursor-pointer px-[6px] py-1">
+      <div
+        onClick={onClick}
+        className="h-7 w-full rounded-md flex items-center gap-[10px] hover:bg-grey2 active:bg-grey3 cursor-pointer px-[6px] py-1"
+      >
         {children}
         <div className="text-[14px] text-grey7">{label}</div>
       </div>
@@ -42,7 +50,13 @@ function ProfilePicDropdown({ children }) {
         <DropdownItem label="My courses">
           <CollectionIcon className="w-4 h-4" />
         </DropdownItem>
-        <DropdownItem label="Create a course">
+        <DropdownItem
+          onClick={async function createCourse() {
+            var courseId = (await dispatch(createCourseThunk())).payload;
+            if (courseId) router.push(`/course-editor/${courseId}`);
+          }}
+          label="Create a course"
+        >
           <PlusIcon className="w-4 h-4" />
         </DropdownItem>
       </Group>

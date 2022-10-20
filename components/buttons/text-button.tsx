@@ -1,28 +1,17 @@
 import { MouseEventHandler } from "react";
 
-import styles from "@styles/components/buttons/text-icon-button.module.scss";
-
 interface Props {
-  size: "sm" | "md" | "lg";
   label: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  type?: "button" | "submit" | "reset";
-  disabled?: boolean;
 }
 
-function TextButton({ size, label, onClick, type, disabled }: Props) {
-  if (size == "sm") {
-    var sizeClass = `${styles.sm} -text-body2`;
-  } else if (size == "lg") {
-    var sizeClass = `${styles.lg} -text-body1`;
-  }
-
+function TextButton({ label, onClick }: Props) {
   return (
     <button
-      disabled={disabled}
-      type={type}
       onClick={onClick}
-      className={`${styles.btn} ${sizeClass}`}
+      className={
+        "h-[38px] -text-body2 rounded-[4px] text-grey7 hover:bg-grey2 active:bg-grey3 p-2 flex gap-2 items-center justify-center"
+      }
     >
       {label}
     </button>

@@ -10,8 +10,7 @@
 /// and then mounted again, now the height will be default textarea height and
 /// this might not fit your content and then you've to scroll.
 
-import debounce from "lodash.debounce";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 /// Similar situation was faced in `editor-mode-0` in post_form.tsx
 export function useResizeTextareaHeight(
@@ -54,38 +53,3 @@ export function useResizeTextareaHeight(
 
   return { ref };
 }
-
-interface Props {
-  text?: string;
-  placeholder?: string;
-  onChange?: (value: string) => void;
-}
-
-function Paragraph({ text, placeholder, onChange }: Props) {
-  var [value, setValue] = useState<string | null>(text);
-  var { ref } = useResizeTextareaHeight(value);
-
-  var callback = debounce(function debounceCallback(value) {
-    onChange && onChange(value);
-  }, 500);
-
-  return (
-    <textarea
-      ref={ref}
-      className={`w-full px-[2px] py-[3px] -text-body1 ${
-        value ? "text-grey8" : "text-grey6"
-      } outline-none resize-none`}
-      value={value}
-      onChange={(e) => {
-        setValue(e.target.value);
-        callback(e.target.value);
-      }}
-      placeholder={placeholder}
-      onKeyPress={(e) => {
-        if (e.key == "Enter") e.preventDefault();
-      }}
-    />
-  );
-}
-
-export default Paragraph;

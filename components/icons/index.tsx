@@ -1,4 +1,5 @@
 import DarkLight from "@public/brand-svg/darklight.svg";
+import ArrowDownIcon from "@public/icons/arrow-down.svg";
 import CollectionIcon from "@public/icons/collection.svg";
 import CompassIcon from "@public/icons/compass.svg";
 import GlobeIcon from "@public/icons/globe.svg";
@@ -26,4 +27,5 @@ export {
   LogoutIcon,
   MenuIcon,
   MultiplyIcon,
+  ArrowDownIcon,
 };

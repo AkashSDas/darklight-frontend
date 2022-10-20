@@ -25,7 +25,7 @@ export interface Module {
   lessons: CourseLesson[];
 }
 
-interface Course {
+export interface Course {
   id: string;
   emoji?: string;
   title?: string;
@@ -60,6 +60,16 @@ export const editableCourseSlice = createSlice({
     setCourse(state, action: PayloadAction<Course | null>) {
       state.course = action.payload;
     },
+    addTag(state, action: PayloadAction<string>) {
+      state.course?.tags.push(action.payload);
+    },
+    removeTag(state, action: PayloadAction<string>) {
+      if (state.course) {
+        state.course.tags = state.course.tags.filter(
+          (tag) => tag != action.payload
+        );
+      }
+    },
   },
   extraReducers: (builder) => {
     // Getting course
@@ -75,7 +85,7 @@ export const editableCourseSlice = createSlice({
   },
 });
 
-export var { setCourse } = editableCourseSlice.actions;
+export var { setCourse, addTag, removeTag } = editableCourseSlice.actions;
 export var selectEditableCourse = (state: RootState) => state.editableCourse;
 export var editableCourseSliceName = editableCourseSlice.name;
 export default editableCourseSlice.reducer;

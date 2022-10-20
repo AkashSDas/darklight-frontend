@@ -1,16 +1,21 @@
 import { useFormik } from "formik";
 import moment from "moment";
+import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 import IconButton from "@components/buttons/icon-button";
 import TextButton from "@components/buttons/text-button";
-import H1 from "@components/editor/H1";
-import Paragraph from "@components/editor/paragraphy";
-import { MenuIcon, SearchIcon, SettingsIcon } from "@components/icons";
+import OptionsInput from "@components/dropdown/options-input";
+import Divider from "@components/editor/divider";
+import Spacer from "@components/editor/space";
+import Text from "@components/editor/text";
+import { MenuIcon, MultiplyIcon, SearchIcon, SettingsIcon } from "@components/icons";
+import { useOutsideAlerter } from "@hooks/outsider-alerter";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { selectEditableCourse } from "@store/editable-course/slice";
-import { getCourseThunk } from "@store/editable-course/thunk";
+import { addTag, removeTag, selectEditableCourse } from "@store/editable-course/slice";
+import { getCourseThunk, updateCourseInfoThunk } from "@store/editable-course/thunk";
 
 function CourseNavName() {
   var { course, isUpdating } = useAppSelector(selectEditableCourse);
@@ -41,7 +46,7 @@ function CourseInfoAndActions() {
         {moment(course?.lastEditedOn).startOf("hour").fromNow().toString()}
       </span>
 
-      <TextButton size="sm" label="Modules" />
+      <TextButton label="Modules" />
       <button className="h-7 w-7 flex items-center justify-center hover:bg-grey2 active:bg-grey3 rounded-[4px]">
         <svg
           width="20"
@@ -94,17 +99,6 @@ function MainContent() {
 
   return (
     <main className="w-full flex flex-col py-2 px-[96px] max-w-[900px]">
-      <H1
-        text={course?.title}
-        placeholder="Untitled"
-        onChange={(value) => console.log(value)}
-      />
-      <div className="h-[6px] w-full"></div>
-      <Paragraph
-        text={course?.description}
-        placeholder="Add description"
-        onChange={(value) => console.log(value)}
-      />
       <div className="h-8 w-full"></div>
       <h3 className="-text-h4">Settings</h3>
       <div className="h-4 w-full"></div>
@@ -137,6 +131,12 @@ function EditableCoursePage({}) {
   var [isLoading, setIsLoading] = useState(true);
   var router = useRouter();
   var dispatch = useAppDispatch();
+  var { course } = useAppSelector(selectEditableCourse);
+  var wrapperRef = useRef(null);
+  var [isOpen, setIsOpen] = useState(false);
+  useOutsideAlerter(wrapperRef, function updateDropdownOnOutsideClick() {
+    setIsOpen(false);
+  });
 
   useEffect(
     function fetchCourse() {
@@ -166,164 +166,56 @@ function EditableCoursePage({}) {
         </nav>
 
         <div className="ml-[240px] mt-4 flex flex-col justify-center items-center">
-          <MainContent />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function OptionsDropdown({ options }: { options: string[] }) {
-  var [opts, setOpts] = useState(options);
-  var formik = useFormik({
-    initialValues: { value: "" },
-    onSubmit: (values) => {
-      setOpts([...opts, values.value]);
-      formik.resetForm();
-    },
-  });
-
-  return (
-    <div id="absolute">
-      <div className="relative">
-        <div className="flex items-center relative flex-col origin-bottom">
-          <div className="bg-grey0 rounded-md max-w-[calc(-24px+100vw)] relative shadow-md overflow-hidden w-[300px]">
-            <div className="flex flex-col max-w-[calc(-24px+100vw)] min-w-[180px] h-full max-h-[70vh]">
-              <div className="flex-shrink-0 max-h-[240px] overflow-x-hidden overflow-y-auto">
-                <div className="flex flex-wrap items-start bg-grey1 overflow-auto min-h-[34px] text-[14px] p-2">
-                  {opts.map((option) => (
-                    <div
-                      key={option}
-                      className="flex items-center flex-shrink min-w-0 h-[20px] rounded-sm text-[14px] leading-[120%] mr-[6px] mb-[6px] bg-grey1 p-[4px]"
-                    >
-                      <div className="whitespace-nowrap overflow-hidden overflow-ellipsis flex items-center">
-                        {option}
-                      </div>
-                      <div className="cursor-pointer flex items-center justify-center flex-grow-0 flex-shrink-0 ml-[2px] w-[20px] h-[20px]">
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M9.52498 8.81814C9.32972 8.62288 9.01314 8.62288 8.81788 8.81814C8.62261 9.0134 8.62261 9.32999 8.81788 9.52525L11.2927 12.0001L8.81788 14.475C8.62261 14.6703 8.62261 14.9868 8.81788 15.1821C9.01314 15.3774 9.32972 15.3774 9.52498 15.1821L11.9999 12.7072L14.4747 15.1821C14.67 15.3774 14.9866 15.3774 15.1818 15.1821C15.3771 14.9868 15.3771 14.6703 15.1818 14.475L12.707 12.0001L15.1818 9.52525C15.3771 9.32999 15.3771 9.0134 15.1818 8.81814C14.9866 8.62288 14.67 8.62288 14.4747 8.81814L11.9999 11.293L9.52498 8.81814Z"
-                            fill="#494C53"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="flex items-center outline-none w-auto bg-transparent h-5 min-w-[60px] mr-[6px] mb-[6px] rounded-sm">
-                    <form onSubmit={formik.handleSubmit}>
-                      <input
-                        type="text"
-                        className="bg-transparent h-[18px] resize-none block"
-                        name="value"
-                        value={formik.values.value}
-                        onChange={formik.handleChange}
-                      />
-                    </form>
+          <main className="w-full flex flex-col py-2 px-[96px] max-w-[900px]">
+            <Text size="h2" placeholder="Untitled" />
+            <div className="w-full h-[6px]"></div>
+            <Text size="intro" placeholder="Add a description" />
+            <div className="w-full h-8"></div>
+            <div>
+              <div className="-text-intro mb-1">Settings</div>
+              <Divider height={1} />
+              <div className="w-full h-3"></div>
+              <div className="flex gap-2 items-center">
+                <div className="flex flex-col flex-grow">
+                  <div className="-text-body1 text-grey7">Tags</div>
+                  <div className="-text-cap text-grey6">
+                    Explain your course using tags
                   </div>
                 </div>
-              </div>
 
-              <div
-                className="border-t border-t-grey5 flex-grow min-h-0 overflow-x-hidden overflow-y-auto"
-                style={{
-                  transform: "translateZ(0px)",
-                }}
-              >
-                <div>
-                  <div className="py-[6px]">
-                    <div className="flex px-[14px] mt-[6px] mb-2 font-medium text-grey6 -text-cap">
-                      Select an option
-                    </div>
+                <div
+                  ref={wrapperRef}
+                  onClick={() => setIsOpen(true)}
+                  className="relative w-[300px] rounded-md min-h-[44px] bg-grey1 cursor-pointer hover:bg-grey2 active:bg-grey3"
+                >
+                  {(course?.tags ?? [])
+                    .map((t) => ({
+                      value: t,
+                      id: nanoid(),
+                    }))
+                    .map((t) => (
+                      <span key={t.id}>{t.value}</span>
+                    ))}
 
-                    <div>
-                      {opts.map((option) => (
-                        <div key={option} className="flex flex-col">
-                          <div className="cursor-pointer w-[calc(100%-8px)] mx-2 rounded-sm">
-                            <div className="flex items-center leading-[120%] w-full min-h-[28px] text-[14px]">
-                              <div className="flex items-center justify-center w-[18px] h-[24px] flex-shrink-0 ml-[8px] mr-[-4px]">
-                                <svg
-                                  width="9"
-                                  height="15"
-                                  viewBox="0 0 9 15"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <circle
-                                    cx="1.5"
-                                    cy="1.5"
-                                    r="1.5"
-                                    fill="#8A8F99"
-                                  />
-                                  <circle
-                                    cx="7.5"
-                                    cy="1.5"
-                                    r="1.5"
-                                    fill="#8A8F99"
-                                  />
-                                  <circle
-                                    cx="1.5"
-                                    cy="7.5"
-                                    r="1.5"
-                                    fill="#8A8F99"
-                                  />
-                                  <circle
-                                    cx="7.5"
-                                    cy="7.5"
-                                    r="1.5"
-                                    fill="#8A8F99"
-                                  />
-                                  <circle
-                                    cx="1.5"
-                                    cy="13.5"
-                                    r="1.5"
-                                    fill="#8A8F99"
-                                  />
-                                  <circle
-                                    cx="7.5"
-                                    cy="13.5"
-                                    r="1.5"
-                                    fill="#8A8F99"
-                                  />
-                                </svg>
-                              </div>
-
-                              <div
-                                style={{ flex: "1 1 auto" }}
-                                className="ml-[12px] mr-[6px] min-w-0"
-                              >
-                                <div className="flex">
-                                  <div className="inline-flex items-center shrink min-w-0 h-5 rounded-sm px-[6px] text-[14px] leading-[120%] bg-grey2">
-                                    <div className="whitespace-nowrap overflow-hidden text-ellipsis flex items-center">
-                                      <div className="block">{option}</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="ml-auto mr-[12px] min-w-0 flex-shrink-0">
-                                <div className="cursor-pointer inline-flex items-center justify-center flex-shrink-0 rounded-sm w-6 h-6 mr-[-6px]">
-                                  ...
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {isOpen && (
+                    <OptionsInput
+                      opts={course?.tags ?? []}
+                      handleAdd={(v) => addTag(v)}
+                      handleRemove={(v) => removeTag(v)}
+                      onUnmount={async (values) =>
+                        await dispatch(
+                          updateCourseInfoThunk({
+                            courseId: course?.id,
+                            payload: { tags: values },
+                          })
+                        )
+                      }
+                    />
+                  )}
                 </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>

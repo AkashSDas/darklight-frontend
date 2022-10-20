@@ -29,3 +29,31 @@ export async function getCourseService(courseId: string) {
     return { success: false, msg: response.msg, course: undefined };
   }
 }
+
+export interface UpdateCourseInfoPayload {
+  token?: string;
+  courseId: string;
+  payload: {
+    title?: string;
+    description?: string;
+    tags?: string[];
+    stage?: "draft" | "published";
+    price?: number;
+    difficulty?: "beginner" | "intermediate" | "advanced";
+  };
+}
+
+export async function updateCourseInfoService(data: UpdateCourseInfoPayload) {
+  var { token, payload, courseId } = data;
+  var response = await fetchAPI(`${baseURL}/${courseId}/info`, {
+    method: "put",
+    headers: { Authorization: `Bearer ${token}` },
+    data: payload,
+  });
+
+  if (response.status < 300) {
+    return { success: true, msg: response.msg, course: response.data.course };
+  } else {
+    return { success: false, msg: response.msg, course: undefined };
+  }
+}

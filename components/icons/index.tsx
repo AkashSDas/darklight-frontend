@@ -4,6 +4,7 @@ import CompassIcon from "@public/icons/compass.svg";
 import GlobeIcon from "@public/icons/globe.svg";
 import LogoutIcon from "@public/icons/logout.svg";
 import MenuIcon from "@public/icons/menu.svg";
+import MultiplyIcon from "@public/icons/multiply.svg";
 import PlusIcon from "@public/icons/plus.svg";
 import SchoolBagIcon from "@public/icons/school-bag.svg";
 import SearchIcon from "@public/icons/search.svg";
@@ -24,4 +25,5 @@ export {
   StudentCardIcon,
   LogoutIcon,
   MenuIcon,
+  MultiplyIcon,
 };

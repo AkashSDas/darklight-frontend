@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import moment from "moment";
+import moment from "moment-timezone";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -11,11 +11,24 @@ import OptionsInput from "@components/dropdown/options-input";
 import Divider from "@components/editor/divider";
 import Spacer from "@components/editor/space";
 import Text from "@components/editor/text";
-import { ArrowDownIcon, MenuIcon, MultiplyIcon, SearchIcon, SettingsIcon } from "@components/icons";
+import {
+  ArrowDownIcon,
+  MenuIcon,
+  MultiplyIcon,
+  SearchIcon,
+  SettingsIcon,
+} from "@components/icons";
 import { useOutsideAlerter } from "@hooks/outsider-alerter";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { addTag, removeTag, selectEditableCourse } from "@store/editable-course/slice";
-import { getCourseThunk, updateCourseInfoThunk } from "@store/editable-course/thunk";
+import {
+  addTag,
+  removeTag,
+  selectEditableCourse,
+} from "@store/editable-course/slice";
+import {
+  getCourseThunk,
+  updateCourseInfoThunk,
+} from "@store/editable-course/thunk";
 
 function CourseNavName() {
   var { course, isUpdating } = useAppSelector(selectEditableCourse);
@@ -42,8 +55,7 @@ function CourseInfoAndActions() {
   return (
     <div className="flex gap-2 items-center">
       <span className="text-grey6 -text-cap">
-        Edited{" "}
-        {moment(course?.lastEditedOn).startOf("hour").fromNow().toString()}
+        <>Edited {moment(course?.lastEditedOn).tz("Asia/Kolkata").fromNow()}</>
       </span>
 
       <TextButton label="Modules" />
@@ -94,44 +106,11 @@ function CourseInfoAndActions() {
   );
 }
 
-function MainContent() {
-  var { course } = useAppSelector(selectEditableCourse);
-
-  return (
-    <main className="w-full flex flex-col py-2 px-[96px] max-w-[900px]">
-      <div className="h-8 w-full"></div>
-      <h3 className="-text-h4">Settings</h3>
-      <div className="h-4 w-full"></div>
-      <div className="h-[1px] w-full bg-grey5 rounded-full"></div>
-      <div className="h-4 w-full"></div>
-      <div className="flex justify-between gap-2">
-        <div className="flex-grow">
-          <div>Tags</div>
-          <div className="mt-[2px] -text-cap text-grey6">
-            Explain your course using tags
-          </div>
-        </div>
-
-        <div className="hover:bg-grey2 p-1 rounded-md cursor-pointer w-[300px] gap-1 flex flex-wrap h-[70px] overflow-clip">
-          {course?.tags.map((tag) => (
-            <span
-              key={tag}
-              className="p-1 rounded-md bg-grey1 text-grey7 text-[14px]"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-    </main>
-  );
-}
-
 function EditableCoursePage({}) {
   var [isLoading, setIsLoading] = useState(true);
   var router = useRouter();
   var dispatch = useAppDispatch();
-  var { course } = useAppSelector(selectEditableCourse);
+  var { course, isUpdating } = useAppSelector(selectEditableCourse);
 
   useEffect(
     function fetchCourse() {
@@ -146,7 +125,7 @@ function EditableCoursePage({}) {
     if (router.query?.id) setIsLoading(false);
   }, [router.query]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || isUpdating) return <div>Loading...</div>;
 
   return (
     <div className="flex">
@@ -162,9 +141,37 @@ function EditableCoursePage({}) {
 
         <div className="ml-[240px] mt-4 flex flex-col justify-center items-center">
           <main className="w-full flex flex-col py-2 px-[96px] max-w-[900px]">
-            <Text size="h2" placeholder="Untitled" />
+            <Text
+              size="h2"
+              text={course?.title}
+              placeholder="Untitled"
+              onChange={async (value) => {
+                if (value && value.length >= 6) {
+                  await dispatch(
+                    updateCourseInfoThunk({
+                      courseId: course?.id,
+                      payload: { title: value },
+                    })
+                  );
+                }
+              }}
+            />
             <div className="w-full h-[6px]"></div>
-            <Text size="intro" placeholder="Add a description" />
+            <Text
+              size="intro"
+              text={course?.description}
+              placeholder="Add a description"
+              onChange={async (value) => {
+                if (value && value.length >= 6) {
+                  await dispatch(
+                    updateCourseInfoThunk({
+                      courseId: course?.id,
+                      payload: { description: value },
+                    })
+                  );
+                }
+              }}
+            />
             <div className="w-full h-8"></div>
             <div>
               <div className="-text-intro mb-1">Settings</div>
@@ -245,7 +252,7 @@ function SettingItem({ children, title, description }) {
   return (
     <div className="flex gap-2 items-center">
       <div className="flex flex-col flex-grow">
-        <div className="-text-body1 text-grey7">{title}</div>
+        <div className="-text-body2 text-grey7">{title}</div>
         <div className="-text-cap text-grey6">{description}</div>
       </div>
 
@@ -366,7 +373,7 @@ function CourseDifficultyOptionsInput() {
       )}
 
       {isOpen && (
-        <div className="w-[300px] absolute top-0 left-0 shadow-lg rounded-md">
+        <div className="z-10 w-[300px] absolute top-0 left-0 shadow-lg rounded-md">
           <div className="flex flex-col max-w-[calc(-24px+100vw)] min-w-[180px] h-full max-h-[70vh">
             <div className="rounded-md flex flex-col flex-wrap p-1 gap-1 bg-grey1 flex-shrink-0 max-h-[240px] overflow-x-hidden overflow-y-auto">
               {["beginner", "intermediate", "advanced"].map((difficulty) => (

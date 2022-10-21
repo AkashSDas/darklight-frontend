@@ -83,6 +83,9 @@ export const editableCourseSlice = createSlice({
     },
     setModule(state, action: PayloadAction<Module>) {
       state.activeModule = action.payload;
+      state.course.modules = state.course.modules.map((module) =>
+        module.id == action.payload.id ? action.payload : module
+      );
     },
   },
   extraReducers: (builder) => {

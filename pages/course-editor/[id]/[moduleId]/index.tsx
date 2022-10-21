@@ -46,7 +46,7 @@ function ModuleEmojiPicker() {
 }
 
 function ModulePage({}) {
-  var { activeModule, isLoading } = useAppSelector(selectEditableCourse);
+  var { isLoading } = useAppSelector(selectEditableCourse);
 
   if (isLoading) return <div>Loading...</div>;
 

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@store/user/slice";
 
 import { RootState } from "../";
-import { getCourseThunk } from "./thunk";
+import { createCourseModuleThunk, getCourseThunk } from "./thunk";
 
 export interface CourseLesson {
   id: string;
@@ -45,12 +45,14 @@ export interface EditableCourseState {
   course: Course | null;
   isUpdating: boolean;
   createLoading: boolean;
+  isLoading: boolean;
 }
 
 var initialState: EditableCourseState = {
   course: null,
   isUpdating: false,
   createLoading: false,
+  isLoading: false,
 };
 
 export const editableCourseSlice = createSlice({
@@ -70,22 +72,37 @@ export const editableCourseSlice = createSlice({
         );
       }
     },
+    addModule(state, action: PayloadAction<Module>) {
+      state.course?.modules.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     // Getting course
     builder.addCase(getCourseThunk.pending, (state, action) => {
-      state.isUpdating = true;
+      state.isLoading = true;
     });
     builder.addCase(getCourseThunk.fulfilled, (state, action) => {
-      state.isUpdating = false;
+      state.isLoading = false;
     });
     builder.addCase(getCourseThunk.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+
+    // Add module
+    builder.addCase(createCourseModuleThunk.pending, (state, action) => {
+      state.isUpdating = true;
+    });
+    builder.addCase(createCourseModuleThunk.fulfilled, (state, action) => {
+      state.isUpdating = false;
+    });
+    builder.addCase(createCourseModuleThunk.rejected, (state, action) => {
       state.isUpdating = false;
     });
   },
 });
 
 export var { setCourse, addTag, removeTag } = editableCourseSlice.actions;
+export var { addModule } = editableCourseSlice.actions;
 export var selectEditableCourse = (state: RootState) => state.editableCourse;
 export var editableCourseSliceName = editableCourseSlice.name;
 export default editableCourseSlice.reducer;

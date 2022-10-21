@@ -13,8 +13,10 @@ import Spacer from "@components/editor/space";
 import Text from "@components/editor/text";
 import {
   ArrowDownIcon,
+  ArrowRightIcon,
   MenuIcon,
   MultiplyIcon,
+  PlusIcon,
   SearchIcon,
   SettingsIcon,
 } from "@components/icons";
@@ -26,6 +28,7 @@ import {
   selectEditableCourse,
 } from "@store/editable-course/slice";
 import {
+  createCourseModuleThunk,
   getCourseThunk,
   updateCourseInfoThunk,
 } from "@store/editable-course/thunk";
@@ -110,7 +113,8 @@ function EditableCoursePage({}) {
   var [isLoading, setIsLoading] = useState(true);
   var router = useRouter();
   var dispatch = useAppDispatch();
-  var { course, isUpdating } = useAppSelector(selectEditableCourse);
+  var { course, isLoading: courseLoading } =
+    useAppSelector(selectEditableCourse);
 
   useEffect(
     function fetchCourse() {
@@ -125,13 +129,11 @@ function EditableCoursePage({}) {
     if (router.query?.id) setIsLoading(false);
   }, [router.query]);
 
-  if (isLoading || isUpdating) return <div>Loading...</div>;
+  if (isLoading || courseLoading) return <div>Loading...</div>;
 
   return (
     <div className="flex">
-      <div className="w-[240px] bg-grey1 h-screen fixed pt-[61px] pb-3">
-        Sidebar
-      </div>
+      <CourseSidebar />
 
       <div className="w-full">
         <nav className="ml-[240px] w-[calc(100vw-240px)] h-[45px] flex items-center justify-between px-4 py-[18px] border-b border-b-grey5">
@@ -405,6 +407,60 @@ function CourseDifficultyOptionsInput() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function CourseSidebar() {
+  var { course } = useAppSelector(selectEditableCourse);
+  var dispatch = useAppDispatch();
+  var router = useRouter();
+
+  return (
+    <div className="w-[240px] bg-grey1 h-screen fixed pt-[61px] pb-3">
+      {course?.modules.map((m) => (
+        <div key={m.id} className="flex gap-[6px] items-center px-2 py-[5px]">
+          <div className="w-4 h-4">
+            <ArrowRightIcon />
+          </div>
+          <div className="w-4 h-4 flex justify-center items-center">
+            {m.emoji ?? "📁"}
+          </div>
+          <div className="-text-body2 leading-[100%] font-medium text-grey7">
+            {m.title}
+          </div>
+        </div>
+      ))}
+
+      <button
+        onClick={async () => {
+          var id = await (
+            await dispatch(createCourseModuleThunk(course?.id))
+          ).payload;
+          if (id) {
+            router.push(`/course-editor/${course?.id}/${id}`);
+          }
+        }}
+        className="w-full h-9 hover:bg-grey2 active:bg-grey3 flex gap-[6px] items-center px-2 py-[5px] border-t border-b border-t-grey5 border-b-grey5"
+      >
+        <span className="flex justify-center items-center w-5 h-5 stroke-grey7">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M8.5 4C8.5 3.72386 8.27614 3.5 8 3.5C7.72386 3.5 7.5 3.72386 7.5 4V7.5H4C3.72386 7.5 3.5 7.72386 3.5 8C3.5 8.27614 3.72386 8.5 4 8.5H7.5V12C7.5 12.2761 7.72386 12.5 8 12.5C8.27614 12.5 8.5 12.2761 8.5 12V8.5H12C12.2761 8.5 12.5 8.27614 12.5 8C12.5 7.72386 12.2761 7.5 12 7.5H8.5V4Z"
+              fill="#494C53"
+            />
+          </svg>
+        </span>
+        <span>Add a module</span>
+      </button>
     </div>
   );
 }

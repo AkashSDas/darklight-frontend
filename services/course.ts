@@ -57,3 +57,19 @@ export async function updateCourseInfoService(data: UpdateCourseInfoPayload) {
     return { success: false, msg: response.msg, course: undefined };
   }
 }
+
+export async function createCourseModuleService(payload: {
+  token?: string;
+  courseId: string;
+}) {
+  var response = await fetchAPI(`${baseURL}/${payload.courseId}`, {
+    method: "post",
+    headers: { Authorization: `Bearer ${payload.token}` },
+  });
+
+  if (response.status < 300) {
+    return { success: true, msg: response.msg, module: response.data.module };
+  } else {
+    return { success: false, msg: response.msg, module: undefined };
+  }
+}

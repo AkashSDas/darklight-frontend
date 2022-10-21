@@ -12,6 +12,7 @@ import SearchIcon from "@public/icons/search.svg";
 import SettingsIcon from "@public/icons/settings.svg";
 import StudentCardIcon from "@public/icons/student-card.svg";
 import UserIcon from "@public/icons/user.svg";
+import ArrowRightIcon from "@public/icons/arrow-right.svg";
 
 export {
   DarkLight,
@@ -28,4 +29,5 @@ export {
   MenuIcon,
   MultiplyIcon,
   ArrowDownIcon,
+  ArrowRightIcon,
 };

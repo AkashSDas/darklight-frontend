@@ -1,3 +1,4 @@
+import { Module } from "@store/editable-course/slice";
 import fetchAPI from "services";
 
 const baseURL = "/course";
@@ -65,6 +66,40 @@ export async function createCourseModuleService(payload: {
   var response = await fetchAPI(`${baseURL}/${payload.courseId}`, {
     method: "post",
     headers: { Authorization: `Bearer ${payload.token}` },
+  });
+
+  if (response.status < 300) {
+    return { success: true, msg: response.msg, module: response.data.module };
+  } else {
+    return { success: false, msg: response.msg, module: undefined };
+  }
+}
+
+export async function getCourseModuleService(
+  courseId: string,
+  moduleId: string
+) {
+  var response = await fetchAPI(`${baseURL}/${courseId}/${moduleId}`, {
+    method: "get",
+  });
+
+  if (response.status < 300) {
+    return { success: true, msg: response.msg, module: response.data.module };
+  } else {
+    return { success: false, msg: response.msg, module: undefined };
+  }
+}
+
+export async function updateCourseModuleService(
+  courseId: string,
+  moduleId: string,
+  payload: Module,
+  token: string
+) {
+  var response = await fetchAPI(`${baseURL}/${courseId}/${moduleId}`, {
+    method: "put",
+    data: payload,
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   if (response.status < 300) {

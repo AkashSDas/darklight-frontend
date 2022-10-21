@@ -2,7 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@store/user/slice";
 
 import { RootState } from "../";
-import { createCourseModuleThunk, getCourseThunk } from "./thunk";
+import {
+  createCourseModuleThunk,
+  getCourseModuleThunk,
+  getCourseThunk,
+} from "./thunk";
 
 export interface CourseLesson {
   id: string;
@@ -46,6 +50,7 @@ export interface EditableCourseState {
   isUpdating: boolean;
   createLoading: boolean;
   isLoading: boolean;
+  activeModule: Module | null;
 }
 
 var initialState: EditableCourseState = {
@@ -53,6 +58,7 @@ var initialState: EditableCourseState = {
   isUpdating: false,
   createLoading: false,
   isLoading: false,
+  activeModule: null,
 };
 
 export const editableCourseSlice = createSlice({
@@ -74,6 +80,9 @@ export const editableCourseSlice = createSlice({
     },
     addModule(state, action: PayloadAction<Module>) {
       state.course?.modules.push(action.payload);
+    },
+    setModule(state, action: PayloadAction<Module>) {
+      state.activeModule = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -98,11 +107,22 @@ export const editableCourseSlice = createSlice({
     builder.addCase(createCourseModuleThunk.rejected, (state, action) => {
       state.isUpdating = false;
     });
+
+    // Fetch module
+    builder.addCase(getCourseModuleThunk.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getCourseModuleThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getCourseModuleThunk.rejected, (state, action) => {
+      state.isLoading = false;
+    });
   },
 });
 
 export var { setCourse, addTag, removeTag } = editableCourseSlice.actions;
-export var { addModule } = editableCourseSlice.actions;
+export var { addModule, setModule } = editableCourseSlice.actions;
 export var selectEditableCourse = (state: RootState) => state.editableCourse;
 export var editableCourseSliceName = editableCourseSlice.name;
 export default editableCourseSlice.reducer;

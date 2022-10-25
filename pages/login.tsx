@@ -1,14 +1,15 @@
-import AuthLayout from "@components/layout/auth";
-import touch from "react-hot-toast";
+import { useRouter } from "next/router";
 import { ReactElement, useEffect } from "react";
-import styles from "@styles/components/pages/signup.module.scss";
+import touch from "react-hot-toast";
+
+import LoginForm from "@components/auth/login";
 import GoogleButton from "@components/buttons/google-button";
 import OutlineIconButton from "@components/buttons/outline-icon-button";
+import AuthLayout from "@components/layout/auth";
 import { oauthLogin, oauthSignup } from "@lib/oauth";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Twitter from "@public/brand-svg/twitter.svg";
-import LoginForm from "@components/login";
-import { useRouter } from "next/router";
+import styles from "@styles/components/pages/signup.module.scss";
 
 function LoginPage() {
   var router = useRouter();

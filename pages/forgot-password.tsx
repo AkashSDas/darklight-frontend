@@ -1,7 +1,8 @@
-import ForgotPasswordForm from "@components/forgot-password";
+import { ReactElement } from "react";
+
+import ForgotPasswordForm from "@components/auth/forgot-password";
 import AuthLayout from "@components/layout/auth";
 import styles from "@styles/components/pages/signup.module.scss";
-import { ReactElement } from "react";
 
 function ForgotPassword() {
   return (

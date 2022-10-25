@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 
+import BasicSignup from "@components/auth/basic-signup";
+import CompleteOAuthSignup from "@components/auth/complete-oauth-signup";
 import GoogleButton from "@components/buttons/google-button";
 import OutlineIconButton from "@components/buttons/outline-icon-button";
 import AuthLayout from "@components/layout/auth";
-import BasicSignup from "@components/signup/basic";
-import CompleteOAuthSignup from "@components/signup/complete-oauth";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { oauthSignup } from "@lib/oauth";
 import Facebook from "@public/brand-svg/facebook.svg";

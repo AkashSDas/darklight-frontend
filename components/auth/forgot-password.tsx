@@ -1,11 +1,12 @@
+import { useFormik } from "formik";
+import { IForgotPasswordPayload } from "services/auth";
+
 import FlatButton from "@components/buttons/flat-button";
 import FormLabel from "@components/form/label";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { forgotPasswordValidation } from "@lib/validations";
 import { forgotPasswordThunk } from "@store/auth/thunk";
 import styles from "@styles/components/signup/basic.module.scss";
-import { useFormik } from "formik";
-import { IForgotPasswordPayload } from "services/auth";
 
 function ForgotPasswordForm() {
   var dispatch = useAppDispatch();

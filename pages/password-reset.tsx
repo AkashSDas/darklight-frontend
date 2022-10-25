@@ -1,8 +1,8 @@
-import ForgotPasswordForm from "@components/forgot-password";
-import AuthLayout from "@components/layout/auth";
-import PasswordResetForm from "@components/password-reset";
-import styles from "@styles/components/pages/signup.module.scss";
 import { ReactElement } from "react";
+
+import PasswordResetForm from "@components/auth/password-reset";
+import AuthLayout from "@components/layout/auth";
+import styles from "@styles/components/pages/signup.module.scss";
 
 function PasswordResetPage() {
   return (

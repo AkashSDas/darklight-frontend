@@ -1,12 +1,13 @@
+import { useFormik } from "formik";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
 import FlatButton from "@components/buttons/flat-button";
 import FormLabel from "@components/form/label";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { passwordResetValidation } from "@lib/validations";
 import { passwordResetThunk } from "@store/auth/thunk";
 import styles from "@styles/components/signup/basic.module.scss";
-import { useFormik } from "formik";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
 function PasswordResetForm() {
   var router = useRouter();

@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import debounce from "lodash.debounce";
+import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import { ICompleteOAuthSignupPayload } from "services/auth";
 
@@ -8,12 +9,8 @@ import FormLabel from "@components/form/label";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { completeOAuthSignupValidation } from "@lib/validations";
 import { completeOAuthSignupThunk } from "@store/auth/thunk";
-import {
-  emailAvailabilityCheckThunk,
-  usernameAvailabilityCheckThunk,
-} from "@store/user/thunk";
+import { emailAvailabilityCheckThunk, usernameAvailabilityCheckThunk } from "@store/user/thunk";
 import styles from "@styles/components/signup/basic.module.scss";
-import { useRouter } from "next/router";
 
 function CompleteOAuthSignup() {
   var router = useRouter();

@@ -1,5 +1,6 @@
-import { Module } from "@store/editable-course/slice";
 import fetchAPI from "services";
+
+import { Module } from "@store/editable-course/slice";
 
 const baseURL = "/course";
 
@@ -106,5 +107,23 @@ export async function updateCourseModuleService(
     return { success: true, msg: response.msg, module: response.data.module };
   } else {
     return { success: false, msg: response.msg, module: undefined };
+  }
+}
+
+export async function reorderModulesService(
+  courseId: string,
+  payload: Module[],
+  token: string
+) {
+  var response = await fetchAPI(`${baseURL}/${courseId}/reorder`, {
+    method: "put",
+    data: { modules: payload },
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (response.status < 300) {
+    return { success: true, msg: response.msg, modules: response.data.modules };
+  } else {
+    return { success: false, msg: response.msg, modules: undefined };
   }
 }

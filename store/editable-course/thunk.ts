@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { createCourseModuleService, createCourseService, getCourseModuleService, getCourseService, UpdateCourseInfoPayload, updateCourseInfoService, updateCourseModuleService } from "services/course";
+import { createCourseModuleService, createCourseService, getCourseModuleService, getCourseService, reorderModulesService, UpdateCourseInfoPayload, updateCourseInfoService, updateCourseModuleService } from "services/course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -101,6 +101,27 @@ export var updateCourseModuleThunk = createAsyncThunk(
       dispatch(setModule({ module: response.module, editing: false }));
       return response.module.id;
     } else toast.error(response.msg || "Failed to update the module");
+    return null;
+  }
+);
+
+export var reorderModulesThunk = createAsyncThunk(
+  "editable-course/reorder-modules",
+  async function (
+    data: { courseId: string; payload: Module[] },
+    { getState, dispatch }
+  ) {
+    var token = (getState() as RootState).auth.accessToken;
+    var course = (getState() as RootState).editableCourse.course;
+    var response = await reorderModulesService(
+      data.courseId,
+      data.payload,
+      token
+    );
+    console.log(response);
+    if (response.success && response.modules) {
+      dispatch(setCourse({ ...course, modules: response.modules }));
+    } else toast.error(response.msg || "Failed to update modules order info");
     return null;
   }
 );

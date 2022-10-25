@@ -1,12 +1,15 @@
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import TextButton from "@components/buttons/text-button";
 import { ArrowRightIcon } from "@components/icons";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { selectEditableCourse, setModule } from "@store/editable-course/slice";
-import { createCourseModuleThunk, getCourseModuleThunk, getCourseThunk } from "@store/editable-course/thunk";
+import { Module, selectEditableCourse, setCourse, setModule } from "@store/editable-course/slice";
+import { createCourseModuleThunk, getCourseModuleThunk, getCourseThunk, reorderModulesThunk } from "@store/editable-course/thunk";
+
+// https://github.com/atlassian/react-beautiful-dnd/issues/2393
 
 function CourseSidebar() {
   var { course } = useAppSelector(selectEditableCourse);
@@ -15,30 +18,59 @@ function CourseSidebar() {
 
   return (
     <div className="w-[240px] bg-grey1 h-screen fixed pt-[61px] pb-3">
-      {course?.modules.map((m) => (
-        <div
-          key={m.id}
-          className="cursor-pointer flex gap-[6px] items-center px-2 py-[5px] hover:bg-grey2 active:bg-grey3"
-          onClick={() => {
-            dispatch(setModule({ module: m, editing: false }));
-            router.push(`/course-editor/${course.id}/${m.id}`);
-          }}
-        >
-          <div className="w-4 h-4">
-            <ArrowRightIcon />
-          </div>
-          <div className="w-4 h-4 flex justify-center items-center">
-            {m.emoji ?? "📁"}
-          </div>
-          <div className="-text-body2 leading-[100%] font-medium">
-            {m.title ? (
-              <span className="text-grey7">{m.title}</span>
-            ) : (
-              <span className="text-grey6">Untitled</span>
-            )}
-          </div>
-        </div>
-      ))}
+      <DragDropContext
+        onDragEnd={(dropEvent) => {
+          // Reorder
+          var source = dropEvent.source.index;
+          var destination = dropEvent.destination?.index;
+          var modules = (course?.modules.slice() || []) as Module[];
+          var moveModule = modules[source];
+          modules.splice(source, 1);
+          modules.splice(destination || 0, 0, moveModule);
+          dispatch(setCourse({ ...course, modules: modules }));
+          dispatch(
+            reorderModulesThunk({ courseId: course?.id, payload: modules })
+          );
+        }}
+      >
+        <Droppable droppableId="sidebar-modules">
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {course?.modules.map((m, index) => (
+                <Draggable key={m.id} draggableId={m.id} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      className="cursor-pointer flex gap-[6px] items-center px-2 py-[5px] hover:bg-grey2 active:bg-grey3"
+                      onClick={() => {
+                        dispatch(setModule({ module: m, editing: false }));
+                        router.push(`/course-editor/${course.id}/${m.id}`);
+                      }}
+                    >
+                      <div className="w-4 h-4">
+                        <ArrowRightIcon />
+                      </div>
+                      <div className="w-4 h-4 flex justify-center items-center">
+                        {m.emoji ?? "📁"}
+                      </div>
+                      <div className="-text-body2 leading-[100%] font-medium">
+                        {m.title ? (
+                          <span className="text-grey7">{m.title}</span>
+                        ) : (
+                          <span className="text-grey6">Untitled</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
 
       <button
         onClick={async () => {

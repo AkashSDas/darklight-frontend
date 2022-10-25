@@ -1,6 +1,6 @@
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import TextButton from "@components/buttons/text-button";
@@ -10,6 +10,121 @@ import { Module, selectEditableCourse, setCourse, setModule } from "@store/edita
 import { createCourseModuleThunk, getCourseModuleThunk, getCourseThunk, reorderModulesThunk } from "@store/editable-course/thunk";
 
 // https://github.com/atlassian/react-beautiful-dnd/issues/2393
+
+function ModuleButton({ m }) {
+  var { course } = useAppSelector(selectEditableCourse);
+  var dispatch = useAppDispatch();
+  var router = useRouter();
+  var [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <div
+        className="relative cursor-pointer flex gap-[6px] items-center px-2 py-[5px] hover:bg-grey2 active:bg-grey3"
+        onClick={() => {
+          dispatch(setModule({ module: m, editing: false }));
+          router.push(`/course-editor/${course.id}/${m.id}`);
+        }}
+      >
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
+          }}
+          className={`w-4 h-4 hover:bg-grey5 rounded-sm ${
+            isOpen ? "rotate-90" : ""
+          }`}
+        >
+          <ArrowRightIcon />
+        </div>
+        <div className="w-4 h-4 flex justify-center items-center">
+          {m.emoji ?? "📁"}
+        </div>
+        <div className="-text-body2 leading-[100%] font-medium">
+          {m.title ? (
+            <span className="text-grey7">{m.title}</span>
+          ) : (
+            <span className="text-grey6">Untitled</span>
+          )}
+        </div>
+
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className="absolute right-2 flex justify-center items-center w-5 h-5 stroke-grey7 hover:bg-grey4 active:bg-grey5 rounded-sm"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M8.5 4C8.5 3.72386 8.27614 3.5 8 3.5C7.72386 3.5 7.5 3.72386 7.5 4V7.5H4C3.72386 7.5 3.5 7.72386 3.5 8C3.5 8.27614 3.72386 8.5 4 8.5H7.5V12C7.5 12.2761 7.72386 12.5 8 12.5C8.27614 12.5 8.5 12.2761 8.5 12V8.5H12C12.2761 8.5 12.5 8.27614 12.5 8C12.5 7.72386 12.2761 7.5 12 7.5H8.5V4Z"
+              fill="#494C53"
+            />
+          </svg>
+        </div>
+      </div>
+
+      {/* Lessons */}
+      {isOpen && (
+        <div>
+          {m?.lessons?.map((l) => (
+            <div
+              onClick={() => {
+                dispatch(setModule({ module: null, editing: false }));
+                router.push(`/course-editor/${course.id}/${m.id}/${l.id}`);
+              }}
+              key={l.id}
+              className="cursor-pointer pl-[26px] flex gap-[6px] items-center px-2 py-[5px] hover:bg-grey2 active:bg-grey3"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.75 8C9.75 8.9665 8.9665 9.75 8 9.75C7.0335 9.75 6.25 8.9665 6.25 8C6.25 7.0335 7.0335 6.25 8 6.25C8.9665 6.25 9.75 7.0335 9.75 8Z"
+                  fill="#8A8F99"
+                />
+              </svg>
+
+              <div className="-text-body2 text-grey6">
+                {l.title ?? "Untitled"}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isOpen && m?.lessons?.length == 0 && (
+        <div className="pl-[26px] flex gap-[6px] items-center px-2 py-[5px]">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.75 8C9.75 8.9665 8.9665 9.75 8 9.75C7.0335 9.75 6.25 8.9665 6.25 8C6.25 7.0335 7.0335 6.25 8 6.25C8.9665 6.25 9.75 7.0335 9.75 8Z"
+              fill="#8A8F99"
+            />
+          </svg>
+
+          <div className="-text-body2 text-grey6">😢 No lesson</div>
+        </div>
+      )}
+    </>
+  );
+}
 
 function CourseSidebar() {
   var { course } = useAppSelector(selectEditableCourse);
@@ -45,25 +160,9 @@ function CourseSidebar() {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className="cursor-pointer flex gap-[6px] items-center px-2 py-[5px] hover:bg-grey2 active:bg-grey3"
-                      onClick={() => {
-                        dispatch(setModule({ module: m, editing: false }));
-                        router.push(`/course-editor/${course.id}/${m.id}`);
-                      }}
+                      className="flex flex-col"
                     >
-                      <div className="w-4 h-4">
-                        <ArrowRightIcon />
-                      </div>
-                      <div className="w-4 h-4 flex justify-center items-center">
-                        {m.emoji ?? "📁"}
-                      </div>
-                      <div className="-text-body2 leading-[100%] font-medium">
-                        {m.title ? (
-                          <span className="text-grey7">{m.title}</span>
-                        ) : (
-                          <span className="text-grey6">Untitled</span>
-                        )}
-                      </div>
+                      <ModuleButton m={m} />
                     </div>
                   )}
                 </Draggable>

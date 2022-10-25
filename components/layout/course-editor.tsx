@@ -23,14 +23,16 @@ function CourseSidebar() {
           // Reorder
           var source = dropEvent.source.index;
           var destination = dropEvent.destination?.index;
-          var modules = (course?.modules.slice() || []) as Module[];
-          var moveModule = modules[source];
-          modules.splice(source, 1);
-          modules.splice(destination || 0, 0, moveModule);
-          dispatch(setCourse({ ...course, modules: modules }));
-          dispatch(
-            reorderModulesThunk({ courseId: course?.id, payload: modules })
-          );
+          if (destination) {
+            var modules = (course?.modules.slice() || []) as Module[];
+            var moveModule = modules[source];
+            modules.splice(source, 1);
+            modules.splice(destination || 0, 0, moveModule);
+            dispatch(setCourse({ ...course, modules: modules }));
+            dispatch(
+              reorderModulesThunk({ courseId: course?.id, payload: modules })
+            );
+          }
         }}
       >
         <Droppable droppableId="sidebar-modules">

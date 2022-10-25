@@ -1,11 +1,12 @@
+import { ReactElement, useEffect, useRef, useState } from "react";
+
+import Text from "@components/editor/text";
 import EmojiPicker from "@components/emoji-picker";
 import CourseEditorLayout from "@components/layout/course-editor";
 import { useOutsideAlerter } from "@hooks/outsider-alerter";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { selectEditableCourse, setModule } from "@store/editable-course/slice";
 import { updateCourseModuleThunk } from "@store/editable-course/thunk";
-import { ReactElement, useEffect, useRef, useState } from "react";
-import Text from "@components/editor/text";
 
 function ModuleEmojiPicker() {
   var { activeModule, course } = useAppSelector(selectEditableCourse);
@@ -35,7 +36,12 @@ function ModuleEmojiPicker() {
                   courseId: course?.id,
                 })
               );
-              dispatch(setModule({ ...activeModule, emoji: emoji.native }));
+              dispatch(
+                setModule({
+                  module: { ...activeModule, emoji: emoji.native },
+                  editing: true,
+                })
+              );
               setIsOpen(false);
             }}
             handleClose={handleClose}
@@ -51,7 +57,13 @@ function ModulePage({}) {
     useAppSelector(selectEditableCourse);
   var dispatch = useAppDispatch();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || !activeModule?.id) {
+    return (
+      <div className="ml-[240px] mt-4 flex flex-col justify-center items-center">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="ml-[240px] mt-4 flex flex-col justify-center items-center">
@@ -72,7 +84,12 @@ function ModulePage({}) {
                     courseId: course?.id,
                   })
                 );
-                dispatch(setModule({ ...activeModule, title: value }));
+                dispatch(
+                  setModule({
+                    module: { ...activeModule, title: value },
+                    editing: true,
+                  })
+                );
               }
             }}
           />

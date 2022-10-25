@@ -2,11 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@store/user/slice";
 
 import { RootState } from "../";
-import {
-  createCourseModuleThunk,
-  getCourseModuleThunk,
-  getCourseThunk,
-} from "./thunk";
+import { createCourseModuleThunk, getCourseModuleThunk, getCourseThunk } from "./thunk";
 
 export interface CourseLesson {
   id: string;
@@ -25,7 +21,6 @@ export interface Module {
   id: string;
   emoji?: string;
   title?: string;
-  description?: string;
   lessons: CourseLesson[];
 }
 
@@ -45,12 +40,15 @@ export interface Course {
   faqs: any[];
 }
 
+// TODO: replace activeModule with activeModuleId where the id of the module
+// will be stored and the single source of truth for the active module will be
+// the module in the course.modules array
 export interface EditableCourseState {
   course: Course | null;
   isUpdating: boolean;
   createLoading: boolean;
   isLoading: boolean;
-  activeModule: Module | null;
+  activeModule?: Module | null;
 }
 
 var initialState: EditableCourseState = {
@@ -81,11 +79,18 @@ export const editableCourseSlice = createSlice({
     addModule(state, action: PayloadAction<Module>) {
       state.course?.modules.push(action.payload);
     },
-    setModule(state, action: PayloadAction<Module>) {
-      state.activeModule = action.payload;
-      state.course.modules = state.course.modules.map((module) =>
-        module.id == action.payload.id ? action.payload : module
-      );
+    setModule(
+      state,
+      action: PayloadAction<{ module: Module; editing: boolean }>
+    ) {
+      var activeModule = action.payload.module;
+      var editing = action.payload.editing;
+      state.activeModule = activeModule;
+      if (editing) {
+        state.course.modules = state.course.modules.map((module) =>
+          module.id == activeModule.id ? activeModule : module
+        );
+      }
     },
   },
   extraReducers: (builder) => {

@@ -1,15 +1,12 @@
-import TextButton from "@components/buttons/text-button";
-import { ArrowRightIcon } from "@components/icons";
-import { useAppSelector, useAppDispatch } from "@hooks/store";
-import { selectEditableCourse, setModule } from "@store/editable-course/slice";
-import {
-  createCourseModuleThunk,
-  getCourseModuleThunk,
-  getCourseThunk,
-} from "@store/editable-course/thunk";
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
+import TextButton from "@components/buttons/text-button";
+import { ArrowRightIcon } from "@components/icons";
+import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { selectEditableCourse, setModule } from "@store/editable-course/slice";
+import { createCourseModuleThunk, getCourseModuleThunk, getCourseThunk } from "@store/editable-course/thunk";
 
 function CourseSidebar() {
   var { course } = useAppSelector(selectEditableCourse);
@@ -23,7 +20,7 @@ function CourseSidebar() {
           key={m.id}
           className="cursor-pointer flex gap-[6px] items-center px-2 py-[5px] hover:bg-grey2 active:bg-grey3"
           onClick={() => {
-            dispatch(setModule(m));
+            dispatch(setModule({ module: m, editing: false }));
             router.push(`/course-editor/${course.id}/${m.id}`);
           }}
         >
@@ -87,7 +84,7 @@ function CourseNavName() {
       <span
         className="flex items-center gap-2 hover:bg-grey2 px-2 py-1 cursor-pointer rounded-md"
         onClick={() => {
-          dispatch(setModule(null));
+          dispatch(setModule({ module: null, editing: false }));
           router.push(`/course-editor/${course?.id}`);
         }}
       >

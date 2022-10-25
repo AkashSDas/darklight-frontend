@@ -98,7 +98,7 @@ export var updateCourseModuleThunk = createAsyncThunk(
       token
     );
     if (response.success && response.module) {
-      dispatch(setModule(response.module));
+      dispatch(setModule({ module: response.module, editing: false }));
       return response.module.id;
     } else toast.error(response.msg || "Failed to update the module");
     return null;

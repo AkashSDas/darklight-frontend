@@ -1,5 +1,4 @@
-import debounce from "lodash.debounce";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useResizeTextareaHeight } from "@hooks/resize-textarea-height";
 
@@ -14,10 +13,6 @@ function Text({ size, onChange, placeholder, text }: Props) {
   var [value, setValue] = useState<string | null>(text);
   var { ref } = useResizeTextareaHeight(value);
 
-  var callback = debounce(function debounceCallback(value) {
-    onChange && onChange(value);
-  }, 2000);
-
   return (
     <textarea
       ref={ref}
@@ -25,7 +20,7 @@ function Text({ size, onChange, placeholder, text }: Props) {
       value={value}
       onChange={(e) => {
         setValue(e.target.value);
-        callback(e.target.value);
+        onChange && onChange(e.target.value);
       }}
       placeholder={placeholder}
       onKeyPress={(e) => {

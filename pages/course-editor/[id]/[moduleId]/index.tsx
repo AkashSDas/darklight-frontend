@@ -77,17 +77,17 @@ function ModulePage({}) {
             placeholder="Untitled"
             onChange={async (value) => {
               if (value) {
+                dispatch(
+                  setModule({
+                    module: { ...activeModule, title: value },
+                    editing: true,
+                  })
+                );
                 await dispatch(
                   updateCourseModuleThunk({
                     payload: { ...activeModule, title: value },
                     moduleId: activeModule?.id,
                     courseId: course?.id,
-                  })
-                );
-                dispatch(
-                  setModule({
-                    module: { ...activeModule, title: value },
-                    editing: true,
                   })
                 );
               }

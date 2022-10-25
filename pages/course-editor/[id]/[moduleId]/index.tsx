@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { selectEditableCourse, setModule } from "@store/editable-course/slice";
 import { updateCourseModuleThunk } from "@store/editable-course/thunk";
 import { ReactElement, useEffect, useRef, useState } from "react";
+import Text from "@components/editor/text";
 
 function ModuleEmojiPicker() {
   var { activeModule, course } = useAppSelector(selectEditableCourse);
@@ -46,7 +47,9 @@ function ModuleEmojiPicker() {
 }
 
 function ModulePage({}) {
-  var { isLoading } = useAppSelector(selectEditableCourse);
+  var { isLoading, activeModule, course } =
+    useAppSelector(selectEditableCourse);
+  var dispatch = useAppDispatch();
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -55,6 +58,24 @@ function ModulePage({}) {
       <main className="w-full flex flex-col py-2 px-[96px] max-w-[900px]">
         <div className="w-full">
           <ModuleEmojiPicker />
+          <div className="w-full h-[6px]"></div>
+          <Text
+            size="h2"
+            text={activeModule?.title}
+            placeholder="Untitled"
+            onChange={async (value) => {
+              if (value) {
+                await dispatch(
+                  updateCourseModuleThunk({
+                    payload: { ...activeModule, title: value },
+                    moduleId: activeModule?.id,
+                    courseId: course?.id,
+                  })
+                );
+                dispatch(setModule({ ...activeModule, title: value }));
+              }
+            }}
+          />
         </div>
       </main>
     </div>

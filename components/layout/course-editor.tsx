@@ -183,7 +183,7 @@ function CourseEditorLayout({ children }) {
 
   useEffect(
     function fetchCourse() {
-      if (router.query?.id && !course) {
+      if (router.query?.id && !course?.id) {
         dispatch(getCourseThunk(router.query.id as string));
       }
     },
@@ -192,7 +192,7 @@ function CourseEditorLayout({ children }) {
 
   useEffect(
     function fetchCourseModule() {
-      if (router.query?.id && router.query?.moduleId && !activeModule) {
+      if (router.query?.id && router.query?.moduleId) {
         dispatch(
           getCourseModuleThunk({
             moduleId: router.query.moduleId as string,

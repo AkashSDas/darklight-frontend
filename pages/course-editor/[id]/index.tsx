@@ -1,45 +1,18 @@
 import { useFormik } from "formik";
-import moment from "moment-timezone";
+import debounce from "lodash.debounce";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import {
-  ReactElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import toast from "react-hot-toast";
+import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 
-import IconButton from "@components/buttons/icon-button";
-import TextButton from "@components/buttons/text-button";
 import OptionsInput from "@components/dropdown/options-input";
 import Divider from "@components/editor/divider";
-import Spacer from "@components/editor/space";
 import Text from "@components/editor/text";
-import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  MenuIcon,
-  MultiplyIcon,
-  PlusIcon,
-  SearchIcon,
-  SettingsIcon,
-} from "@components/icons";
+import { ArrowDownIcon } from "@components/icons";
+import CourseEditorLayout from "@components/layout/course-editor";
 import { useOutsideAlerter } from "@hooks/outsider-alerter";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
-import {
-  addTag,
-  removeTag,
-  selectEditableCourse,
-} from "@store/editable-course/slice";
-import {
-  createCourseModuleThunk,
-  getCourseThunk,
-  updateCourseInfoThunk,
-} from "@store/editable-course/thunk";
-import CourseEditorLayout from "@components/layout/course-editor";
+import { addTag, removeTag, selectEditableCourse, setCourse } from "@store/editable-course/slice";
+import { updateCourseInfoThunk } from "@store/editable-course/thunk";
 
 function EditableCoursePage({}) {
   var [isLoading, setIsLoading] = useState(true);
@@ -52,6 +25,36 @@ function EditableCoursePage({}) {
     if (router.query?.id) setIsLoading(false);
   }, [router.query]);
 
+  var introCallback = useCallback(
+    debounce(async (value) => {
+      console.log(value);
+      if (value && course?.id) {
+        await dispatch(
+          updateCourseInfoThunk({
+            courseId: course?.id,
+            payload: { description: value },
+          })
+        );
+      }
+    }, 500),
+    [course?.id, dispatch]
+  );
+
+  var titleCallback = useCallback(
+    debounce(async (value) => {
+      if (value && course?.id) {
+        console.log(value);
+        await dispatch(
+          updateCourseInfoThunk({
+            courseId: course?.id,
+            payload: { title: value },
+          })
+        );
+      }
+    }, 500),
+    [course?.id, dispatch]
+  );
+
   if (isLoading || courseLoading) return <div>Loading...</div>;
 
   return (
@@ -62,14 +65,8 @@ function EditableCoursePage({}) {
           text={course?.title}
           placeholder="Untitled"
           onChange={async (value) => {
-            if (value && value.length >= 6) {
-              await dispatch(
-                updateCourseInfoThunk({
-                  courseId: course?.id,
-                  payload: { title: value },
-                })
-              );
-            }
+            dispatch(setCourse({ ...course, title: value }));
+            await titleCallback(value);
           }}
         />
         <div className="w-full h-[6px]"></div>
@@ -77,16 +74,7 @@ function EditableCoursePage({}) {
           size="intro"
           text={course?.description}
           placeholder="Add a description"
-          onChange={async (value) => {
-            if (value && value.length >= 6) {
-              await dispatch(
-                updateCourseInfoThunk({
-                  courseId: course?.id,
-                  payload: { description: value },
-                })
-              );
-            }
-          }}
+          onChange={async (value) => await introCallback(value)}
         />
         <div className="w-full h-8"></div>
         <div>

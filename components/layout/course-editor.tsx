@@ -207,43 +207,42 @@ function CourseSidebar() {
 }
 
 function CourseNavName() {
-  var { course, isUpdating, activeModule } =
-    useAppSelector(selectEditableCourse);
   var router = useRouter();
   var dispatch = useAppDispatch();
+  var { course, activeModule, isUpdating } =
+    useAppSelector(selectEditableCourse);
 
-  return (
-    <div className="flex gap-4">
+  function handleCourseClick() {
+    if (course?.id) {
+      dispatch(setModule({ module: null, editing: false }));
+      router.push(`/course-editor/${course?.id}`);
+    }
+  }
+
+  function NavItem({ label, onClick }) {
+    return (
       <span
-        className="flex items-center gap-2 hover:bg-grey2 px-2 py-1 cursor-pointer rounded-md"
-        onClick={() => {
-          dispatch(setModule({ module: null, editing: false }));
-          router.push(`/course-editor/${course?.id}`);
-        }}
+        className="flex items-center gap-1 hover:bg-grey2 active:bg-grey3 px-1 py-[2px] cursor-pointer rounded-sm text-[14px]"
+        onClick={onClick}
       >
-        <span>🗃</span>
-        {course?.title ? (
-          <span className="text-grey8">{course.title}</span>
+        {label ? (
+          <span className="text-grey8">{label}</span>
         ) : (
           <span className="text-grey6">Untitled</span>
         )}
       </span>
+    );
+  }
 
-      <span className="flex items-center gap-2">
+  return (
+    <div className="flex gap-[2px]">
+      <NavItem label={course?.title} onClick={handleCourseClick} />
+      <span className="flex items-center">
         {activeModule ? <span className="-text-cap text-grey6">/</span> : null}
       </span>
-
       {activeModule?.id && (
-        <span className="flex items-center gap-2">
-          <span>{activeModule.emoji ?? "📄"}</span>
-          {activeModule.title ? (
-            <span className="text-grey8">{activeModule.title}</span>
-          ) : (
-            <span className="text-grey6">Untitled</span>
-          )}
-        </span>
+        <NavItem label={activeModule.title} onClick={() => {}} />
       )}
-
       {isUpdating && <span className="text-grey6">Updating...</span>}
     </div>
   );

@@ -1,33 +1,41 @@
-import { useFormik } from "formik";
 import debounce from "lodash.debounce";
-import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
+import { ReactElement, useCallback } from "react";
 
-import OptionsInput from "@components/dropdown/options-input";
+import CourseDifficultyDropdown from "@components/edit-course/difficulty-dropdown";
+import CoursePriceInput from "@components/edit-course/price-input";
+import PublishCourseInput from "@components/edit-course/publish-input";
+import CourseTagsInput from "@components/edit-course/tags-input";
 import Divider from "@components/editor/divider";
 import Text from "@components/editor/text";
-import { ArrowDownIcon } from "@components/icons";
 import CourseEditorLayout from "@components/layout/course-editor";
-import { useOutsideAlerter } from "@hooks/outsider-alerter";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { addTag, removeTag, selectEditableCourse, setCourse } from "@store/editable-course/slice";
+import { selectEditableCourse, setCourse } from "@store/editable-course/slice";
 import { updateCourseInfoThunk } from "@store/editable-course/thunk";
 
 function EditableCoursePage({}) {
-  var [isLoading, setIsLoading] = useState(true);
   var router = useRouter();
   var dispatch = useAppDispatch();
-  var { course, isLoading: courseLoading } =
-    useAppSelector(selectEditableCourse);
+  var { course, isLoading } = useAppSelector(selectEditableCourse);
 
-  useEffect(() => {
-    if (router.query?.id) setIsLoading(false);
-  }, [router.query]);
+  // eslint-disable-next-line
+  var titleCallback = useCallback(
+    debounce(async function updateTitle(value) {
+      if (value && course?.id) {
+        await dispatch(
+          updateCourseInfoThunk({
+            courseId: course?.id,
+            payload: { title: value },
+          })
+        );
+      }
+    }, 1000),
+    [course?.id, dispatch]
+  );
 
-  var introCallback = useCallback(
-    debounce(async (value) => {
-      console.log(value);
+  // eslint-disable-next-line
+  var descriptionCallback = useCallback(
+    debounce(async function updateCourseTitle(value) {
       if (value && course?.id) {
         await dispatch(
           updateCourseInfoThunk({
@@ -36,26 +44,21 @@ function EditableCoursePage({}) {
           })
         );
       }
-    }, 500),
-    [course?.id, dispatch]
+    }, 1000),
+    []
   );
 
-  var titleCallback = useCallback(
-    debounce(async (value) => {
-      if (value && course?.id) {
-        console.log(value);
-        await dispatch(
-          updateCourseInfoThunk({
-            courseId: course?.id,
-            payload: { title: value },
-          })
-        );
-      }
-    }, 500),
-    [course?.id, dispatch]
-  );
+  async function handleTitleOnChange(value: string) {
+    dispatch(setCourse({ ...course, title: value }));
+    await titleCallback(value);
+  }
 
-  if (isLoading || courseLoading) return <div>Loading...</div>;
+  async function handleDescriptionOnChange(value: string) {
+    dispatch(setCourse({ ...course, description: value }));
+    await descriptionCallback(value);
+  }
+
+  if (!router.query?.id || isLoading) return <div>Loading...</div>;
 
   return (
     <div className="ml-[240px] mt-4 flex flex-col justify-center items-center">
@@ -64,17 +67,14 @@ function EditableCoursePage({}) {
           size="h2"
           text={course?.title}
           placeholder="Untitled"
-          onChange={async (value) => {
-            dispatch(setCourse({ ...course, title: value }));
-            await titleCallback(value);
-          }}
+          onChange={handleTitleOnChange}
         />
         <div className="w-full h-[6px]"></div>
         <Text
           size="intro"
           text={course?.description}
           placeholder="Add a description"
-          onChange={async (value) => await introCallback(value)}
+          onChange={handleDescriptionOnChange}
         />
         <div className="w-full h-8"></div>
         <div>
@@ -85,7 +85,7 @@ function EditableCoursePage({}) {
             title="Tags"
             description="Explain your course using tags"
           >
-            <CourseTagsOptionsInput />
+            <CourseTagsInput />
           </SettingItem>
           <div className="w-full h-4"></div>
           <SettingItem title="Price" description="How much to charge students">
@@ -96,7 +96,7 @@ function EditableCoursePage({}) {
             title="Difficulty level"
             description="What is the difficulty level of this course"
           >
-            <CourseDifficultyOptionsInput />
+            <CourseDifficultyDropdown />
           </SettingItem>
           <div className="w-full h-4"></div>
           <SettingItem
@@ -111,42 +111,6 @@ function EditableCoursePage({}) {
   );
 }
 
-function PublishCourseInput() {
-  var { course } = useAppSelector(selectEditableCourse);
-  var [active, setActive] = useState(course?.stage == "published" ?? false);
-  var dispatch = useAppDispatch();
-  useEffect(() => {
-    setActive(course?.stage == "published" ?? false);
-  }, [course?.stage]);
-
-  return (
-    <div
-      className="flex justify-between items-center cursor-pointer"
-      onClick={async () => {
-        setActive(!active);
-        await dispatch(
-          updateCourseInfoThunk({
-            courseId: course?.id,
-            payload: { stage: !active ? "published" : "draft" },
-          })
-        );
-      }}
-    >
-      <div
-        className={`w-14 h-8 ${
-          !active ? "bg-gray-300" : "bg-blue2"
-        }  rounded-full flex-shrink-0 p-1`}
-      >
-        <div
-          className={`bg-white w-6 h-6 rounded-full shadow-md transform ${
-            active ? "translate-x-6" : ""
-          } duration-300 ease-in-out`}
-        ></div>
-      </div>
-    </div>
-  );
-}
-
 function SettingItem({ children, title, description }) {
   return (
     <div className="flex gap-2 items-center">
@@ -156,154 +120,6 @@ function SettingItem({ children, title, description }) {
       </div>
 
       <div className="w-[300px]">{children}</div>
-    </div>
-  );
-}
-
-function CoursePriceInput() {
-  var { course } = useAppSelector(selectEditableCourse);
-  var dispatch = useAppDispatch();
-  var formik = useFormik({
-    initialValues: { price: course?.price },
-    onSubmit: async (values) => {
-      await dispatch(
-        updateCourseInfoThunk({
-          courseId: course?.id,
-          payload: { price: values.price },
-        })
-      );
-    },
-  });
-
-  useEffect(() => {
-    formik.setFieldValue("price", course?.price);
-  }, [course?.price]);
-
-  return (
-    <form onSubmit={formik.handleSubmit}>
-      <input
-        className="w-full px-3 py-2 border border-grey3 rounded-md text-grey8"
-        name="price"
-        type="number"
-        placeholder="₹0"
-        autoComplete="off"
-        value={formik.values.price}
-        onChange={formik.handleChange}
-        min={0}
-      />
-    </form>
-  );
-}
-
-function CourseTagsOptionsInput() {
-  var { course } = useAppSelector(selectEditableCourse);
-  var dispatch = useAppDispatch();
-  var wrapperRef = useRef(null);
-  var [isOpen, setIsOpen] = useState(false);
-  useOutsideAlerter(wrapperRef, function updateDropdownOnOutsideClick() {
-    setIsOpen(false);
-  });
-
-  return (
-    <div
-      ref={wrapperRef}
-      onClick={() => setIsOpen(true)}
-      className="relative w-[300px] p-1 rounded-md min-h-[44px] bg-grey0 cursor-pointer hover:bg-grey1 active:bg-grey2 flex flex-wrap gap-1"
-    >
-      {(course?.tags ?? [])
-        .map((t) => ({
-          value: t,
-          id: nanoid(),
-        }))
-        .map((t) => (
-          <span
-            key={t.id}
-            className="h-7 w-max rounded-[4px] flex-shrink px-[6px] py-1 flex items-center bg-grey2 min-w-0"
-          >
-            <div className="flex-shrink text-[14px] text-grey7 whitespace-nowrap overflow-hidden text-ellipsis">
-              {t.value}
-            </div>
-          </span>
-        ))}
-
-      {isOpen && (
-        <OptionsInput
-          opts={course?.tags ?? []}
-          handleAdd={(v) => addTag(v)}
-          handleRemove={(v) => removeTag(v)}
-          onUnmount={async (values) =>
-            await dispatch(
-              updateCourseInfoThunk({
-                courseId: course?.id,
-                payload: { tags: values },
-              })
-            )
-          }
-        />
-      )}
-    </div>
-  );
-}
-
-function CourseDifficultyOptionsInput() {
-  var { course } = useAppSelector(selectEditableCourse);
-  var dispatch = useAppDispatch();
-  var wrapperRef = useRef(null);
-  var [isOpen, setIsOpen] = useState(false);
-  useOutsideAlerter(wrapperRef, function updateDropdownOnOutsideClick() {
-    setIsOpen(false);
-  });
-
-  return (
-    <div
-      ref={wrapperRef}
-      className="relative w-[300px] p-1 rounded-md min-h-[44px] flex flex-wrap gap-1"
-    >
-      {course?.difficulty && (
-        <span
-          onClick={() => setIsOpen(true)}
-          className="flex gap-2 items-center cursor-pointer h-8 rounded-[4px] px-[6px] py-1 bg-grey0 hover:bg-grey2 active:bg-grey3"
-        >
-          <div className="-text-body1 text-grey7 ">{course?.difficulty}</div>
-          <div className="w-6 h-6">
-            <ArrowDownIcon className="stroke-grey7" />
-          </div>
-        </span>
-      )}
-
-      {isOpen && (
-        <div className="z-10 w-[300px] absolute top-0 left-0 shadow-lg rounded-md">
-          <div className="flex flex-col max-w-[calc(-24px+100vw)] min-w-[180px] h-full max-h-[70vh">
-            <div className="rounded-md flex flex-col flex-wrap p-1 gap-1 bg-grey1 flex-shrink-0 max-h-[240px] overflow-x-hidden overflow-y-auto">
-              {["beginner", "intermediate", "advanced"].map((difficulty) => (
-                <div
-                  key={difficulty}
-                  onClick={async () => {
-                    if (course?.difficulty != difficulty) {
-                      await dispatch(
-                        updateCourseInfoThunk({
-                          courseId: course?.id,
-                          payload: { difficulty } as any,
-                        })
-                      );
-                    }
-                    setIsOpen(false);
-                  }}
-                  className={`${
-                    course?.difficulty == difficulty ? "bg-grey2" : ""
-                  } cursor-pointer active:bg-grey3 rounded-[4px] flex-shrink px-[6px] py-1 flex items-center hover:bg-grey2 min-w-0`}
-                >
-                  <div
-                    className={` flex-shrink -text-body2 text-grey7 whitespace-nowrap overflow-hidden text-ellipsis`}
-                  >
-                    {difficulty}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

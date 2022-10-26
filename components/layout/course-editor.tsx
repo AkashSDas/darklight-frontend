@@ -7,7 +7,7 @@ import TextButton from "@components/buttons/text-button";
 import { ArrowRightIcon } from "@components/icons";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { Module, selectEditableCourse, setCourse, setModule } from "@store/editable-course/slice";
-import { createCourseModuleThunk, getCourseModuleThunk, getCourseThunk, reorderModulesThunk } from "@store/editable-course/thunk";
+import { createCourseModuleThunk, createLessonThunk, getCourseModuleThunk, getCourseThunk, reorderModulesThunk } from "@store/editable-course/thunk";
 
 // https://github.com/atlassian/react-beautiful-dnd/issues/2393
 
@@ -49,8 +49,17 @@ function ModuleButton({ m }) {
         </div>
 
         <div
-          onClick={(e) => {
+          onClick={async (e) => {
             e.stopPropagation();
+
+            if (course?.id && m.id) {
+              let lessonId = await (
+                await dispatch(
+                  createLessonThunk({ courseId: course?.id, moduleId: m?.id })
+                )
+              ).payload;
+              router.push(`/course-editor/${course.id}/${m.id}/${lessonId}`);
+            }
           }}
           className="absolute right-2 flex justify-center items-center w-5 h-5 stroke-grey7 hover:bg-grey4 active:bg-grey5 rounded-sm"
         >

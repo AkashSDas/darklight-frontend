@@ -1,10 +1,10 @@
 import toast from "react-hot-toast";
-import { createCourseModuleService, createCourseService, getCourseModuleService, getCourseService, reorderModulesService, UpdateCourseInfoPayload, updateCourseInfoService, updateCourseModuleService } from "services/course";
+import { createCourseModuleService, createCourseService, createLessonService, getCourseModuleService, getCourseService, reorderModulesService, UpdateCourseInfoPayload, updateCourseInfoService, updateCourseModuleService } from "services/course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "../";
-import { addModule, Module, setCourse, setModule } from "./slice";
+import { addModule, Module, setCourse, setLesson, setModule } from "./slice";
 
 export var createCourseThunk = createAsyncThunk(
   "editable-course/create",
@@ -122,6 +122,24 @@ export var reorderModulesThunk = createAsyncThunk(
     if (response.success && response.modules) {
       dispatch(setCourse({ ...course, modules: response.modules }));
     } else toast.error(response.msg || "Failed to update modules order info");
+    return null;
+  }
+);
+
+export var createLessonThunk = createAsyncThunk(
+  "editable-course/create-lesson",
+  async function (
+    { courseId, moduleId }: { courseId: string; moduleId: string },
+    { getState, dispatch }
+  ) {
+    var token = (getState() as RootState).auth.accessToken;
+    var response = await createLessonService(token, courseId, moduleId);
+    if (response.success && response.lesson) {
+      dispatch(
+        setLesson({ lesson: response.lesson, moduleId, editing: false })
+      );
+      return response.lesson.id;
+    } else toast.error(response.msg || "Failed to create lesson");
     return null;
   }
 );

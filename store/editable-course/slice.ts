@@ -49,6 +49,7 @@ export interface EditableCourseState {
   createLoading: boolean;
   isLoading: boolean;
   activeModule?: Module | null;
+  activeLesson?: CourseLesson | null;
 }
 
 var initialState: EditableCourseState = {
@@ -57,6 +58,7 @@ var initialState: EditableCourseState = {
   createLoading: false,
   isLoading: false,
   activeModule: null,
+  activeLesson: null,
 };
 
 export const editableCourseSlice = createSlice({
@@ -89,6 +91,43 @@ export const editableCourseSlice = createSlice({
       if (editing) {
         state.course.modules = state.course.modules.map((module) =>
           module.id == activeModule.id ? activeModule : module
+        );
+      }
+    },
+    setLesson(
+      state,
+      action: PayloadAction<{
+        lesson: CourseLesson;
+        moduleId?: string;
+        editing: boolean;
+      }>
+    ) {
+      var { lesson, moduleId } = action.payload;
+      state.activeLesson = lesson;
+
+      // Updating lesson info in course.modules
+
+      if (moduleId && action.payload.editing) {
+        // Updating
+        state.course.modules = state.course.modules.map((module) =>
+          module.id == moduleId
+            ? {
+                ...module,
+                lessons: module.lessons.map((l) =>
+                  l.id == lesson.id ? lesson : l
+                ),
+              }
+            : module
+        );
+      } else if (moduleId) {
+        // adding
+        state.course.modules = state.course.modules.map((module) =>
+          module.id == moduleId
+            ? {
+                ...module,
+                lessons: [...module.lessons, lesson],
+              }
+            : module
         );
       }
     },
@@ -130,7 +169,7 @@ export const editableCourseSlice = createSlice({
 });
 
 export var { setCourse, addTag, removeTag } = editableCourseSlice.actions;
-export var { addModule, setModule } = editableCourseSlice.actions;
+export var { addModule, setModule, setLesson } = editableCourseSlice.actions;
 export var selectEditableCourse = (state: RootState) => state.editableCourse;
 export var editableCourseSliceName = editableCourseSlice.name;
 export default editableCourseSlice.reducer;

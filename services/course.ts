@@ -127,3 +127,20 @@ export async function reorderModulesService(
     return { success: false, msg: response.msg, modules: undefined };
   }
 }
+
+export async function createLessonService(
+  token: string,
+  courseId: string,
+  moduleId: string
+) {
+  var response = await fetchAPI(`${baseURL}/${courseId}/${moduleId}`, {
+    method: "post",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (response.status < 300) {
+    return { success: true, msg: response.msg, lesson: response.data.lesson };
+  } else {
+    return { success: false, msg: response.msg, lesson: undefined };
+  }
+}

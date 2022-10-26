@@ -144,3 +144,22 @@ export async function createLessonService(
     return { success: false, msg: response.msg, lesson: undefined };
   }
 }
+
+export async function getLessonService(
+  courseId: string,
+  moduleId: string,
+  lessonId: string
+) {
+  var response = await fetchAPI(
+    `${baseURL}/${courseId}/${moduleId}/${lessonId}`,
+    {
+      method: "get",
+    }
+  );
+
+  if (response.status < 300) {
+    return { success: true, msg: response.msg, lesson: response.data.lesson };
+  } else {
+    return { success: false, msg: response.msg, lesson: undefined };
+  }
+}

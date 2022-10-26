@@ -6,8 +6,8 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import TextButton from "@components/buttons/text-button";
 import { ArrowRightIcon } from "@components/icons";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { Module, selectEditableCourse, setCourse, setModule } from "@store/editable-course/slice";
-import { createCourseModuleThunk, createLessonThunk, getCourseModuleThunk, getCourseThunk, reorderModulesThunk } from "@store/editable-course/thunk";
+import { Module, selectEditableCourse, setCourse, setLesson, setModule } from "@store/editable-course/slice";
+import { createCourseModuleThunk, createLessonThunk, getCourseModuleThunk, getCourseThunk, getLessonThunk, reorderModulesThunk } from "@store/editable-course/thunk";
 
 // https://github.com/atlassian/react-beautiful-dnd/issues/2393
 
@@ -218,13 +218,20 @@ function CourseSidebar() {
 function CourseNavName() {
   var router = useRouter();
   var dispatch = useAppDispatch();
-  var { course, activeModule, isUpdating } =
+  var { course, activeModule, activeLesson, isUpdating } =
     useAppSelector(selectEditableCourse);
 
   function handleCourseClick() {
     if (course?.id) {
       dispatch(setModule({ module: null, editing: false }));
       router.push(`/course-editor/${course?.id}`);
+    }
+  }
+
+  function handleModuleClick() {
+    if (course?.id && router.query?.moduleId) {
+      dispatch(setLesson({ lesson: null, editing: false }));
+      router.push(`/course-editor/${course?.id}/${router.query?.moduleId}`);
     }
   }
 
@@ -247,12 +254,18 @@ function CourseNavName() {
     <div className="flex gap-[2px]">
       <NavItem label={course?.title} onClick={handleCourseClick} />
       <span className="flex items-center">
-        {activeModule ? <span className="-text-cap text-grey6">/</span> : null}
+        {activeModule ? <span className="-text-cap text-grey5">/</span> : null}
       </span>
       {activeModule?.id && (
-        <NavItem label={activeModule.title} onClick={() => {}} />
+        <NavItem label={activeModule.title} onClick={handleModuleClick} />
       )}
-      {isUpdating && <span className="text-grey6">Updating...</span>}
+      <span className="flex items-center">
+        {activeLesson ? <span className="-text-cap text-grey5">/</span> : null}
+      </span>
+      {activeLesson?.id && (
+        <NavItem label={activeLesson.title} onClick={() => {}} />
+      )}
+      {isUpdating && <span className="text-grey5">Updating...</span>}
     </div>
   );
 }
@@ -335,6 +348,25 @@ function CourseEditorLayout({ children }) {
           getCourseModuleThunk({
             moduleId: router.query.moduleId as string,
             courseId: router.query?.id as string,
+          })
+        );
+      }
+    },
+    [router.query, dispatch]
+  );
+
+  useEffect(
+    function fetchLessonModule() {
+      if (
+        router.query?.id &&
+        router.query?.moduleId &&
+        router.query?.lessonId
+      ) {
+        dispatch(
+          getLessonThunk({
+            moduleId: router.query.moduleId as string,
+            courseId: router.query?.id as string,
+            lessonId: router.query?.lessonId as string,
           })
         );
       }

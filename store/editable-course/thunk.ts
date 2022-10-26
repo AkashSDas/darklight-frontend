@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { createCourseModuleService, createCourseService, createLessonService, getCourseModuleService, getCourseService, reorderModulesService, UpdateCourseInfoPayload, updateCourseInfoService, updateCourseModuleService } from "services/course";
+import { createCourseModuleService, createCourseService, createLessonService, getCourseModuleService, getCourseService, getLessonService, reorderModulesService, UpdateCourseInfoPayload, updateCourseInfoService, updateCourseModuleService } from "services/course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -140,6 +140,27 @@ export var createLessonThunk = createAsyncThunk(
       );
       return response.lesson.id;
     } else toast.error(response.msg || "Failed to create lesson");
+    return null;
+  }
+);
+
+export var getLessonThunk = createAsyncThunk(
+  "editable-course/get-lesson",
+  async function (
+    {
+      courseId,
+      moduleId,
+      lessonId,
+    }: { courseId: string; moduleId: string; lessonId: string },
+    { dispatch }
+  ) {
+    var response = await getLessonService(courseId, moduleId, lessonId);
+    if (response.success && response.lesson) {
+      dispatch(
+        setLesson({ lesson: response.lesson, moduleId: null, editing: false })
+      );
+      return response.lesson.id;
+    } else toast.error(response.msg || "Failed to fetch lesson");
     return null;
   }
 );

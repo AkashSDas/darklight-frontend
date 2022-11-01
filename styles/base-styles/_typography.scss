@@ -1,5 +1,8 @@
 // FONT FAMILY
 
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@700&display=swap");
+
 @font-face {
   font-family: "GTWalsheimPro";
   src: url("/fonts/regular.ttf");
@@ -19,6 +22,19 @@
 //   font-family: "EmojiMart";
 //   src: url("/fonts/seguiemj.ttf") format("truetype");
 // }
+
+// Gilroy
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/gilroy-light.ttf");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/gilroy-extrabold.ttf");
+  font-weight: 800;
+}
 
 // RESPONSIVE TYPOGRAPHY
 

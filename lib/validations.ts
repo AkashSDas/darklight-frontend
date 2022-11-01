@@ -4,6 +4,15 @@ import * as Yup from "yup";
 // Auth
 // ===========================
 
+export var signupSchema = Yup.object({
+  username: Yup.string()
+    .required("Required")
+    .min(3, "Too short")
+    .max(120, "Too long"),
+  email: Yup.string().required("Required").email("Invalid"),
+  password: Yup.string().required("Required").min(6, "Too short"),
+});
+
 export var signupValidation = Yup.object({
   fullName: Yup.string()
     .required("Full name is required")

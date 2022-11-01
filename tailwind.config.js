@@ -6,8 +6,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        "radial-mask":
+          "radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0) 31.77%, #000000 100%)",
+      },
       fontFamily: {
         gtwalsheim: ["GTWalsheimPro", "system-ui", "sans-serif"],
+        gilroy: ["Gilroy", "system-ui", "sans-serif"],
+        urbanist: ["Urbanist", "system-ui", "sans-serif"],
+        syne: ["Syne", "system-ui", "sans-serif"],
       },
       fontSize: {
         // Desktop

@@ -32,7 +32,7 @@ export default function Button(props: Props) {
       type={props.type}
       disabled={props.disabled}
       onClick={props.onClick}
-      className={`${baseStyle} ${btnStyle} ${sizeStyle} ${props.className}`}
+      className={`${baseStyle} ${btnStyle} ${sizeStyle} ${props.className} disabled:bg-gray-300`}
     >
       {props.startIcon && <span>{props.startIcon}</span>}{" "}
       <span>{props.label}</span>

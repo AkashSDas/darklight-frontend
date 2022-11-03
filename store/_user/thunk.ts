@@ -25,6 +25,7 @@ export var instructorSignupThunk = createAsyncThunk(
     if (!accessToken) return toast.error("You are not logged in");
 
     var res = await instructorSignupService(accessToken);
+
     if (res) {
       let user = (getState() as RootState)._user.data;
       if (user) {

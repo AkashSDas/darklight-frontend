@@ -5,7 +5,9 @@ import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { useDropdown } from "@lib/hooks";
 import { logoutThunk } from "@store/_auth/thunk";
+import { createCourseThunk } from "@store/_course/thunk";
 import { selectUserData } from "@store/_user/slice";
+import { instructorSignupThunk } from "@store/_user/thunk";
 
 import Avatar from "./avatar";
 import Button from "./button";
@@ -77,6 +79,15 @@ function AvatarDropdown() {
     router.push("/auth/login");
   }
 
+  async function createCourse() {
+    var courseId = await (await dispatch(createCourseThunk())).payload;
+    if (courseId) router.push(`/admin/c/${courseId}`);
+  }
+
+  async function handleInstructorSignup() {
+    await dispatch(instructorSignupThunk());
+  }
+
   function Item({ icon, label, feedback }: { icon; label; feedback? }) {
     return (
       <div className="h-9 flex items-center gap-2 px-2 rounded-lg cursor-pointer">
@@ -121,15 +132,19 @@ function AvatarDropdown() {
         <div className="pl-2 pb-3 font-gilroy font-bold text-[12.8px]">
           TEACH
         </div>
-        <Item
-          label="Start teaching"
-          icon={<StudentCardIcon className="fill-[#686868]" />}
-          feedback="✌🏼"
-        />
-        <Item
-          label="Create a course"
-          icon={<AddIcon className="fill-[#686868]" />}
-        />
+        <div onClick={handleInstructorSignup}>
+          <Item
+            label="Start teaching"
+            icon={<StudentCardIcon className="fill-[#686868]" />}
+            feedback="✌🏼"
+          />
+        </div>
+        <div onClick={createCourse}>
+          <Item
+            label="Create a course"
+            icon={<AddIcon className="fill-[#686868]" />}
+          />
+        </div>
       </div>
     );
   }

@@ -87,8 +87,6 @@ export var getNewAccessTokenThunk = createAsyncThunk(
           updatedAt: data.updatedAt,
         })
       );
-
-      toast.success(res.msg);
     }
   }
 );

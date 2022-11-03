@@ -30,5 +30,5 @@ export async function instructorSignupService(token: string) {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  return { success: res.status < 300, msg: res.data.msg };
+  return { success: res.status < 300, msg: res.msg };
 }

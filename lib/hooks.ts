@@ -1,4 +1,9 @@
+import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
+
+import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { selectCourse } from "@store/_course/slice";
+import { getCourseThunk, getLessonThunk, getModuleThunk } from "@store/_course/thunk";
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -94,4 +99,64 @@ export function useResizeTextareaHeight(
   }, [value, solveScrollIssue]);
 
   return { ref };
+}
+
+export function useCourse() {
+  var router = useRouter();
+  var dispatch = useAppDispatch();
+  var courseId = router.query.cid as string;
+  var { loading, course } = useAppSelector(selectCourse);
+
+  useEffect(
+    function getCourse() {
+      if (!course && courseId) {
+        dispatch(getCourseThunk(courseId));
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [courseId, dispatch]
+  );
+
+  return { loading, course, courseId };
+}
+
+export function useModule() {
+  var router = useRouter();
+  var dispatch = useAppDispatch();
+  var courseId = router.query.cid as string;
+  var moduleId = router.query.mid as string;
+  var { moduleLoading, course } = useAppSelector(selectCourse);
+
+  useEffect(
+    function getModule() {
+      if (!course && courseId && moduleId) {
+        dispatch(getModuleThunk({ courseId, moduleId }));
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [courseId, dispatch, moduleId]
+  );
+
+  return { moduleLoading, moduleId, courseId };
+}
+
+export function useLesson() {
+  var router = useRouter();
+  var dispatch = useAppDispatch();
+  var courseId = router.query.cid as string;
+  var moduleId = router.query.mid as string;
+  var lessonId = router.query.mid as string;
+  var { lessonLoading, course } = useAppSelector(selectCourse);
+
+  useEffect(
+    function getLesson() {
+      if (!course && courseId && moduleId && lessonId) {
+        dispatch(getLessonThunk({ courseId, moduleId, lessonId }));
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [courseId, dispatch, lessonId, moduleId]
+  );
+
+  return { lessonLoading, lessonId, moduleId, courseId };
 }

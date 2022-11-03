@@ -4,7 +4,7 @@ import { CourseInfoPayload, createCourseService, createLessonService, createModu
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "../";
-import { Module, updateActiveLessonId, updateActiveModuleId, updateCourse } from "./slice";
+import { Module, updateActiveLesson, updateActiveModuleId, updateCourse } from "./slice";
 
 export var getCourseThunk = createAsyncThunk(
   "_course/get",
@@ -118,7 +118,7 @@ export var getLessonThunk = createAsyncThunk(
     { getState, dispatch }
   ) {
     var lesson = await getLessonService(courseId, moduleId, lessonId);
-    dispatch(updateActiveLessonId(lesson?.id ?? null));
+    dispatch(updateActiveLesson(lesson as any));
     return lesson?.id;
   }
 );

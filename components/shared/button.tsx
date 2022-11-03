@@ -3,10 +3,10 @@ import { MouseEventHandler } from "react";
 interface Props {
   onClick: MouseEventHandler<HTMLButtonElement>;
   label: string;
-  variant: "text" | "contained" | "outlined";
+  variant: "text" | "contained" | "outlined" | "icon";
   size: "md" | "lg";
   className?: string;
-  startIcon?: React.ReactNode;
+  startIcon?: JSX.Element;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
 }
@@ -22,10 +22,27 @@ export default function Button(props: Props) {
     var btnStyle = "bg-white text-black border border-solid border-[#E9E9E9]";
   } else if (variant == "text") {
     var btnStyle = "bg-transparent text-black";
+  } else if (variant == "icon") {
+    var btnStyle = "";
+    var baseStyle =
+      "font-urbanist font-semibold text-base rounded-2xl px-3 flex justify-center items-center gap-2";
   }
 
   if (size == "lg") var sizeStyle = "h-12";
   if (size == "md") var sizeStyle = "h-11";
+
+  if (variant == "icon") {
+    return (
+      <button
+        type={props.type}
+        disabled={props.disabled}
+        onClick={props.onClick}
+        className={`${baseStyle} ${btnStyle} ${sizeStyle} ${props.className} disabled:bg-gray-300`}
+      >
+        <span className="h-6 w-6">{props.startIcon}</span>
+      </button>
+    );
+  }
 
   return (
     <button

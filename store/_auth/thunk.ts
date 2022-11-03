@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { cancelOAuthService, CompleteOAuthPayload, completeOAuthService, forgotPasswordService, getNewAccessTokenService, LoginPayload, loginService, PasswordResetPayload, passwordResetService, SignupPayload, signupService, verifyEmailService } from "services/_auth";
+import { cancelOAuthService, CompleteOAuthPayload, completeOAuthService, forgotPasswordService, getNewAccessTokenService, LoginPayload, loginService, logoutService, PasswordResetPayload, passwordResetService, SignupPayload, signupService, verifyEmailService } from "services/_auth";
 import { getLoggedInUserService } from "services/_user";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -145,5 +145,21 @@ export var verifyEmailThunk = createAsyncThunk(
     if (res.success) {
       toast.success(res.msg);
     } else toast.error(res.msg);
+  }
+);
+
+export var logoutThunk = createAsyncThunk(
+  "_auth/logout",
+  async function logout(_, { dispatch }) {
+    var res = await logoutService();
+    if (res) {
+      dispatch(changeLoginState(null));
+      dispatch(updateUserData(null));
+      toast.success("Logged out");
+      return true; // logout success
+    }
+
+    toast.error("Something went wrong, Please try again");
+    return false;
   }
 );

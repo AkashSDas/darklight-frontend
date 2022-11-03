@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CompleteOAuthPayload, SignupPayload } from "services/_auth";
 
 import Button from "@components/shared/button";
+import Navbar from "@components/shared/navbar";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { completeOAuthSignupSchema, signupSchema } from "@lib/validations";
 import Facebook from "@public/brand-svg/facebook.svg";
@@ -23,58 +24,62 @@ export default function SignupPage() {
   var user = useAppSelector(selectUserData);
 
   return (
-    <div className="relative px-6 flex gap-6 items-center">
-      {/* Gif */}
-      <aside className="sticky w-1/2 h-screen flex-grow flex flex-col items-center justify-center">
-        <div className="w-[500px] h-[385px]">
-          <Image
-            src="/gifs/sit.gif"
-            width={500}
-            height={385}
-            layout="fixed"
-            alt="Gif"
-            className="rounded-[100px]"
-          />
-        </div>
-      </aside>
+    <>
+      <Navbar />
 
-      {/* Signup */}
-      <section className="w-1/2 h-screen flex-grow flex flex-col gap-6 items-center justify-center">
-        <h1 className="font-gilroy font-bold text-[31.25px] mb-6">
-          {user?.id ? "Last step" : "Create an account"}
-        </h1>
+      <div className="relative px-6 flex gap-6 items-center">
+        {/* Gif */}
+        <aside className="sticky w-1/2 h-screen flex-grow flex flex-col items-center justify-center">
+          <div className="w-[500px] h-[385px]">
+            <Image
+              src="/gifs/sit.gif"
+              width={500}
+              height={385}
+              layout="fixed"
+              alt="Gif"
+              className="rounded-[100px]"
+            />
+          </div>
+        </aside>
 
-        {user?.id && (
+        {/* Signup */}
+        <section className="w-1/2 h-screen flex-grow flex flex-col gap-6 items-center justify-center">
+          <h1 className="font-gilroy font-bold text-[31.25px] mb-6">
+            {user?.id ? "Last step" : "Create an account"}
+          </h1>
+
+          {user?.id && (
+            <p className="font-urbanist font-semibold leading-[135%] text-[#686868] px-16 text-center">
+              Your account {user.fullName} will be connected to your new
+              DarkLight account. Wrong identity?{" "}
+              <span
+                className="text-blue-500 cursor-pointer"
+                onClick={() => dispatch(cancelOAuthThunk())}
+              >
+                Start over
+              </span>
+            </p>
+          )}
+
+          {user?.id ? <CompleteOAuthSignupForm /> : <SignupWithEmailForm />}
+
+          {!user?.id && (
+            <p className="font-urbanist font-semibold leading-[135%] text-[#686868] px-16 text-center">
+              OR
+            </p>
+          )}
+
+          {!user?.id && <SignupOAuthProviders />}
+
           <p className="font-urbanist font-semibold leading-[135%] text-[#686868] px-16 text-center">
-            Your account {user.fullName} will be connected to your new DarkLight
-            account. Wrong identity?{" "}
-            <span
-              className="text-blue-500 cursor-pointer"
-              onClick={() => dispatch(cancelOAuthThunk())}
-            >
-              Start over
-            </span>
+            Already have an account?{" "}
+            <Link href="/auth/login">
+              <a className="text-blue-500">Login</a>
+            </Link>
           </p>
-        )}
-
-        {user?.id ? <CompleteOAuthSignupForm /> : <SignupWithEmailForm />}
-
-        {!user?.id && (
-          <p className="font-urbanist font-semibold leading-[135%] text-[#686868] px-16 text-center">
-            OR
-          </p>
-        )}
-
-        {!user?.id && <SignupOAuthProviders />}
-
-        <p className="font-urbanist font-semibold leading-[135%] text-[#686868] px-16 text-center">
-          Already have an account?{" "}
-          <Link href="/auth/login">
-            <a className="text-blue-500">Login</a>
-          </Link>
-        </p>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 }
 

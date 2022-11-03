@@ -20,7 +20,7 @@ export interface Module {
   id: string;
   emoji?: string;
   title?: string;
-  lessons: Lesson[];
+  lessons: string[];
   lastEditedOn: string;
 }
 
@@ -81,6 +81,14 @@ export var courseSlice = createSlice({
     updateActiveLesson(state, action: PayloadAction<Lesson>) {
       state.activeLesson = action.payload;
     },
+    addNewLessonToModule(
+      state,
+      action: PayloadAction<{ moduleId: string; lessonId: string }>
+    ) {
+      var { moduleId, lessonId } = action.payload;
+      var moduleData = state.course?.modules.find((m) => m.id === moduleId);
+      if (moduleData) moduleData.lessons.push(lessonId);
+    },
   },
   extraReducers: (builder) => {},
 });
@@ -90,6 +98,7 @@ export var {
   updateActiveLesson,
   updateActiveModuleId,
   updateActiveModule,
+  addNewLessonToModule,
 } = courseSlice.actions;
 
 export var selectCourse = (state: RootState) => state._course;

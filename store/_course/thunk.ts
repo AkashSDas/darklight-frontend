@@ -4,7 +4,7 @@ import { CourseInfoPayload, createCourseService, createLessonService, createModu
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "../";
-import { Module, updateActiveLesson, updateActiveModuleId, updateCourse } from "./slice";
+import { addNewLessonToModule, Module, updateActiveLesson, updateActiveModuleId, updateCourse } from "./slice";
 
 export var getCourseThunk = createAsyncThunk(
   "_course/get",
@@ -107,6 +107,8 @@ export var createLessonThunk = createAsyncThunk(
       var res = await createLessonService(accessToken, courseId, moduleId);
       if (res.success && res.lesson) {
         toast.success("Lesson created");
+        dispatch(updateActiveLesson(res.lesson as any));
+        if (res.lesson.id) dispatch(addNewLessonToModule(res.lesson.id));
         return res.lesson.id;
       } else toast.error(res.msg);
     } else toast.error("You are not logged in");

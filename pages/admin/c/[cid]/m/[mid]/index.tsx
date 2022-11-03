@@ -3,12 +3,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import EmojiPicker from "@components/emoji-picker";
-import { MenuIcon, SettingsIcon } from "@components/icons";
+import { ArrowRightIcon, MenuIcon, SettingsIcon } from "@components/icons";
 import Button from "@components/shared/button";
+import { AddIcon, DotsIcon } from "@components/shared/icons";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { useCourse, useDropdown, useModule, useResizeTextareaHeight } from "@lib/hooks";
-import { selectActiveModule, selectCourse, updateActiveModule } from "@store/_course/slice";
-import { createModuleThunk } from "@store/_course/thunk";
+import { selectActiveModule, selectCourse, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
+import { createLessonThunk, createModuleThunk } from "@store/_course/thunk";
 
 export default function ModulePage() {
   var router = useRouter();
@@ -48,7 +49,51 @@ export default function ModulePage() {
           {course.modules.length} module
         </div>
 
-        <div className="flex-grow"></div>
+        <div className="flex-grow">
+          {course.modules.map((module) => (
+            <div
+              onClick={() => {
+                router.push(`/admin/c/${courseId}/m/${module.id}`);
+                dispatch(updateActiveModuleId(module.id));
+              }}
+              key={module.id}
+              className="h-[34px] group px-2 py-1 cursor-pointer hover:bg-gray-100 flex items-center gap-2"
+            >
+              <span className="p-[1px] rounded-md cursor-pointer hover:bg-slate-200">
+                <ArrowRightIcon className="w-6 h-6 stroke-[#686868]" />
+              </span>
+              <span className="flex justify-center items-center p-[2px] h-5 w-5">
+                {module.emoji ?? "✌🏼"}
+              </span>
+              <span className="text-[#686868] flex-grow">
+                {module?.title ?? "Untitled"}
+              </span>
+
+              <span
+                onClick={async () => {
+                  var id = await (
+                    await dispatch(
+                      createLessonThunk({
+                        courseId: course.id,
+                        moduleId: module.id,
+                      })
+                    )
+                  ).payload;
+                  console.log(id);
+                  if (id)
+                    router.push(`/admin/c/${courseId}/m/${module.id}/l/${id}`);
+                }}
+                className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200"
+              >
+                <AddIcon className="w-6 h-6 fill-[#686868]" />
+              </span>
+
+              <span className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200">
+                <DotsIcon className="w-6 h-6 fill-[#686868]" />
+              </span>
+            </div>
+          ))}
+        </div>
 
         <div className="py-3 flex justify-center items-center">
           <button

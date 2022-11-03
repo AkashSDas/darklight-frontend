@@ -21,20 +21,6 @@ import { userExistsThunk } from "@store/_user/thunk";
 export default function SignupPage() {
   var dispatch = useAppDispatch();
   var user = useAppSelector(selectUserData);
-  var loading = useAppSelector(selectInitLoading);
-
-  useEffect(
-    function getUser() {
-      // If user has logged in using email-password
-      dispatch(getNewAccessTokenThunk());
-
-      // If user has logged in using OAuth
-      dispatch(getLoggedInUserThunk());
-    },
-    [dispatch]
-  );
-
-  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="relative px-6 flex gap-6 items-center">

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { selectCourse } from "@store/_course/slice";
+import { selectActiveLesson, selectActiveModule, selectCourse } from "@store/_course/slice";
 import { getCourseThunk, getLessonThunk, getModuleThunk } from "@store/_course/thunk";
 
 /**
@@ -126,6 +126,7 @@ export function useModule() {
   var courseId = router.query.cid as string;
   var moduleId = router.query.mid as string;
   var { moduleLoading, course } = useAppSelector(selectCourse);
+  var moduleData = useAppSelector(selectActiveModule);
 
   useEffect(
     function getModule() {
@@ -137,7 +138,7 @@ export function useModule() {
     [courseId, dispatch, moduleId]
   );
 
-  return { moduleLoading, moduleId, courseId };
+  return { moduleLoading, moduleId, courseId, moduleData };
 }
 
 export function useLesson() {
@@ -147,6 +148,7 @@ export function useLesson() {
   var moduleId = router.query.mid as string;
   var lessonId = router.query.mid as string;
   var { lessonLoading, course } = useAppSelector(selectCourse);
+  var lesson = useAppSelector(selectActiveLesson);
 
   useEffect(
     function getLesson() {
@@ -158,5 +160,5 @@ export function useLesson() {
     [courseId, dispatch, lessonId, moduleId]
   );
 
-  return { lessonLoading, lessonId, moduleId, courseId };
+  return { lessonLoading, lessonId, moduleId, courseId, lesson };
 }

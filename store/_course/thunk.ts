@@ -63,10 +63,17 @@ export var createModuleThunk = createAsyncThunk(
   "_course/create-module",
   async function createModule(courseId: string, { getState, dispatch }) {
     var { accessToken } = (getState() as RootState)._auth;
+    var { course } = (getState() as RootState)._course;
     if (accessToken) {
       var res = await createModuleService(accessToken, courseId);
       if (res.success && res.module) {
         toast.success("Module created");
+        dispatch(
+          updateCourse({
+            ...course,
+            modules: [...course?.modules, res.module],
+          } as any)
+        );
         return res.module.id;
       } else toast.error(res.msg);
     } else toast.error("You are not logged in");

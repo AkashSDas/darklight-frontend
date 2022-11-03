@@ -7,35 +7,23 @@ import { ArrowDownIcon, MenuIcon, SettingsIcon } from "@components/icons";
 import Button from "@components/shared/button";
 import { AddIcon } from "@components/shared/icons";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { useDropdown, useResizeTextareaHeight } from "@lib/hooks";
+import { useCourse, useDropdown, useResizeTextareaHeight } from "@lib/hooks";
 import { selectCourse, updateCourse } from "@store/_course/slice";
-import { getCourseThunk } from "@store/_course/thunk";
-
-function useCourse() {
-  var router = useRouter();
-  var dispatch = useAppDispatch();
-  var courseId = router.query.cid as string;
-  var { loading, course } = useAppSelector(selectCourse);
-
-  useEffect(
-    function getCourse() {
-      if (!course && courseId) {
-        dispatch(getCourseThunk(courseId));
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [courseId, dispatch]
-  );
-
-  return { loading, course, courseId };
-}
+import { createModuleThunk, getCourseThunk } from "@store/_course/thunk";
 
 export default function CoursePage() {
   var router = useRouter();
+  var dispatch = useAppDispatch();
   var { loading, course, courseId } = useCourse();
 
   if (loading || !courseId || !course) {
     return <div>Loading...</div>;
+  }
+
+  async function createNewModule() {
+    var id = (await dispatch(createModuleThunk(courseId))).payload;
+    console.log(id);
+    if (id) router.push(`/admin/c/${courseId}/m/${id}`);
   }
 
   return (
@@ -57,8 +45,11 @@ export default function CoursePage() {
         <div className="flex-grow"></div>
 
         <div className="py-3 flex justify-center items-center">
-          <button className="bg-[#E1E4FF] text-[#3A4EFF] h-12 px-6 rounded-2xl">
-            Add a new lesson
+          <button
+            onClick={createNewModule}
+            className="bg-[#E1E4FF] text-[#3A4EFF] h-12 px-6 rounded-2xl"
+          >
+            Add a new module
           </button>
         </div>
       </div>

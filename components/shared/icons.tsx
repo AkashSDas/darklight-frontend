@@ -1,3 +1,4 @@
+import ArrowDownIcon from "@public/icons/arrow-down.svg";
 import CollectionIcon from "@public/icons/collection.svg";
 import LogoutIcon from "@public/icons/logout.svg";
 import MenuIcon from "@public/icons/menu.svg";
@@ -14,4 +15,5 @@ export {
   AddIcon,
   StudentCardIcon,
   MenuIcon,
+  ArrowDownIcon,
 };

@@ -21,6 +21,7 @@ export interface Module {
   emoji?: string;
   title?: string;
   lessons: Lesson[];
+  lastEditedOn: string;
 }
 
 export interface Course {
@@ -69,6 +70,14 @@ export var courseSlice = createSlice({
     updateActiveModuleId(state, action: PayloadAction<string>) {
       state.activeModuleId = action.payload;
     },
+    updateActiveModule(state, action: PayloadAction<Module>) {
+      var moduleData = action.payload;
+      var modules = state.course?.modules.map((m) => {
+        if (m.id === moduleData.id) return moduleData;
+        else return m;
+      });
+      if (modules) state.course.modules = modules;
+    },
     updateActiveLesson(state, action: PayloadAction<Lesson>) {
       state.activeLesson = action.payload;
     },
@@ -76,8 +85,12 @@ export var courseSlice = createSlice({
   extraReducers: (builder) => {},
 });
 
-export var { updateCourse, updateActiveLesson, updateActiveModuleId } =
-  courseSlice.actions;
+export var {
+  updateCourse,
+  updateActiveLesson,
+  updateActiveModuleId,
+  updateActiveModule,
+} = courseSlice.actions;
 
 export var selectCourse = (state: RootState) => state._course;
 export var selectCourseData = (state: RootState) => state._course.course;

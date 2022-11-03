@@ -22,7 +22,6 @@ export default function CoursePage() {
 
   async function createNewModule() {
     var id = (await dispatch(createModuleThunk(courseId))).payload;
-    console.log(id);
     if (id) router.push(`/admin/c/${courseId}/m/${id}`);
   }
 

@@ -55,7 +55,7 @@ export async function createModuleService(token: string, courseId: string) {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  return { success: res.status < 300, msg: res.msg, course: res.data };
+  return { success: res.status < 300, msg: res.msg, module: res.data };
 }
 
 export async function updateModuleService(

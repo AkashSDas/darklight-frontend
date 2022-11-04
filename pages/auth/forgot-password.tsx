@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Button from "@components/shared/button";
-import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { useAppDispatch, useAppSelector } from "@lib/hooks";
 import { forgotPasswordSchema } from "@lib/validations";
 import { selectAuthLoading } from "@store/_auth/slice";
 import { forgotPasswordThunk } from "@store/_auth/thunk";

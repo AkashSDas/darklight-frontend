@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { PasswordResetPayload } from "services/_auth";
 
 import Button from "@components/shared/button";
-import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { useAppDispatch, useAppSelector } from "@lib/hooks";
 import { forgotPasswordSchema, passwordResetSchema } from "@lib/validations";
 import { selectAuthLoading } from "@store/_auth/slice";
 import { forgotPasswordThunk, passwordResetThunk } from "@store/_auth/thunk";

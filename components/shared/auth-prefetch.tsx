@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { useAppDispatch, useAppSelector } from "@lib/hooks";
 import { selectInitLoading } from "@store/_auth/slice";
 import { getLoggedInUserThunk, getNewAccessTokenThunk } from "@store/_auth/thunk";
 

@@ -2,13 +2,11 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import EmojiPicker from "@components/emoji-picker";
-import { ArrowRightIcon, MenuIcon, SettingsIcon } from "@components/icons";
 import Button from "@components/shared/button";
-import { AddIcon, DotIcon, DotsIcon } from "@components/shared/icons";
-import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { useCourse, useDropdown, useModule, useResizeTextareaHeight } from "@lib/hooks";
-import { selectActiveModule, selectCourse, updateActiveLesson, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
+import EmojiPicker from "@components/shared/emoji-picker";
+import { AddIcon, ArrowRightIcon, DotIcon, DotsIcon, MenuIcon, SettingsIcon } from "@components/shared/icons";
+import { useAppDispatch, useAppSelector, useCourse, useDropdown, useModule, useResizeTextareaHeight } from "@lib/hooks";
+import { selectActiveModule, selectCourse, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
 import { createLessonThunk, createModuleThunk } from "@store/_course/thunk";
 
 export default function ModulePage() {

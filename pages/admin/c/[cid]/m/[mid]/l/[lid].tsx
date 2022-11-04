@@ -2,15 +2,12 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import EmojiPicker from "@components/emoji-picker";
-import { ArrowRightIcon, MenuIcon, SettingsIcon } from "@components/icons";
 import Button from "@components/shared/button";
-import { AddIcon, DotsIcon } from "@components/shared/icons";
-import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight } from "@lib/hooks";
+import EmojiPicker from "@components/shared/emoji-picker";
+import { AddIcon, ArrowRightIcon, DotsIcon, MenuIcon, SettingsIcon } from "@components/shared/icons";
+import { useAppDispatch, useAppSelector, useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight } from "@lib/hooks";
 import { selectActiveLesson, selectActiveModule, selectCourse, updateActiveLesson, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
-import { createModuleThunk } from "@store/_course/thunk";
-import { createLessonThunk } from "@store/editable-course/thunk";
+import { createLessonThunk, createModuleThunk } from "@store/_course/thunk";
 
 export default function LessonPage() {
   var router = useRouter();

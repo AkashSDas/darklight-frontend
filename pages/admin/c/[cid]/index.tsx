@@ -1,13 +1,11 @@
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import EmojiPicker from "@components/emoji-picker";
-import { ArrowDownIcon, MenuIcon, SettingsIcon } from "@components/icons";
 import Button from "@components/shared/button";
-import { AddIcon } from "@components/shared/icons";
-import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { useCourse, useDropdown, useResizeTextareaHeight } from "@lib/hooks";
+import EmojiPicker from "@components/shared/emoji-picker";
+import { AddIcon, ArrowDownIcon, MenuIcon, SettingsIcon } from "@components/shared/icons";
+import { useAppDispatch, useAppSelector, useCourse, useDropdown, useResizeTextareaHeight } from "@lib/hooks";
 import { selectCourse, updateCourse } from "@store/_course/slice";
 import { createModuleThunk, getCourseThunk } from "@store/_course/thunk";
 

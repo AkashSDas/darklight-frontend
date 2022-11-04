@@ -7,7 +7,7 @@ import { CompleteOAuthPayload, SignupPayload } from "services/_auth";
 
 import Button from "@components/shared/button";
 import Navbar from "@components/shared/navbar";
-import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { useAppDispatch, useAppSelector } from "@lib/hooks";
 import { completeOAuthSignupSchema, signupSchema } from "@lib/validations";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Google from "@public/brand-svg/google.svg";

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { LoginPayload } from "services/_auth";
 
 import Button from "@components/shared/button";
-import { useAppDispatch, useAppSelector } from "@hooks/store";
+import { useAppDispatch, useAppSelector } from "@lib/hooks";
 import { loginSchema } from "@lib/validations";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Google from "@public/brand-svg/google.svg";

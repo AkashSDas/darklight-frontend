@@ -2,8 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { useAppDispatch, useAppSelector } from "@hooks/store";
-import { useDropdown } from "@lib/hooks";
+import { useAppDispatch, useAppSelector, useDropdown } from "@lib/hooks";
 import { logoutThunk } from "@store/_auth/thunk";
 import { createCourseThunk } from "@store/_course/thunk";
 import { selectUserData } from "@store/_user/slice";

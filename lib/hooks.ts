@@ -1,9 +1,14 @@
 import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "store";
 
-import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { selectActiveLesson, selectActiveModule, selectCourse } from "@store/_course/slice";
 import { getCourseThunk, getLessonThunk, getModuleThunk } from "@store/_course/thunk";
+
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 /**
  * Hook that alerts clicks outside of the passed ref

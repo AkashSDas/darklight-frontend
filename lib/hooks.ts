@@ -146,7 +146,7 @@ export function useLesson() {
   var dispatch = useAppDispatch();
   var courseId = router.query.cid as string;
   var moduleId = router.query.mid as string;
-  var lessonId = router.query.mid as string;
+  var lessonId = router.query.lid as string;
   var { lessonLoading, course } = useAppSelector(selectCourse);
   var lesson = useAppSelector(selectActiveLesson);
 

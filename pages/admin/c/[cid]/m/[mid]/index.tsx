@@ -1,17 +1,11 @@
-import moment from "moment";
-import { useRouter } from "next/router";
 import { useState } from "react";
 
-import Button from "@components/shared/button";
+import CourseEditorLayout from "@components/shared/course-editor-layout";
 import EmojiPicker from "@components/shared/emoji-picker";
-import { AddIcon, ArrowRightIcon, DotIcon, DotsIcon, MenuIcon, SettingsIcon } from "@components/shared/icons";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useModule, useResizeTextareaHeight } from "@lib/hooks";
-import { selectActiveModule, selectCourse, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
-import { createLessonThunk, createModuleThunk } from "@store/_course/thunk";
+import { selectActiveModule, updateActiveModule } from "@store/_course/slice";
 
 export default function ModulePage() {
-  var router = useRouter();
-  var dispatch = useAppDispatch();
   var { loading, course, courseId } = useCourse();
   var { moduleId, moduleLoading, moduleData } = useModule();
 
@@ -26,211 +20,12 @@ export default function ModulePage() {
     return <div>Loading...</div>;
   }
 
-  async function createNewModule() {
-    var id = (await dispatch(createModuleThunk(courseId))).payload;
-    if (id) router.push(`/admin/c/${courseId}/m/${id}`);
-  }
-
-  function ModuleItem({ module }) {
-    var [open, setOpen] = useState(false);
-
-    return (
-      <>
-        <div
-          onClick={(e) => {
-            router.push(`/admin/c/${courseId}/m/${module.id}`);
-            dispatch(updateActiveModuleId(module.id));
-          }}
-          key={module.id}
-          className="h-[34px] group px-2 py-1 cursor-pointer hover:bg-gray-100 flex items-center gap-2"
-        >
-          <span
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpen(!open);
-            }}
-            className="p-[1px] rounded-md cursor-pointer hover:bg-slate-200"
-          >
-            <ArrowRightIcon
-              className={`w-6 h-6 stroke-[#686868] ${
-                open ? "rotate-90" : "rotate-0"
-              }`}
-            />
-          </span>
-          <span className="flex justify-center items-center p-[2px] h-5 w-5">
-            {module.emoji ?? "✌🏼"}
-          </span>
-          <span className="text-[#686868] flex-grow">
-            {module?.title ?? "Untitled"}
-          </span>
-
-          <span
-            onClick={async () => {
-              var id = await (
-                await dispatch(
-                  createLessonThunk({
-                    courseId: course.id,
-                    moduleId: module.id,
-                  })
-                )
-              ).payload;
-              if (id)
-                router.push(`/admin/c/${courseId}/m/${module.id}/l/${id}`);
-            }}
-            className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200"
-          >
-            <AddIcon className="w-6 h-6 fill-[#686868]" />
-          </span>
-
-          <span className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200">
-            <DotsIcon className="w-6 h-6 fill-[#686868]" />
-          </span>
-        </div>
-
-        {open && (
-          <div>
-            {module.lessons.map((lesson) => (
-              <div
-                key={lesson.id}
-                onClick={() => {
-                  updateActiveModule(null);
-                  router.push(
-                    `/admin/c/${courseId}/m/${module.id}/l/${lesson.id}`
-                  );
-                }}
-                className="h-[34px] group px-2 py-1 cursor-pointer hover:bg-gray-100 flex items-center gap-2"
-              >
-                <span className="w-6 h-6"></span>
-                <span className="bg-slate-100">
-                  <DotIcon className="w-5 h-5 fill-[#686868]" />
-                </span>
-                <span className="flex justify-center items-center p-[2px] h-5 w-5">
-                  {lesson.emoji ?? "✌🏼"}
-                </span>
-                <span className="text-[#686868] flex-grow">
-                  {lesson?.title ?? "Untitled"}
-                </span>
-
-                <span className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200">
-                  <DotsIcon className="w-6 h-6 fill-[#686868]" />
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </>
-    );
-  }
-
-  return (
-    <div className="relative flex">
-      <div
-        id="sidebar"
-        className="w-[300px] h-screen bg-gray-50 fixed flex flex-col gap-2"
-      >
-        <div className="h-[60px] flex items-center px-2 py-1 border-b border-b-solid border-b-[#E9E9E9]">
-          <div className="bg-[#E1E4FF] text-[#3A4EFF] h-7 rounded-lg px-3 flex items-center justify-center text-[14px]">
-            {course.stage == "draft" ? "Draft" : "Published"}
-          </div>
-        </div>
-
-        <div className="font-gilroy font-extrabold text-[14px] pl-2 pb-3 text-gray-600">
-          {course.modules.length} module
-        </div>
-
-        <div className="flex-grow">
-          {course.modules.map((module) => (
-            <ModuleItem key={module.id} module={module} />
-          ))}
-        </div>
-
-        <div className="py-3 flex justify-center items-center">
-          <button
-            onClick={createNewModule}
-            className="bg-[#E1E4FF] text-[#3A4EFF] h-12 px-6 rounded-2xl"
-          >
-            Add a new module
-          </button>
-        </div>
-      </div>
-
-      <div className="ml-[300px] flex-grow">
-        <nav className="h-[60px] mb-6 flex justify-between items-center px-3 py2 border-b border-b-solid border-b-[#E9E9E9]">
-          <div>
-            <div
-              onClick={(e) => {
-                router.push(`/admin/c/${courseId}`);
-              }}
-              className="h-[34px] rounded-xl cursor-pointer flex items-center px-2"
-            >
-              <span className="mr-2">{course.emoji ?? "✌🏼"}</span>
-              <span>{course.title ?? "Untitled"}</span>
-              {moduleData && (
-                <span className="flex items-center justify-center text-[#B6B6B6] font-urbanist px-2 text-[14px] font-medium">
-                  /
-                </span>
-              )}
-              <span className="mr-2">{moduleData.emoji ?? "✌🏼"}</span>
-              <span>{moduleData.title ?? "Untitled"}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 justify-end">
-            <div className="font-urbanist text-[14px] font-medium text-gray-300">
-              Edited{" "}
-              {moduleData
-                ? moment(moduleData.lastEditedOn).fromNow().split(" m")[0] +
-                  "m ago"
-                : moment(course.lastEditedOn).fromNow().split(" m")[0] +
-                  "m ago"}
-            </div>
-
-            <Button
-              variant="text"
-              size="md"
-              label="My courses"
-              onClick={() => {}}
-              className="!px-3"
-            />
-            <Button
-              variant="text"
-              size="md"
-              label="Search"
-              onClick={() => {}}
-              className="!px-3"
-            />
-
-            <div className="h-[22px] w-[1px] bg-gray-200"></div>
-
-            <Button
-              variant="icon"
-              size="md"
-              label="Settings"
-              startIcon={<SettingsIcon className="fill-black" />}
-              onClick={() => {}}
-              className="!px-3"
-            />
-            <Button
-              variant="icon"
-              size="md"
-              label="Menu"
-              startIcon={<MenuIcon className="fill-black" />}
-              onClick={() => {}}
-              className="!px-3"
-            />
-          </div>
-        </nav>
-
-        <ModuleSettings />
-      </div>
-    </div>
-  );
+  return <ModuleSettings />;
 }
 
 function ModuleSettings() {
   var dispatch = useAppDispatch();
   var { isOpen, setIsOpen, wrapperRef } = useDropdown();
-  var { loading, course } = useAppSelector(selectCourse);
   var moduleData = useAppSelector(selectActiveModule);
 
   function EmojiInput() {
@@ -312,3 +107,7 @@ function ModuleSettings() {
     </div>
   );
 }
+
+ModulePage.getLayout = function getLayout(page) {
+  return <CourseEditorLayout>{page}</CourseEditorLayout>;
+};

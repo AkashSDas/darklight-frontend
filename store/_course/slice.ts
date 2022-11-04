@@ -20,7 +20,7 @@ export interface Module {
   id: string;
   emoji?: string;
   title?: string;
-  lessons: string[];
+  lessons: Lesson[];
   lastEditedOn: string;
 }
 
@@ -83,11 +83,11 @@ export var courseSlice = createSlice({
     },
     addNewLessonToModule(
       state,
-      action: PayloadAction<{ moduleId: string; lessonId: string }>
+      action: PayloadAction<{ moduleId: string; lesson: Lesson }>
     ) {
-      var { moduleId, lessonId } = action.payload;
+      var { moduleId, lesson } = action.payload;
       var moduleData = state.course?.modules.find((m) => m.id === moduleId);
-      if (moduleData) moduleData.lessons.push(lessonId);
+      if (moduleData) moduleData.lessons.push(lesson);
     },
   },
   extraReducers: (builder) => {},

@@ -109,7 +109,7 @@ export var createLessonThunk = createAsyncThunk(
         toast.success("Lesson created");
         dispatch(updateActiveLesson(res.lesson as any));
         if (res.lesson.id) dispatch(addNewLessonToModule(res.lesson.id));
-        return res.lesson.id;
+        return res.lesson;
       } else toast.error(res.msg);
     } else toast.error("You are not logged in");
     return null;

@@ -217,6 +217,7 @@ function LessonEditor() {
             handleClose={() => setIsOpen(false)}
           />
         )}
+        {JSON.stringify(lesson)}
       </div>
     );
   }

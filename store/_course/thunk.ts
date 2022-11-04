@@ -126,7 +126,9 @@ export var getLessonThunk = createAsyncThunk(
     }: { courseId: string; moduleId: string; lessonId: string },
     { getState, dispatch }
   ) {
+    console.log("get lesson thunk");
     var lesson = await getLessonService(courseId, moduleId, lessonId);
+    console.log(lesson);
     dispatch(updateActiveLesson(lesson as any));
     return lesson?.id;
   }

@@ -152,7 +152,7 @@ export function useLesson() {
 
   useEffect(
     function getLesson() {
-      if (!course && courseId && moduleId && lessonId) {
+      if (courseId && moduleId && lessonId) {
         dispatch(getLessonThunk({ courseId, moduleId, lessonId }));
       }
     },

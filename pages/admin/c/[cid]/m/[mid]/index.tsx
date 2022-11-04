@@ -5,10 +5,10 @@ import { useState } from "react";
 import EmojiPicker from "@components/emoji-picker";
 import { ArrowRightIcon, MenuIcon, SettingsIcon } from "@components/icons";
 import Button from "@components/shared/button";
-import { AddIcon, DotsIcon } from "@components/shared/icons";
+import { AddIcon, DotIcon, DotsIcon } from "@components/shared/icons";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { useCourse, useDropdown, useModule, useResizeTextareaHeight } from "@lib/hooks";
-import { selectActiveModule, selectCourse, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
+import { selectActiveModule, selectCourse, updateActiveLesson, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
 import { createLessonThunk, createModuleThunk } from "@store/_course/thunk";
 
 export default function ModulePage() {
@@ -33,6 +33,97 @@ export default function ModulePage() {
     if (id) router.push(`/admin/c/${courseId}/m/${id}`);
   }
 
+  function ModuleItem({ module }) {
+    var [open, setOpen] = useState(false);
+
+    return (
+      <>
+        <div
+          onClick={(e) => {
+            router.push(`/admin/c/${courseId}/m/${module.id}`);
+            dispatch(updateActiveModuleId(module.id));
+          }}
+          key={module.id}
+          className="h-[34px] group px-2 py-1 cursor-pointer hover:bg-gray-100 flex items-center gap-2"
+        >
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(!open);
+            }}
+            className="p-[1px] rounded-md cursor-pointer hover:bg-slate-200"
+          >
+            <ArrowRightIcon
+              className={`w-6 h-6 stroke-[#686868] ${
+                open ? "rotate-90" : "rotate-0"
+              }`}
+            />
+          </span>
+          <span className="flex justify-center items-center p-[2px] h-5 w-5">
+            {module.emoji ?? "✌🏼"}
+          </span>
+          <span className="text-[#686868] flex-grow">
+            {module?.title ?? "Untitled"}
+          </span>
+
+          <span
+            onClick={async () => {
+              var id = await (
+                await dispatch(
+                  createLessonThunk({
+                    courseId: course.id,
+                    moduleId: module.id,
+                  })
+                )
+              ).payload;
+              if (id)
+                router.push(`/admin/c/${courseId}/m/${module.id}/l/${id}`);
+            }}
+            className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200"
+          >
+            <AddIcon className="w-6 h-6 fill-[#686868]" />
+          </span>
+
+          <span className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200">
+            <DotsIcon className="w-6 h-6 fill-[#686868]" />
+          </span>
+        </div>
+
+        {open && (
+          <div>
+            {module.lessons.map((lesson) => (
+              <div
+                key={lesson.id}
+                onClick={() => {
+                  updateActiveModule(null);
+                  router.push(
+                    `/admin/c/${courseId}/m/${module.id}/l/${lesson.id}`
+                  );
+                }}
+                className="h-[34px] group px-2 py-1 cursor-pointer hover:bg-gray-100 flex items-center gap-2"
+              >
+                <span className="w-6 h-6"></span>
+                <span className="bg-slate-100">
+                  <DotIcon className="w-5 h-5 fill-[#686868]" />
+                </span>
+                <span className="flex justify-center items-center p-[2px] h-5 w-5">
+                  {lesson.emoji ?? "✌🏼"}
+                </span>
+                <span className="text-[#686868] flex-grow">
+                  {lesson?.title ?? "Untitled"}
+                </span>
+
+                <span className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200">
+                  <DotsIcon className="w-6 h-6 fill-[#686868]" />
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </>
+    );
+  }
+
   return (
     <div className="relative flex">
       <div
@@ -51,47 +142,7 @@ export default function ModulePage() {
 
         <div className="flex-grow">
           {course.modules.map((module) => (
-            <div
-              onClick={() => {
-                router.push(`/admin/c/${courseId}/m/${module.id}`);
-                dispatch(updateActiveModuleId(module.id));
-              }}
-              key={module.id}
-              className="h-[34px] group px-2 py-1 cursor-pointer hover:bg-gray-100 flex items-center gap-2"
-            >
-              <span className="p-[1px] rounded-md cursor-pointer hover:bg-slate-200">
-                <ArrowRightIcon className="w-6 h-6 stroke-[#686868]" />
-              </span>
-              <span className="flex justify-center items-center p-[2px] h-5 w-5">
-                {module.emoji ?? "✌🏼"}
-              </span>
-              <span className="text-[#686868] flex-grow">
-                {module?.title ?? "Untitled"}
-              </span>
-
-              <span
-                onClick={async () => {
-                  var id = await (
-                    await dispatch(
-                      createLessonThunk({
-                        courseId: course.id,
-                        moduleId: module.id,
-                      })
-                    )
-                  ).payload;
-                  console.log(id);
-                  if (id)
-                    router.push(`/admin/c/${courseId}/m/${module.id}/l/${id}`);
-                }}
-                className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200"
-              >
-                <AddIcon className="w-6 h-6 fill-[#686868]" />
-              </span>
-
-              <span className="group-hover:block hidden p-[1px] rounded-md cursor-pointer hover:bg-slate-200">
-                <DotsIcon className="w-6 h-6 fill-[#686868]" />
-              </span>
-            </div>
+            <ModuleItem key={module.id} module={module} />
           ))}
         </div>
 
@@ -109,7 +160,9 @@ export default function ModulePage() {
         <nav className="h-[60px] mb-6 flex justify-between items-center px-3 py2 border-b border-b-solid border-b-[#E9E9E9]">
           <div>
             <div
-              onClick={() => router.push(`/admin/c/${courseId}`)}
+              onClick={(e) => {
+                router.push(`/admin/c/${courseId}`);
+              }}
               className="h-[34px] rounded-xl cursor-pointer flex items-center px-2"
             >
               <span className="mr-2">{course.emoji ?? "✌🏼"}</span>

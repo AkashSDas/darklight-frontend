@@ -4,7 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
 
 import { selectActiveLesson, selectActiveModule, selectCourse } from "@store/_course/slice";
-import { getCourseThunk, getLessonThunk, getModuleThunk } from "@store/_course/thunk";
+import { getCourseThunk, getLessonThunk, getModuleThunk, updateCourseInfoThunk } from "@store/_course/thunk";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -166,4 +166,46 @@ export function useLesson() {
   );
 
   return { lessonLoading, lessonId, moduleId, courseId, lesson };
+}
+
+export function useSaveCourseSettings() {
+  var dispatch = useAppDispatch();
+  var { course } = useAppSelector(selectCourse);
+  var firstEditSaved = useRef(false);
+  var lastSavedAt = useRef(new Date(Date.now()));
+  const CALL_AFTER = 5000;
+
+  useEffect(() => {
+    var interval = setInterval(() => {
+      async function saveSetting() {
+        await dispatch(
+          updateCourseInfoThunk({
+            courseId: course.id,
+            payload: {
+              emoji: course.emoji,
+              title: course.title,
+              description: course.description,
+              tags: course.tags,
+              difficulty: course.difficulty,
+              price: course.price,
+              stage: course.stage,
+            },
+          })
+        );
+        lastSavedAt.current = new Date(Date.now());
+      }
+
+      if (
+        course &&
+        (!firstEditSaved ||
+          new Date(course.lastEditedOn).getTime() >
+            lastSavedAt.current.getTime())
+      ) {
+        firstEditSaved.current = true;
+        saveSetting();
+      }
+    }, CALL_AFTER);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [dispatch, course]);
 }

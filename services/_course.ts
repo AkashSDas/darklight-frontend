@@ -23,6 +23,7 @@ export async function createCourseService(token: string) {
 }
 
 export interface CourseInfoPayload {
+  emoji?: string;
   title?: string;
   description?: string;
   tags?: string[];

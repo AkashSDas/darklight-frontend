@@ -39,10 +39,7 @@ export var updateCourseInfoThunk = createAsyncThunk(
   ) {
     var { accessToken } = (getState() as RootState)._auth;
     if (accessToken) {
-      var res = await updateCourseInfoService(accessToken, courseId, payload);
-      if (res.success && res.course) {
-        dispatch(updateCourse(res.course as any));
-      } else toast.error(res.msg);
+      await updateCourseInfoService(accessToken, courseId, payload);
     } else toast.error("You are not logged in");
   }
 );

@@ -2,8 +2,8 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { useAppDispatch, useCourse, useLesson, useModule } from "@lib/hooks";
-import { addNewLessonToModule, updateActiveLesson, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
+import { useAppDispatch, useAppSelector, useCourse, useLesson, useModule } from "@lib/hooks";
+import { addNewLessonToModule, selectCourse, selectCourseLoading, updateActiveLesson, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
 import { createLessonThunk, createModuleThunk } from "@store/_course/thunk";
 
 import Button from "./button";
@@ -28,6 +28,7 @@ function Navbar() {
   var { lesson } = useLesson();
   var router = useRouter();
   var dispatch = useAppDispatch();
+  var { updating } = useAppSelector(selectCourse);
 
   function Breadcrumb() {
     return (
@@ -35,6 +36,7 @@ function Navbar() {
         <div className="h-[34px] rounded-xl cursor-pointer flex items-center px-2">
           <span className="mr-2">{course?.emoji ?? "✌🏼"}</span>
           <span
+            className="max-w-[200px] overflow-hidden whitespace-nowrap overflow-ellipsis"
             onClick={() => {
               dispatch(updateActiveModuleId(null));
               dispatch(updateActiveLesson(null));
@@ -69,6 +71,10 @@ function Navbar() {
               <span>{lesson?.title ?? "Untitled"}</span>
             </>
           )}
+
+          <span className="mx-2 font-urbanist text-[14px] font-medium text-gray-300">
+            {updating ? "Saving..." : ""}
+          </span>
         </div>
       </div>
     );
@@ -81,9 +87,9 @@ function Navbar() {
       <div className="flex items-center gap-4 justify-end">
         <div className="font-urbanist text-[14px] font-medium text-gray-300">
           Edited{" "}
-          {router.pathname.includes("l")
+          {router.pathname.includes("/l/")
             ? moment(lesson?.lastEditedOn).fromNow()
-            : router.pathname.includes("m")
+            : router.pathname.includes("/m/")
             ? moment(moduleData?.lastEditedOn).fromNow()
             : moment(course?.lastEditedOn).fromNow()}
         </div>

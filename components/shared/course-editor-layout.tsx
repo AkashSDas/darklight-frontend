@@ -1,10 +1,11 @@
 import moment from "moment";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { useAppDispatch, useAppSelector, useCourse, useLesson, useModule } from "@lib/hooks";
-import { addNewLessonToModule, selectCourse, selectCourseLoading, updateActiveLesson, updateActiveModule, updateActiveModuleId } from "@store/_course/slice";
-import { createLessonThunk, createModuleThunk } from "@store/_course/thunk";
+import { addNewLessonToModule, Module, selectCourse, selectCourseLoading, updateActiveLesson, updateActiveModule, updateActiveModuleId, updateCourse } from "@store/_course/slice";
+import { createLessonThunk, createModuleThunk, reorderModulesThunk } from "@store/_course/thunk";
 
 import Button from "./button";
 import { AddIcon, ArrowRightIcon, DotIcon, DotsIcon, MenuIcon, SettingsIcon } from "./icons";
@@ -181,16 +182,53 @@ function Sidebar() {
         {course?.modules.length} module
       </div>
 
-      <div className="flex-grow">
-        {course?.modules.map((moduleData) => (
-          <ModuleItem
-            key={moduleData.id}
-            moduleData={moduleData}
-            course={course}
-            courseId={courseId}
-          />
-        ))}
-      </div>
+      <DragDropContext
+        onDragEnd={async (dropEvent) => {
+          // Reorder
+          var source = dropEvent.source.index;
+          var destination = dropEvent.destination?.index;
+          var modules = (course?.modules.slice() || []) as Module[];
+          var moveModule = modules[source];
+          modules.splice(source, 1);
+          modules.splice(destination || 0, 0, moveModule);
+          dispatch(updateCourse({ ...course, modules }));
+          await dispatch(reorderModulesThunk({ courseId: course.id, modules }));
+        }}
+      >
+        <Droppable droppableId="sidebar-modules">
+          {(provided) => (
+            <div
+              className="flex-grow"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {course?.modules.map((moduleData, index) => (
+                <Draggable
+                  key={moduleData.id}
+                  draggableId={moduleData.id}
+                  index={index}
+                >
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <ModuleItem
+                        key={moduleData.id}
+                        moduleData={moduleData}
+                        course={course}
+                        courseId={courseId}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
 
       <NewModuleButton />
     </div>

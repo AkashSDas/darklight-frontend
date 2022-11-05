@@ -79,7 +79,7 @@ export async function updateModuleService(
   return { success: res.status < 300, msg: res.msg, module: res.data };
 }
 
-export async function reorderModules(
+export async function reorderModulesService(
   token: string,
   courseId: string,
   data: Module[]
@@ -87,7 +87,7 @@ export async function reorderModules(
   var res = await fetchFromCourse(`${courseId}/reorder`, {
     method: "put",
     headers: { Authorization: `Bearer ${token}` },
-    data,
+    data: { modules: data },
   });
   return { success: res.status < 300, msg: res.msg, course: res.data };
 }

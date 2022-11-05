@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@store/_user/slice";
 
 import { RootState } from "../";
-import { updateCourseInfoThunk } from "./thunk";
+import { updateCourseInfoThunk, updateModuleThunk } from "./thunk";
 
 export interface Lesson {
   id: string;
@@ -21,6 +21,7 @@ export interface Module {
   id: string;
   emoji?: string;
   title?: string;
+  description?: string;
   lessons: Lesson[];
   lastEditedOn: string;
 }
@@ -99,6 +100,16 @@ export var courseSlice = createSlice({
       state.updating = false;
     });
     builder.addCase(updateCourseInfoThunk.rejected, (state) => {
+      state.updating = false;
+    });
+
+    builder.addCase(updateModuleThunk.pending, (state) => {
+      state.updating = true;
+    });
+    builder.addCase(updateModuleThunk.fulfilled, (state) => {
+      state.updating = false;
+    });
+    builder.addCase(updateModuleThunk.rejected, (state) => {
       state.updating = false;
     });
   },

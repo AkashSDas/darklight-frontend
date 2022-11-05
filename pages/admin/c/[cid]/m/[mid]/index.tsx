@@ -2,8 +2,36 @@ import { useState } from "react";
 
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 import EmojiPicker from "@components/shared/emoji-picker";
-import { useAppDispatch, useAppSelector, useCourse, useDropdown, useModule, useResizeTextareaHeight } from "@lib/hooks";
+import { useAppDispatch, useAppSelector, useCourse, useDropdown, useModule, useResizeTextareaHeight, useSaveModuleData } from "@lib/hooks";
 import { selectActiveModule, updateActiveModule } from "@store/_course/slice";
+
+function TitleInput({ title }: { title: string }) {
+  var { ref } = useResizeTextareaHeight(title ?? "");
+  var moduleData = useAppSelector(selectActiveModule);
+  var dispatch = useAppDispatch();
+  useSaveModuleData();
+
+  return (
+    <textarea
+      ref={ref}
+      onChange={(e) => {
+        dispatch(
+          updateActiveModule({
+            ...moduleData,
+            title: e.target.value,
+            lastEditedOn: new Date().toISOString(),
+          })
+        );
+      }}
+      value={title}
+      onKeyDownCapture={(e) => {
+        if (e.key == "Enter") e.preventDefault();
+      }}
+      placeholder="Untitled"
+      className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-gilroy font-extrabold text-[39.1px] leading-[100%]"
+    />
+  );
+}
 
 export default function ModulePage() {
   var { loading, course, courseId } = useCourse();
@@ -50,24 +78,6 @@ function ModuleSettings() {
           />
         )}
       </div>
-    );
-  }
-
-  function TitleInput({ title }: { title: string }) {
-    var [value, setValue] = useState(title);
-    var { ref } = useResizeTextareaHeight(value);
-
-    return (
-      <textarea
-        ref={ref}
-        onChange={(e) => setValue(e.target.value)}
-        value={value}
-        onKeyDownCapture={(e) => {
-          if (e.key == "Enter") e.preventDefault();
-        }}
-        placeholder="Untitled"
-        className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-gilroy font-extrabold text-[39.1px] leading-[100%]"
-      />
     );
   }
 

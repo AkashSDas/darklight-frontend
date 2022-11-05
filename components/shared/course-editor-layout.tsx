@@ -52,6 +52,7 @@ function Navbar() {
               </span>
               <span className="mr-2">{moduleData?.emoji ?? "✌🏼"}</span>
               <span
+                className="max-w-[200px] overflow-hidden whitespace-nowrap overflow-ellipsis"
                 onClick={() => {
                   dispatch(updateActiveLesson(null));
                   router.push(`/admin/c/${courseId}/m/${moduleId}`);
@@ -68,7 +69,9 @@ function Navbar() {
                 /
               </span>
               <span className="mr-2">{lesson?.emoji ?? "✌🏼"}</span>
-              <span>{lesson?.title ?? "Untitled"}</span>
+              <span className="max-w-[200px] overflow-hidden whitespace-nowrap overflow-ellipsis">
+                {lesson?.title ?? "Untitled"}
+              </span>
             </>
           )}
 

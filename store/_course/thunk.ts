@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { CourseInfoPayload, createCourseService, createLessonService, createModuleService, getCourseService, getLessonService, getModuleService, updateCourseInfoService, updateModuleService } from "services/_course";
+import { CourseInfoPayload, createCourseService, createLessonService, createModuleService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, updateCourseInfoService, updateModuleService } from "services/_course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -85,7 +85,11 @@ export var updateModuleThunk = createAsyncThunk(
       courseId,
       moduleId,
       payload,
-    }: { courseId: string; moduleId: string; payload: Module },
+    }: {
+      courseId: string;
+      moduleId: string;
+      payload: ModuleInfoPayload;
+    },
     { getState, dispatch }
   ) {
     var { accessToken } = (getState() as RootState)._auth;

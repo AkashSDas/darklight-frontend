@@ -4,7 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
 
 import { selectActiveLesson, selectActiveModule, selectCourse } from "@store/_course/slice";
-import { getCourseThunk, getLessonThunk, getModuleThunk, updateCourseInfoThunk } from "@store/_course/thunk";
+import { getCourseThunk, getLessonThunk, getModuleThunk, updateCourseInfoThunk, updateModuleThunk } from "@store/_course/thunk";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -208,4 +208,46 @@ export function useSaveCourseSettings() {
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [dispatch, course]);
+}
+
+export function useSaveModuleData() {
+  var dispatch = useAppDispatch();
+  var moduleData = useAppSelector(selectActiveModule);
+  var { course } = useAppSelector(selectCourse);
+  var firstEditSaved = useRef(false);
+  var lastSavedAt = useRef(new Date(Date.now()));
+  const CALL_AFTER = 1000;
+
+  useEffect(() => {
+    var interval = setInterval(() => {
+      console.log("loog");
+      async function saveSetting() {
+        await dispatch(
+          updateModuleThunk({
+            courseId: course.id,
+            moduleId: moduleData.id,
+            payload: {
+              title: moduleData.title,
+              description: moduleData.description,
+              emoji: moduleData.emoji,
+              lessons: moduleData.lessons.map((l) => l.id),
+            },
+          })
+        );
+        lastSavedAt.current = new Date(Date.now());
+      }
+
+      if (
+        course &&
+        (!firstEditSaved ||
+          new Date(moduleData.lastEditedOn).getTime() >
+            lastSavedAt.current.getTime())
+      ) {
+        firstEditSaved.current = true;
+        saveSetting();
+      }
+    }, CALL_AFTER);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [dispatch, course, moduleData]);
 }

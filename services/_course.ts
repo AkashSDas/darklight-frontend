@@ -59,11 +59,17 @@ export async function createModuleService(token: string, courseId: string) {
   return { success: res.status < 300, msg: res.msg, module: res.data };
 }
 
+export interface ModuleInfoPayload {
+  emoji?: string;
+  title?: string;
+  description?: string;
+  lessons?: string[];
+}
 export async function updateModuleService(
   token: string,
   courseId: string,
   moduleId: string,
-  data: Module
+  data: ModuleInfoPayload
 ) {
   var res = await fetchFromCourse(`${courseId}/${moduleId}`, {
     method: "put",

@@ -135,7 +135,7 @@ export function useModule() {
 
   useEffect(
     function getModule() {
-      if (!course && courseId && moduleId) {
+      if (courseId && moduleId) {
         dispatch(getModuleThunk({ courseId, moduleId }));
       }
     },

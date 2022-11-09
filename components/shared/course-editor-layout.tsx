@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { useAppDispatch, useAppSelector, useCourse, useLesson, useModule } from "@lib/hooks";
-import { addNewLessonToModule, Module, selectCourse, selectCourseLoading, updateActiveLesson, updateActiveModule, updateActiveModuleId, updateCourse } from "@store/_course/slice";
+import { addNewLessonToModule, Module, selectCourse, selectCourseLoading, selectPreview, updateActiveLesson, updateActiveModule, updateActiveModuleId, updateCourse, updatePreview } from "@store/_course/slice";
 import { createLessonThunk, createModuleThunk, reorderModulesThunk } from "@store/_course/thunk";
 
 import Button from "./button";
@@ -149,10 +149,32 @@ function Sidebar() {
   }
 
   function Header() {
+    var preview = useAppSelector(selectPreview);
+    var dispatch = useAppDispatch();
+
     return (
-      <div className="h-[60px] flex items-center px-2 py-1 border-b border-b-solid border-b-[#E9E9E9]">
-        <div className="bg-[#E1E4FF] text-[#3A4EFF] h-7 rounded-lg px-3 flex items-center justify-center text-[14px]">
-          {course?.stage == "draft" ? "Draft" : "Published"}
+      <div className="h-[60px] flex justify-between items-center px-2 py-1 border-b border-b-solid border-b-[#E9E9E9]">
+        <div className="text-[14px]">Lesson preview mode</div>
+
+        <div className="relative max-w-[300px] w-max flex justify-end">
+          <div
+            onClick={() => {
+              dispatch(updatePreview(!preview));
+            }}
+            className="flex justify-between items-center cursor-pointer"
+          >
+            <div
+              className={`w-14 h-8 ${
+                !preview ? "bg-gray-300" : "bg-blue2"
+              }  rounded-full flex-shrink-0 p-1`}
+            >
+              <div
+                className={`bg-white w-6 h-6 rounded-full shadow-md transform ${
+                  preview ? "translate-x-6" : ""
+                } duration-300 ease-in-out`}
+              ></div>
+            </div>
+          </div>
         </div>
       </div>
     );

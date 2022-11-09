@@ -50,6 +50,7 @@ interface CourseState {
   lessonLoading: boolean;
   activeModuleId?: string | null;
   activeLesson?: Lesson | null;
+  previewLesson: boolean;
 }
 
 var initialState: CourseState = {
@@ -60,6 +61,7 @@ var initialState: CourseState = {
   lessonLoading: false,
   activeModuleId: null,
   activeLesson: null,
+  previewLesson: false,
 };
 
 export var courseSlice = createSlice({
@@ -91,6 +93,9 @@ export var courseSlice = createSlice({
       var moduleData = state.course?.modules.find((m) => m.id === moduleId);
       if (moduleData) moduleData.lessons.push(lesson);
     },
+    updatePreview(state, action: PayloadAction<boolean>) {
+      state.previewLesson = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateCourseInfoThunk.pending, (state) => {
@@ -121,11 +126,13 @@ export var {
   updateActiveModuleId,
   updateActiveModule,
   addNewLessonToModule,
+  updatePreview,
 } = courseSlice.actions;
 
 export var selectCourse = (state: RootState) => state._course;
 export var selectCourseData = (state: RootState) => state._course.course;
 export var selectCourseLoading = (state: RootState) => state._course.loading;
+export var selectPreview = (state: RootState) => state._course.previewLesson;
 export var selectActiveLesson = (state: RootState) =>
   state._course.activeLesson;
 export var selectModuleLoading = (state: RootState) =>

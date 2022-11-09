@@ -1,6 +1,9 @@
 import { useFormik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { LoginPayload } from "services/_auth";
 
 import Button from "@components/shared/button";
@@ -14,7 +17,19 @@ import { loginThunk } from "@store/_auth/thunk";
 
 import { FormLabel, ValidationMsg } from "./signup";
 
+function useInvalidLogin() {
+  var router = useRouter();
+
+  useEffect(() => {
+    if (router.query.info == "signup-invalid") {
+      toast.error("No OR incomplete account");
+    }
+  }, [router.query]);
+}
+
 export default function LoginPage() {
+  useInvalidLogin();
+
   return (
     <div className="relative px-6 flex gap-6 items-center">
       {/* Gif */}

@@ -1,13 +1,15 @@
 import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { v4 as uuidv4 } from "uuid";
 
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 import EmojiPicker from "@components/shared/emoji-picker";
 import Markdown from "@components/shared/markdown";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight, useSaveLessonContentData } from "@lib/hooks";
 import { deleteContent, Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateCourse, updateLessonInModule } from "@store/_course/slice";
-import { addContentThunk, createModuleThunk, deleteContentThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/_course/thunk";
+import { addContentThunk, createModuleThunk, deleteContentThunk, reorderContentThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/_course/thunk";
 import { userExistsThunk } from "@store/_user/thunk";
 
 /**
@@ -287,9 +289,67 @@ function LessonEditor() {
         <div className="mt-4 mb-11 flex flex-col gap-4">
           <ContentOptions />
           <Divider />
-          {lesson.contents.map((content, index) => (
-            <DisplayContent key={index} index={index} id={content.type} />
-          ))}
+
+          <DragDropContext
+            onDragEnd={async (dropEvent) => {
+              // Reorder
+              var source = dropEvent.source.index;
+              var destination = dropEvent.destination?.index;
+              var content = (lesson.contents.slice() || []) as Lesson[];
+              var moveLesson = content[source];
+              content.splice(source, 1);
+              content.splice(destination || 0, 0, moveLesson);
+              dispatch(updateActiveLesson({ ...lesson, contents: content }));
+              await dispatch(reorderContentThunk({ content: content }));
+            }}
+          >
+            <Droppable droppableId="sidebar-modules">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {lesson.contents.map((content, index) => (
+                    <Draggable
+                      key={index}
+                      draggableId={index.toString()}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          className="relative group"
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                        >
+                          <div
+                            onClick={async () => {
+                              dispatch(deleteContent({ deleteAt: index }));
+                              await dispatch(
+                                deleteContentThunk({ deleteAt: index })
+                              );
+                            }}
+                            className="flex top-0 left-[-32px] rounded w-6 h-6 items-center justify-center absolute hover:bg-slate-100 cursor-pointer"
+                          >
+                            🗑️
+                          </div>
+
+                          <div
+                            {...provided.dragHandleProps}
+                            className="flex top-0 left-[-56px] rounded w-6 h-6 items-center justify-center absolute hover:bg-slate-100 cursor-pointer"
+                          >
+                            📀
+                          </div>
+
+                          <DisplayContent
+                            key={index}
+                            index={index}
+                            id={content.type}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
       </div>
     </div>
@@ -307,23 +367,7 @@ function DisplayContent({ id, index }) {
 }
 
 function Divider({ index }) {
-  var dispatch = useAppDispatch();
-
-  return (
-    <div className="relative">
-      <div
-        onClick={async () => {
-          dispatch(deleteContent({ deleteAt: index }));
-          // await dispatch(deleteContentThunk({ deleteAt: index }));
-        }}
-        className="top-0 left-[-32px] rounded w-6 h-6 flex items-center justify-center absolute hover:bg-slate-100 cursor-pointer"
-      >
-        🗑️
-      </div>
-
-      <div className="h-[1px] bg-[#F5F5F5]"></div>
-    </div>
-  );
+  return <div className="h-[1px] bg-[#F5F5F5]"></div>;
 }
 
 function Paragraph({ index }) {
@@ -333,6 +377,7 @@ function Paragraph({ index }) {
   var preview = useAppSelector(selectPreview);
   var dispatch = useAppDispatch();
   var activeLesson = useAppSelector(selectActiveLesson);
+  var [val, setVal] = useState(text);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var save = useCallback(
@@ -350,9 +395,11 @@ function Paragraph({ index }) {
 
   useEffect(() => {
     save(index, content.data, content.type);
-  }, [save, text]);
+  }, [val]);
 
   function setValue(value: string) {
+    setVal(value);
+
     // TODO: fix last edited on
     dispatch(
       updateActiveLesson({
@@ -371,24 +418,12 @@ function Paragraph({ index }) {
   }
 
   return (
-    <div className="relative">
-      <div
-        onClick={async () => {
-          dispatch(deleteContent({ deleteAt: index }));
-          await dispatch(deleteContentThunk({ deleteAt: index }));
-        }}
-        className="top-0 left-[-32px] rounded w-6 h-6 flex items-center justify-center absolute hover:bg-slate-100 cursor-pointer"
-      >
-        🗑️
-      </div>
-
-      <div>
-        {preview ? (
-          <Markdown>{text}</Markdown>
-        ) : (
-          <ParagraphEditor value={text} setValue={setValue} />
-        )}
-      </div>
+    <div>
+      {preview ? (
+        <Markdown>{text}</Markdown>
+      ) : (
+        <ParagraphEditor value={text} setValue={setValue} />
+      )}
     </div>
   );
 }

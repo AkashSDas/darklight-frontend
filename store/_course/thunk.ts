@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
+import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderContentService, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -239,6 +239,27 @@ export var updateLessonMetadataThunk = createAsyncThunk(
           isFree: activeLesson.isFree,
           emoji: activeLesson.emoji,
         },
+      });
+
+      console.log(res);
+    } else toast.error("You are not logged in");
+  }
+);
+
+export var reorderContentThunk = createAsyncThunk(
+  "_course/reorder-content",
+  async function reorderContent(payload: { content }, { getState, dispatch }) {
+    var { accessToken } = (getState() as RootState)._auth;
+    var { course, activeModuleId, activeLesson } = (getState() as RootState)
+      ._course;
+
+    if (accessToken) {
+      let res = await reorderContentService({
+        token: accessToken,
+        courseId: course.id,
+        moduleId: activeModuleId,
+        lessonId: activeLesson.id,
+        payload: payload,
       });
 
       console.log(res);

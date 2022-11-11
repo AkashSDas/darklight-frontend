@@ -200,3 +200,24 @@ export async function deleteContentService(data: DeleteContentPayload) {
 
   return { success: res.status < 300, msg: res.msg, lesson: res.data };
 }
+
+export interface ReorderContentPayload {
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+  token: string;
+  payload: { content };
+}
+export async function reorderContentService(data: ReorderContentPayload) {
+  var { payload, token, courseId, moduleId, lessonId } = data;
+  var res = await fetchFromCourse(
+    `${courseId}/${moduleId}/${lessonId}/reorder`,
+    {
+      method: "put",
+      headers: { Authorization: `Bearer ${token}` },
+      data: payload,
+    }
+  );
+
+  return { success: res.status < 300, msg: res.msg, lesson: res.data };
+}

@@ -110,6 +110,13 @@ export var courseSlice = createSlice({
         moduleData.lessons = lessons;
       }
     },
+    deleteContent(state, action: PayloadAction<{ deleteAt: number }>) {
+      var { deleteAt } = action.payload;
+      var activeLesson = state.activeLesson;
+      if (activeLesson) {
+        activeLesson.contents.splice(deleteAt, 1);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateCourseInfoThunk.pending, (state) => {
@@ -142,6 +149,7 @@ export var {
   addNewLessonToModule,
   updatePreview,
   updateLessonInModule,
+  deleteContent,
 } = courseSlice.actions;
 
 export var selectCourse = (state: RootState) => state._course;

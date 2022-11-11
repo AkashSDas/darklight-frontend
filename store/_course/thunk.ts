@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
+import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -192,6 +192,29 @@ export var updateContentThunk = createAsyncThunk(
         payload: payload,
       });
 
+      console.log(res);
+    } else toast.error("You are not logged in");
+  }
+);
+
+export var deleteContentThunk = createAsyncThunk(
+  "_course/delete-content",
+  async function deleteContent(
+    payload: { deleteAt: number },
+    { getState, dispatch }
+  ) {
+    var { accessToken } = (getState() as RootState)._auth;
+    var { course, activeModuleId, activeLesson } = (getState() as RootState)
+      ._course;
+
+    if (accessToken) {
+      let res = await deleteContentService({
+        token: accessToken,
+        courseId: course.id,
+        moduleId: activeModuleId,
+        lessonId: activeLesson.id,
+        payload: payload,
+      });
       console.log(res);
     } else toast.error("You are not logged in");
   }

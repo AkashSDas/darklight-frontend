@@ -180,3 +180,23 @@ export async function updateLessonMetadataService(
 
   return { success: res.status < 300, msg: res.msg, lesson: res.data };
 }
+
+export interface DeleteContentPayload {
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+  token: string;
+  payload: {
+    deleteAt: number;
+  };
+}
+export async function deleteContentService(data: DeleteContentPayload) {
+  var { payload, token, courseId, moduleId, lessonId } = data;
+  var res = await fetchFromCourse(`${courseId}/${moduleId}/${lessonId}`, {
+    method: "delete",
+    headers: { Authorization: `Bearer ${token}` },
+    data: payload,
+  });
+
+  return { success: res.status < 300, msg: res.msg, lesson: res.data };
+}

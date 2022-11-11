@@ -6,8 +6,8 @@ import CourseEditorLayout from "@components/shared/course-editor-layout";
 import EmojiPicker from "@components/shared/emoji-picker";
 import Markdown from "@components/shared/markdown";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight, useSaveLessonContentData } from "@lib/hooks";
-import { Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateCourse, updateLessonInModule } from "@store/_course/slice";
-import { addContentThunk, createModuleThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/_course/thunk";
+import { deleteContent, Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateCourse, updateLessonInModule } from "@store/_course/slice";
+import { addContentThunk, createModuleThunk, deleteContentThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/_course/thunk";
 import { userExistsThunk } from "@store/_user/thunk";
 
 /**
@@ -200,7 +200,7 @@ function LessonEditor() {
       // {id: "paragraph", label: "Blutted list", src: "/content-types/bulleted-list.png" },
       // {id: "paragraph", label: "Numbered list", src: "/content-types/numbered-list.png" },
       // {id: "paragraph", label: "Quote", src: "/content-types/quote.png" },
-      // {id: "paragraph", label: "Divider", src: "/content-types/divider.png" },
+      { id: "divider", label: "Divider", src: "/content-types/divider.png" },
       // {id: "paragraph", label: "Callout", src: "/content-types/callout.png" },
       // {id: "paragraph", label: "Code", src: "/content-types/code.png" },
       // {id: "paragraph", label: "Image", src: "/content-types/image.png" },
@@ -300,7 +300,30 @@ function DisplayContent({ id, index }) {
   if (id == "paragraph") {
     return <Paragraph index={index} />;
   }
+  if (id == "divider") {
+    return <Divider index={index} />;
+  }
   return <div>{id}</div>;
+}
+
+function Divider({ index }) {
+  var dispatch = useAppDispatch();
+
+  return (
+    <div className="relative">
+      <div
+        onClick={async () => {
+          dispatch(deleteContent({ deleteAt: index }));
+          // await dispatch(deleteContentThunk({ deleteAt: index }));
+        }}
+        className="top-0 left-[-32px] rounded w-6 h-6 flex items-center justify-center absolute hover:bg-slate-100 cursor-pointer"
+      >
+        🗑️ {index}
+      </div>
+
+      <div className="h-[1px] bg-[#F5F5F5]"></div>
+    </div>
+  );
 }
 
 function Paragraph({ index }) {
@@ -348,12 +371,24 @@ function Paragraph({ index }) {
   }
 
   return (
-    <div>
-      {preview ? (
-        <Markdown>{text}</Markdown>
-      ) : (
-        <ParagraphEditor value={text} setValue={setValue} />
-      )}
+    <div className="relative">
+      <div
+        onClick={async () => {
+          dispatch(deleteContent({ deleteAt: index }));
+          await dispatch(deleteContentThunk({ deleteAt: index }));
+        }}
+        className="top-0 left-[-32px] rounded w-6 h-6 flex items-center justify-center absolute hover:bg-slate-100 cursor-pointer"
+      >
+        🗑️ {index}
+      </div>
+
+      <div>
+        {preview ? (
+          <Markdown>{text}</Markdown>
+        ) : (
+          <ParagraphEditor value={text} setValue={setValue} />
+        )}
+      </div>
     </div>
   );
 }
@@ -380,6 +415,11 @@ interface ParagraphContent {
   data: { key: string; value: string }[];
 }
 
+interface DividerContent {
+  type: "divider";
+  data: [];
+}
+
 function createContent(id) {
   switch (id) {
     case "paragraph":
@@ -387,6 +427,10 @@ function createContent(id) {
         type: "paragraph",
         data: [{ key: "text", value: "Hello world" }],
       } as ParagraphContent;
+    case "divider":
+      return {
+        type: "divider",
+      } as DividerContent;
     default:
       return null;
   }

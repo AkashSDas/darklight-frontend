@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, deleteLessonService, deleteModuleService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderContentService, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
+import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, deleteCourseService, deleteLessonService, deleteModuleService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderContentService, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -308,6 +308,29 @@ export var deleteModuleThunk = createAsyncThunk(
         toast.success("Module deleted");
         dispatch(rmModule({ moduleId: activeModuleId }));
         dispatch(updateActiveModule(null));
+        return true;
+      } else toast.error(res.msg);
+    } else toast.error("You are not logged in");
+    return false;
+  }
+);
+
+export var deleteCourseThunk = createAsyncThunk(
+  "_course/delete-course",
+  async function deleteCourse(_, { getState, dispatch }) {
+    var { accessToken } = (getState() as RootState)._auth;
+    var { course } = (getState() as RootState)._course;
+
+    if (accessToken) {
+      var res = await deleteCourseService({
+        token: accessToken,
+        courseId: course.id,
+      });
+      if (res.success) {
+        toast.success("Course deleted");
+        dispatch(updateCourse(null));
+        dispatch(updateActiveModule(null));
+        dispatch(updateActiveLesson(null));
         return true;
       } else toast.error(res.msg);
     } else toast.error("You are not logged in");

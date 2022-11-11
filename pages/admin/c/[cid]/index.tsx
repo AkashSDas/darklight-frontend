@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -6,6 +7,7 @@ import EmojiPicker from "@components/shared/emoji-picker";
 import { AddIcon, ArrowDownIcon } from "@components/shared/icons";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useResizeTextareaHeight, useSaveCourseSettings } from "@lib/hooks";
 import { selectCourse, selectCourseData, updateCourse } from "@store/_course/slice";
+import { deleteCourseThunk } from "@store/_course/thunk";
 
 function TitleInput({ title }: { title: string }) {
   var dispatch = useAppDispatch();
@@ -147,6 +149,9 @@ function CourseSettings() {
 }
 
 function DeleteCourse({ id }) {
+  var dispatch = useAppDispatch();
+  var router = useRouter();
+
   return (
     <div className="flex justify-between gap-1">
       <div className="flex flex-col gap-2">
@@ -158,7 +163,10 @@ function DeleteCourse({ id }) {
 
       <div className="relative max-w-[300px] w-full flex justify-end">
         <button
-          onClick={() => toast.success("To be implemented", { icon: "📆" })}
+          onClick={async () => {
+            var res = await (await dispatch(deleteCourseThunk())).payload;
+            if (res) router.push("/");
+          }}
           className="h-11 px-6 rounded-2xl bg-[#FFECEB] text-[#EA4335]"
         >
           Delete

@@ -255,3 +255,17 @@ export async function deleteModuleService(data: DeleteModulePayload) {
 
   return { success: res.status < 300, msg: res.msg };
 }
+
+export interface DeleteCoursePayload {
+  courseId: string;
+  token: string;
+}
+export async function deleteCourseService(data: DeleteCoursePayload) {
+  var { token, courseId } = data;
+  var res = await fetchFromCourse(`${courseId}`, {
+    method: "delete",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  return { success: res.status < 300, msg: res.msg };
+}

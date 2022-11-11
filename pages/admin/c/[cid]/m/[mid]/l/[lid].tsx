@@ -318,7 +318,7 @@ function Divider({ index }) {
         }}
         className="top-0 left-[-32px] rounded w-6 h-6 flex items-center justify-center absolute hover:bg-slate-100 cursor-pointer"
       >
-        🗑️ {index}
+        🗑️
       </div>
 
       <div className="h-[1px] bg-[#F5F5F5]"></div>
@@ -379,7 +379,7 @@ function Paragraph({ index }) {
         }}
         className="top-0 left-[-32px] rounded w-6 h-6 flex items-center justify-center absolute hover:bg-slate-100 cursor-pointer"
       >
-        🗑️ {index}
+        🗑️
       </div>
 
       <div>

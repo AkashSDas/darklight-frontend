@@ -128,6 +128,12 @@ export var courseSlice = createSlice({
         );
       }
     },
+    rmModule(state, action: PayloadAction<{ moduleId: string }>) {
+      var { moduleId } = action.payload;
+      state.course.modules = state.course.modules.filter(
+        (m) => m.id !== moduleId
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateCourseInfoThunk.pending, (state) => {
@@ -162,6 +168,7 @@ export var {
   updateLessonInModule,
   deleteContent,
   rmLessonFromModule,
+  rmModule,
 } = courseSlice.actions;
 
 export var selectCourse = (state: RootState) => state._course;

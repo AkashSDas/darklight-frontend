@@ -1,10 +1,10 @@
 import toast from "react-hot-toast";
-import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, deleteLessonService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderContentService, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
+import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, deleteLessonService, deleteModuleService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderContentService, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "../";
-import { addNewLessonToModule, Module, rmLessonFromModule, updateActiveLesson, updateActiveModuleId, updateCourse } from "./slice";
+import { addNewLessonToModule, Module, rmLessonFromModule, rmModule, updateActiveLesson, updateActiveModule, updateActiveModuleId, updateCourse } from "./slice";
 
 export var getCourseThunk = createAsyncThunk(
   "_course/get",
@@ -285,6 +285,29 @@ export var deleteLessonThunk = createAsyncThunk(
         toast.success("Lesson deleted");
         dispatch(rmLessonFromModule({ lessonId: activeLesson.id }));
         dispatch(updateActiveLesson(null));
+        return true;
+      } else toast.error(res.msg);
+    } else toast.error("You are not logged in");
+    return false;
+  }
+);
+
+export var deleteModuleThunk = createAsyncThunk(
+  "_course/delete-module",
+  async function deleteModule(_, { getState, dispatch }) {
+    var { accessToken } = (getState() as RootState)._auth;
+    var { course, activeModuleId } = (getState() as RootState)._course;
+
+    if (accessToken) {
+      var res = await deleteModuleService({
+        token: accessToken,
+        courseId: course.id,
+        moduleId: activeModuleId,
+      });
+      if (res.success) {
+        toast.success("Module deleted");
+        dispatch(rmModule({ moduleId: activeModuleId }));
+        dispatch(updateActiveModule(null));
         return true;
       } else toast.error(res.msg);
     } else toast.error("You are not logged in");

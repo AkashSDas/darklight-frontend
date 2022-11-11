@@ -1,9 +1,11 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 import EmojiPicker from "@components/shared/emoji-picker";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useModule, useResizeTextareaHeight, useSaveModuleData } from "@lib/hooks";
-import { selectActiveModule, updateActiveModule } from "@store/_course/slice";
+import { selectActiveModule, selectCourseData, updateActiveModule } from "@store/_course/slice";
+import { deleteModuleThunk } from "@store/_course/thunk";
 
 function TitleInput({ title }: { title: string }) {
   var { ref } = useResizeTextareaHeight(title ?? "");
@@ -90,6 +92,10 @@ function ModuleSettings() {
   }
 
   function DeleteModule({ id }) {
+    var router = useRouter();
+    var dispatch = useAppDispatch();
+    var { id: courseId } = useAppSelector(selectCourseData);
+
     return (
       <div className="flex justify-between gap-1">
         <div className="flex flex-col gap-2">
@@ -100,7 +106,13 @@ function ModuleSettings() {
         </div>
 
         <div className="relative max-w-[300px] w-full flex justify-end">
-          <button className="h-11 px-6 rounded-2xl bg-[#FFECEB] text-[#EA4335]">
+          <button
+            onClick={() => {
+              dispatch(deleteModuleThunk());
+              router.push(`/admin/c/${courseId}`);
+            }}
+            className="h-11 px-6 rounded-2xl bg-[#FFECEB] text-[#EA4335]"
+          >
             Delete
           </button>
         </div>

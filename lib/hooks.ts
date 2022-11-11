@@ -4,7 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
 
 import { selectActiveLesson, selectActiveModule, selectCourse } from "@store/_course/slice";
-import { getCourseThunk, getLessonThunk, getModuleThunk, updateCourseInfoThunk, updateModuleThunk } from "@store/_course/thunk";
+import { getCourseThunk, getLessonThunk, getModuleThunk, updateContentThunk, updateCourseInfoThunk, updateModuleThunk } from "@store/_course/thunk";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -220,7 +220,6 @@ export function useSaveModuleData() {
 
   useEffect(() => {
     var interval = setInterval(() => {
-      console.log("loog");
       async function saveSetting() {
         await dispatch(
           updateModuleThunk({
@@ -250,4 +249,45 @@ export function useSaveModuleData() {
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [dispatch, course, moduleData]);
+}
+
+export function useSaveLessonContentData(updateAt: number) {
+  var dispatch = useAppDispatch();
+  var moduleData = useAppSelector(selectActiveModule);
+  var { course } = useAppSelector(selectCourse);
+  var lesson = useAppSelector(selectActiveLesson);
+  var firstEditSaved = useRef(false);
+  var lastSavedAt = useRef(new Date(Date.now()));
+  var content = lesson.contents[updateAt];
+
+  const CALL_AFTER = 5000;
+
+  useEffect(() => {
+    var interval = setInterval(() => {
+      async function saveSetting() {
+        await dispatch(
+          updateContentThunk({
+            data: content.data,
+            type: content.type,
+            updateAt,
+          })
+        );
+        lastSavedAt.current = new Date(Date.now());
+      }
+
+      console.log(
+        new Date(lesson.lastEditedOn).getTime(),
+        lastSavedAt.current.getTime()
+      );
+      if (
+        !firstEditSaved ||
+        new Date(lesson.lastEditedOn).getTime() > lastSavedAt.current.getTime()
+      ) {
+        firstEditSaved.current = true;
+        saveSetting();
+      }
+    }, CALL_AFTER);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [dispatch, course, moduleData, lesson, content, updateAt]);
 }

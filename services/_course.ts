@@ -115,3 +115,68 @@ export async function getLessonService(
   });
   return res.data;
 }
+
+export interface ContentPayload {
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+  token: string;
+  payload: { type: string; data: any; addAt: number };
+}
+export async function addContentService(data: ContentPayload) {
+  console.log(data);
+  var { payload, token, courseId, moduleId, lessonId } = data;
+  var res = await fetchFromCourse(`${courseId}/${moduleId}/${lessonId}`, {
+    method: "post",
+    headers: { Authorization: `Bearer ${token}` },
+    data: { type: payload.type, data: payload.data, addAt: payload.addAt },
+  });
+
+  return { success: res.status < 300, msg: res.msg, lesson: res.data };
+}
+
+export interface UpdateContentPayload {
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+  token: string;
+  payload: { data: any; updateAt: number };
+}
+export async function updateContentService(data: UpdateContentPayload) {
+  var { payload, token, courseId, moduleId, lessonId } = data;
+  var res = await fetchFromCourse(`${courseId}/${moduleId}/${lessonId}`, {
+    method: "put",
+    headers: { Authorization: `Bearer ${token}` },
+    data: { data: payload.data, updateAt: payload.updateAt },
+  });
+
+  return { success: res.status < 300, msg: res.msg, lesson: res.data };
+}
+
+export interface UpdateLessonMetadataPayload {
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+  token: string;
+  payload: {
+    title: string;
+    description: string;
+    isFree: boolean;
+    emoji: string;
+  };
+}
+export async function updateLessonMetadataService(
+  data: UpdateLessonMetadataPayload
+) {
+  var { payload, token, courseId, moduleId, lessonId } = data;
+  var res = await fetchFromCourse(
+    `${courseId}/${moduleId}/${lessonId}/metadata`,
+    {
+      method: "put",
+      headers: { Authorization: `Bearer ${token}` },
+      data: payload,
+    }
+  );
+
+  return { success: res.status < 300, msg: res.msg, lesson: res.data };
+}

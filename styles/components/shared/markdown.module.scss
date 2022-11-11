@@ -1,31 +1,15 @@
 .md {
   @apply font-urbanist font-medium text-base;
 
-  code {
-    @apply bg-gray-200 text-rose-500 rounded-sm px-[6px] font-urbanist text-base font-medium;
-  }
-
   h1 {
-    @apply font-bold text-[39.1px] leading-[120%];
-
-    code {
-      @apply bg-gray-200 rounded-sm px-[6px] font-urbanist text-[39.1px];
-    }
+    @apply font-bold text-[30px] leading-[120%];
   }
 
   h2 {
-    @apply font-bold text-[31.3px];
-
-    code {
-      @apply bg-gray-200 rounded-sm px-[6px] font-urbanist text-[31.3px];
-    }
+    @apply font-bold text-[24px] leading-[120%];
   }
 
   h3 {
-    @apply font-bold text-[25px];
-
-    code {
-      @apply bg-gray-200 rounded-sm px-[6px] font-urbanist text-[25px];
-    }
+    @apply font-bold text-[20px] leading-[120%];
   }
 }

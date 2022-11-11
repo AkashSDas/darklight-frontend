@@ -1,13 +1,113 @@
+import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import ReactMarkdown from "react-markdown";
+import { useCallback, useEffect, useState } from "react";
 
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 import EmojiPicker from "@components/shared/emoji-picker";
 import Markdown from "@components/shared/markdown";
-import { useAppDispatch, useAppSelector, useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight } from "@lib/hooks";
-import { selectActiveLesson, selectPreview, updateActiveLesson } from "@store/_course/slice";
-import { createModuleThunk } from "@store/_course/thunk";
+import { useAppDispatch, useAppSelector, useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight, useSaveLessonContentData } from "@lib/hooks";
+import { Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateCourse, updateLessonInModule } from "@store/_course/slice";
+import { addContentThunk, createModuleThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/_course/thunk";
+import { userExistsThunk } from "@store/_user/thunk";
+
+/**
+ * TODO: update sidebar lesson title/emoji and update active lesson
+ */
+function TitleInput({
+  moduleLesson,
+  title,
+}: {
+  moduleLesson: Lesson;
+  title: string;
+}) {
+  var { ref } = useResizeTextareaHeight(title);
+  var dispatch = useAppDispatch();
+  var router = useRouter();
+  var lesson = useAppSelector(selectActiveLesson);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  var save = useCallback(
+    debounce(async () => {
+      await dispatch(updateLessonMetadataThunk());
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    save();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lesson?.title]);
+
+  return (
+    <textarea
+      ref={ref}
+      onChange={(e) => {
+        dispatch(updateActiveLesson({ ...lesson, title: e.target.value }));
+        dispatch(
+          updateLessonInModule({
+            lesson: { ...moduleLesson, title: e.target.value },
+            moduleId: router.query?.mid as string,
+          })
+        );
+      }}
+      value={title}
+      onKeyDownCapture={(e) => {
+        if (e.key == "Enter") e.preventDefault();
+      }}
+      placeholder="Untitled"
+      className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-gilroy font-extrabold text-[39.1px] leading-[100%]"
+    />
+  );
+}
+
+function DescriptionInput({
+  moduleLesson,
+  description,
+}: {
+  moduleLesson: Lesson;
+  description: string;
+}) {
+  var { ref } = useResizeTextareaHeight(description ?? "");
+  var router = useRouter();
+  var dispatch = useAppDispatch();
+  var lesson = useAppSelector(selectActiveLesson);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  var save = useCallback(
+    debounce(async () => {
+      await dispatch(updateLessonMetadataThunk());
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    save();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lesson?.description]);
+
+  return (
+    <textarea
+      ref={ref}
+      onChange={(e) => {
+        dispatch(
+          updateActiveLesson({ ...lesson, description: e.target.value })
+        );
+        dispatch(
+          updateLessonInModule({
+            lesson: { ...moduleLesson, description: e.target.value },
+            moduleId: router.query?.mid as string,
+          })
+        );
+      }}
+      value={description}
+      onKeyDownCapture={(e) => {
+        if (e.key == "Enter") e.preventDefault();
+      }}
+      placeholder="Add a description"
+      className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-urbanist font-medium"
+    />
+  );
+}
 
 export default function LessonPage() {
   var router = useRouter();
@@ -48,8 +148,9 @@ function LessonEditor() {
   var dispatch = useAppDispatch();
   var { isOpen, setIsOpen, wrapperRef } = useDropdown();
   var lesson = useAppSelector(selectActiveLesson);
+  var router = useRouter();
 
-  function EmojiInput() {
+  function EmojiInput({ moduleLesson }: { moduleLesson: Lesson }) {
     return (
       <div
         onClick={() => setIsOpen(true)}
@@ -61,9 +162,16 @@ function LessonEditor() {
         </div>
         {isOpen && (
           <EmojiPicker
-            onSelect={(emoji) => {
+            onSelect={async (emoji) => {
+              dispatch(
+                updateLessonInModule({
+                  lesson: { ...moduleLesson, emoji: emoji.native },
+                  moduleId: router.query?.mid as string,
+                })
+              );
               dispatch(updateActiveLesson({ ...lesson, emoji: emoji.native }));
               setIsOpen(false);
+              await dispatch(updateLessonMetadataThunk());
             }}
             handleClose={() => setIsOpen(false)}
           />
@@ -72,69 +180,54 @@ function LessonEditor() {
     );
   }
 
-  /**
-   * TODO: update sidebar lesson title/emoji and update active lesson
-   */
-  function TitleInput({ title }: { title: string }) {
-    var [value, setValue] = useState(title);
-    var { ref } = useResizeTextareaHeight(value);
-
-    return (
-      <textarea
-        ref={ref}
-        onChange={(e) => setValue(e.target.value)}
-        value={value}
-        onKeyDownCapture={(e) => {
-          if (e.key == "Enter") e.preventDefault();
-        }}
-        placeholder="Untitled"
-        className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-gilroy font-extrabold text-[39.1px] leading-[100%]"
-      />
-    );
-  }
-
-  function DescriptionInput({ description }: { description: string }) {
-    var [value, setValue] = useState(description);
-    var { ref } = useResizeTextareaHeight(description ?? "");
-
-    return (
-      <textarea
-        ref={ref}
-        onChange={(e) => setValue(e.target.value)}
-        value={value}
-        onKeyDownCapture={(e) => {
-          if (e.key == "Enter") e.preventDefault();
-        }}
-        placeholder="Add a description"
-        className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-urbanist font-medium"
-      />
-    );
-  }
-
   function Divider() {
     return <div className="h-[1px] bg-[#F5F5F5]"></div>;
   }
 
   function ContentOptions() {
+    var dispatch = useAppDispatch();
+    var lesson = useAppSelector(selectActiveLesson);
+
     var contents = [
-      { label: "Paragraph", src: "/content-types/paragraph.png" },
-      { label: "Heading 1", src: "/content-types/h1.png" },
-      { label: "Heading 2", src: "/content-types/h2.png" },
-      { label: "Heading 3", src: "/content-types/h3.png" },
-      { label: "Blutted list", src: "/content-types/bulleted-list.png" },
-      { label: "Numbered list", src: "/content-types/numbered-list.png" },
-      { label: "Quote", src: "/content-types/quote.png" },
-      { label: "Divider", src: "/content-types/divider.png" },
-      { label: "Callout", src: "/content-types/callout.png" },
-      { label: "Code", src: "/content-types/code.png" },
-      { label: "Image", src: "/content-types/image.png" },
+      {
+        id: "paragraph",
+        label: "Paragraph",
+        src: "/content-types/paragraph.png",
+      },
+      // {id: "paragraph", label: "Heading 1", src: "/content-types/h1.png" },
+      // {id: "paragraph", label: "Heading 2", src: "/content-types/h2.png" },
+      // {id: "paragraph", label: "Heading 3", src: "/content-types/h3.png" },
+      // {id: "paragraph", label: "Blutted list", src: "/content-types/bulleted-list.png" },
+      // {id: "paragraph", label: "Numbered list", src: "/content-types/numbered-list.png" },
+      // {id: "paragraph", label: "Quote", src: "/content-types/quote.png" },
+      // {id: "paragraph", label: "Divider", src: "/content-types/divider.png" },
+      // {id: "paragraph", label: "Callout", src: "/content-types/callout.png" },
+      // {id: "paragraph", label: "Code", src: "/content-types/code.png" },
+      // {id: "paragraph", label: "Image", src: "/content-types/image.png" },
     ];
 
     return (
       <div className="flex flex-row gap-4 p-1 overflow-x-scroll">
         {contents.map((content) => (
           <div
-            key={content.label}
+            key={content.id}
+            onClick={async () => {
+              dispatch(
+                updateActiveLesson({
+                  ...lesson,
+                  contents: [...lesson.contents, createContent(content.id)],
+                })
+              );
+
+              var c = createContent(content.id);
+              await dispatch(
+                addContentThunk({
+                  addAt: lesson.contents.length,
+                  type: c.type,
+                  data: c.data,
+                })
+              );
+            }}
             className="flex-grow w-full rounded-md p-2 flex flex-col gap-3 cursor-pointer hover:bg-slate-100"
           >
             <img
@@ -154,103 +247,149 @@ function LessonEditor() {
   return (
     <div className="w-full flex justify-center">
       <div className="max-w-[600px] w-full">
-        <EmojiInput />
-        <TitleInput title={lesson.title ?? ""} />
-        <DescriptionInput description={lesson.description ?? ""} />
-        <div className="mt-4 flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <EmojiInput moduleLesson={lesson} />
+
+          <div className="flex items-center gap-2">
+            <span>Make it free?</span>
+
+            <div className="relative max-w-[300px] w-max flex justify-end">
+              <div
+                onClick={async () => {
+                  dispatch(
+                    updateActiveLesson({ ...lesson, isFree: !lesson.isFree })
+                  );
+                  await dispatch(updateLessonMetadataThunk());
+                }}
+                className="flex justify-between items-center cursor-pointer"
+              >
+                <div
+                  className={`w-14 h-8 ${
+                    !lesson.isFree ? "bg-gray-300" : "bg-blue2"
+                  }  rounded-full flex-shrink-0 p-1`}
+                >
+                  <div
+                    className={`bg-white w-6 h-6 rounded-full shadow-md transform ${
+                      lesson.isFree ? "translate-x-6" : ""
+                    } duration-300 ease-in-out`}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <TitleInput moduleLesson={lesson} title={lesson.title ?? ""} />
+        <DescriptionInput
+          moduleLesson={lesson}
+          description={lesson.description ?? ""}
+        />
+        <div className="mt-4 mb-11 flex flex-col gap-4">
           <ContentOptions />
           <Divider />
-          <H1 />
-          <Paragraph />
-          <H2 />
-          <Paragraph />
-          <Paragraph />
-
-          <H3 />
+          {lesson.contents.map((content, index) => (
+            <DisplayContent key={index} index={index} id={content.type} />
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-function H1() {
-  var [value, setValue] = useState("");
+function DisplayContent({ id, index }) {
+  if (id == "paragraph") {
+    return <Paragraph index={index} />;
+  }
+  return <div>{id}</div>;
+}
+
+function Paragraph({ index }) {
+  var lessons = useAppSelector(selectActiveLesson);
+  var content = lessons.contents[index] as ParagraphContent;
+  var text = content.data.filter((c) => c.key == "text")[0].value;
   var preview = useAppSelector(selectPreview);
+  var dispatch = useAppDispatch();
+  var activeLesson = useAppSelector(selectActiveLesson);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  var save = useCallback(
+    debounce(async (index, data, type) => {
+      await dispatch(
+        updateContentThunk({
+          updateAt: index,
+          data: data,
+          type: type,
+        })
+      );
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    save(index, content.data, content.type);
+  }, [save, text]);
+
+  function setValue(value: string) {
+    // TODO: fix last edited on
+    dispatch(
+      updateActiveLesson({
+        ...lessons,
+        contents: [
+          ...lessons.contents.slice(0, index),
+          {
+            ...lessons.contents[index],
+            data: [{ key: "text", value }],
+          },
+          ...lessons.contents.slice(index + 1),
+        ],
+        lastEditedOn: new Date().toISOString(),
+      })
+    );
+  }
 
   return (
     <div>
-      {!preview ? (
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Add text"
-          className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-urbanist font-medium"
-        />
+      {preview ? (
+        <Markdown>{text}</Markdown>
       ) : (
-        <h2 className="font-urbanist font-bold text-[39.1px]">{value}</h2>
+        <ParagraphEditor value={text} setValue={setValue} />
       )}
     </div>
   );
 }
 
-function H2() {
-  var [value, setValue] = useState("");
-  var preview = useAppSelector(selectPreview);
+function ParagraphEditor({ value, setValue }) {
+  var { ref } = useResizeTextareaHeight(value);
 
   return (
-    <div>
-      {!preview ? (
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Add text"
-          className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-urbanist font-medium"
-        />
-      ) : (
-        <h3 className="font-urbanist font-bold text-[31.3px]">{value}</h3>
-      )}
-    </div>
+    <textarea
+      ref={ref}
+      value={value}
+      placeholder="Start typing..."
+      onChange={(e) => setValue(e.target.value)}
+      onKeyDownCapture={(e) => {
+        if (e.key == "Enter") e.preventDefault();
+      }}
+      className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-urbanist font-medium"
+    />
   );
 }
 
-function H3() {
-  var [value, setValue] = useState("");
-  var preview = useAppSelector(selectPreview);
-
-  return (
-    <div>
-      {!preview ? (
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Add text"
-          className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-urbanist font-medium"
-        />
-      ) : (
-        <h4 className="font-urbanist font-bold text-[25px]">{value}</h4>
-      )}
-    </div>
-  );
+interface ParagraphContent {
+  type: "paragraph";
+  data: { key: string; value: string }[];
 }
 
-function Paragraph() {
-  var [value, setValue] = useState("");
-  var preview = useAppSelector(selectPreview);
-
-  return (
-    <div>
-      {!preview ? (
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Add text"
-          className="w-full outline-none resize-none placeholder:text-[#E9E9E9] font-urbanist font-medium"
-        />
-      ) : (
-        <Markdown>{value.length == 0 ? "Not text here" : value}</Markdown>
-      )}
-    </div>
-  );
+function createContent(id) {
+  switch (id) {
+    case "paragraph":
+      return {
+        type: "paragraph",
+        data: [{ key: "text", value: "Hello world" }],
+      } as ParagraphContent;
+    default:
+      return null;
+  }
 }
 
 LessonPage.getLayout = function getLayout(page) {

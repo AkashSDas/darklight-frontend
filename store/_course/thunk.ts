@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { CourseInfoPayload, createCourseService, createLessonService, createModuleService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderModulesService, updateCourseInfoService, updateModuleService } from "services/_course";
+import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -144,6 +144,81 @@ export var reorderModulesThunk = createAsyncThunk(
     var { accessToken } = (getState() as RootState)._auth;
     if (accessToken) {
       await reorderModulesService(accessToken, courseId, modules);
+    } else toast.error("You are not logged in");
+  }
+);
+
+export var addContentThunk = createAsyncThunk(
+  "_course/add-content",
+  async function addContent(
+    payload: { type: string; data: any; addAt: number },
+    { getState, dispatch }
+  ) {
+    var { accessToken } = (getState() as RootState)._auth;
+    var { course, activeModuleId, activeLesson } = (getState() as RootState)
+      ._course;
+    if (accessToken) {
+      let res = await addContentService({
+        token: accessToken,
+        courseId: course.id,
+        moduleId: activeModuleId,
+        lessonId: activeLesson.id,
+        payload: payload,
+      });
+      // TODO: fix last edited on
+      dispatch(
+        updateActiveLesson({ ...activeLesson, lastEditedOn: Date.now() } as any)
+      );
+    } else toast.error("You are not logged in");
+  }
+);
+
+export var updateContentThunk = createAsyncThunk(
+  "_course/update-content",
+  async function updateContent(
+    payload: { type: string; data: any; updateAt: number },
+    { getState, dispatch }
+  ) {
+    var { accessToken } = (getState() as RootState)._auth;
+    var { course, activeModuleId, activeLesson } = (getState() as RootState)
+      ._course;
+
+    if (accessToken) {
+      let res = await updateContentService({
+        token: accessToken,
+        courseId: course.id,
+        moduleId: activeModuleId,
+        lessonId: activeLesson.id,
+        payload: payload,
+      });
+
+      console.log(res);
+    } else toast.error("You are not logged in");
+  }
+);
+
+export var updateLessonMetadataThunk = createAsyncThunk(
+  "_course/update-lesson-metadata",
+  async function updateLessonMetdata(_, { getState, dispatch }) {
+    var { accessToken } = (getState() as RootState)._auth;
+    var { course, activeModuleId, activeLesson } = (getState() as RootState)
+      ._course;
+
+    if (accessToken) {
+      let res = await updateLessonMetadataService({
+        token: accessToken,
+        courseId: course.id,
+        moduleId: activeModuleId,
+        lessonId: activeLesson.id,
+        payload: {
+          title: activeLesson.title,
+          description: activeLesson.description,
+          isFree: activeLesson.isFree,
+          emoji: activeLesson.emoji,
+        },
+      });
+
+      console.log(res);
     } else toast.error("You are not logged in");
   }
 );

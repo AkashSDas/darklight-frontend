@@ -108,6 +108,7 @@ function ModuleSettings() {
     <div className="w-full flex justify-center">
       <div className="max-w-[600px] w-full">
         <EmojiInput />
+
         <TitleInput title={moduleData.title ?? ""} />
         <div className="mt-4 flex flex-col gap-4">
           <Divider />

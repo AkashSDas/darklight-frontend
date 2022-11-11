@@ -10,7 +10,7 @@ export interface Lesson {
   title?: string;
   description?: string;
   video: { id?: string; URL: string } | null;
-  content: any[];
+  contents: any[];
   lastEditedOn: string;
   isFree: boolean;
   qna: any[];
@@ -96,6 +96,20 @@ export var courseSlice = createSlice({
     updatePreview(state, action: PayloadAction<boolean>) {
       state.previewLesson = action.payload;
     },
+    updateLessonInModule(
+      state,
+      action: PayloadAction<{ lesson: Lesson; moduleId: string }>
+    ) {
+      var { moduleId, lesson } = action.payload;
+      var moduleData = state.course?.modules.find((m) => m.id === moduleId);
+      if (moduleData) {
+        var lessons = moduleData.lessons.map((l) => {
+          if (l.id === lesson.id) return lesson;
+          else return l;
+        });
+        moduleData.lessons = lessons;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateCourseInfoThunk.pending, (state) => {
@@ -127,6 +141,7 @@ export var {
   updateActiveModule,
   addNewLessonToModule,
   updatePreview,
+  updateLessonInModule,
 } = courseSlice.actions;
 
 export var selectCourse = (state: RootState) => state._course;

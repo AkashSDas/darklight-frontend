@@ -70,7 +70,11 @@ function ModuleSettings() {
           <EmojiPicker
             onSelect={(emoji) => {
               dispatch(
-                updateActiveModule({ ...moduleData, emoji: emoji.native })
+                updateActiveModule({
+                  ...moduleData,
+                  emoji: emoji.native,
+                  lastEditedOn: new Date().toISOString(),
+                })
               );
               setIsOpen(false);
             }}

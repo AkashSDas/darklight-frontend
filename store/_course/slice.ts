@@ -117,6 +117,17 @@ export var courseSlice = createSlice({
         activeLesson.contents.splice(deleteAt, 1);
       }
     },
+    rmLessonFromModule(state, action: PayloadAction<{ lessonId: string }>) {
+      var { lessonId } = action.payload;
+      var activeModule = state.course?.modules.find(
+        (m) => m.id === state.activeModuleId
+      );
+      if (activeModule) {
+        activeModule.lessons = activeModule.lessons.filter(
+          (l) => l.id !== lessonId
+        );
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateCourseInfoThunk.pending, (state) => {
@@ -150,6 +161,7 @@ export var {
   updatePreview,
   updateLessonInModule,
   deleteContent,
+  rmLessonFromModule,
 } = courseSlice.actions;
 
 export var selectCourse = (state: RootState) => state._course;

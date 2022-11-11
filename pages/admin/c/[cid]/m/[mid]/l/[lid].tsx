@@ -9,7 +9,7 @@ import EmojiPicker from "@components/shared/emoji-picker";
 import Markdown from "@components/shared/markdown";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight, useSaveLessonContentData } from "@lib/hooks";
 import { deleteContent, Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateCourse, updateLessonInModule } from "@store/_course/slice";
-import { addContentThunk, createModuleThunk, deleteContentThunk, reorderContentThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/_course/thunk";
+import { addContentThunk, createModuleThunk, deleteContentThunk, deleteLessonThunk, reorderContentThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/_course/thunk";
 import { userExistsThunk } from "@store/_user/thunk";
 
 /**
@@ -277,6 +277,20 @@ function LessonEditor() {
                   ></div>
                 </div>
               </div>
+            </div>
+
+            <div>
+              <button
+                onClick={async () => {
+                  await dispatch(deleteLessonThunk());
+                  router.push(
+                    `/admin/c/${router.query.cid}/m/${router.query.mid}`
+                  );
+                }}
+                className="h-11 px-6 rounded-2xl bg-[#FFECEB] text-[#EA4335]"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

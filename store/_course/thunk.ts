@@ -1,10 +1,10 @@
 import toast from "react-hot-toast";
-import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderContentService, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
+import { addContentService, ContentPayload, CourseInfoPayload, createCourseService, createLessonService, createModuleService, deleteContentService, deleteLessonService, getCourseService, getLessonService, getModuleService, ModuleInfoPayload, reorderContentService, reorderModulesService, updateContentService, updateCourseInfoService, updateLessonMetadataService, updateModuleService } from "services/_course";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "../";
-import { addNewLessonToModule, Module, updateActiveLesson, updateActiveModuleId, updateCourse } from "./slice";
+import { addNewLessonToModule, Module, rmLessonFromModule, updateActiveLesson, updateActiveModuleId, updateCourse } from "./slice";
 
 export var getCourseThunk = createAsyncThunk(
   "_course/get",
@@ -264,5 +264,30 @@ export var reorderContentThunk = createAsyncThunk(
 
       console.log(res);
     } else toast.error("You are not logged in");
+  }
+);
+
+export var deleteLessonThunk = createAsyncThunk(
+  "_course/delete-lesson",
+  async function deleteLesson(_, { getState, dispatch }) {
+    var { accessToken } = (getState() as RootState)._auth;
+    var { course, activeModuleId, activeLesson } = (getState() as RootState)
+      ._course;
+
+    if (accessToken) {
+      var res = await deleteLessonService({
+        token: accessToken,
+        courseId: course.id,
+        moduleId: activeModuleId,
+        lessonId: activeLesson.id,
+      });
+      if (res.success) {
+        toast.success("Lesson deleted");
+        dispatch(rmLessonFromModule({ lessonId: activeLesson.id }));
+        dispatch(updateActiveLesson(null));
+        return true;
+      } else toast.error(res.msg);
+    } else toast.error("You are not logged in");
+    return false;
   }
 );

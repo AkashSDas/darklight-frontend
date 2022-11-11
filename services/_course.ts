@@ -221,3 +221,22 @@ export async function reorderContentService(data: ReorderContentPayload) {
 
   return { success: res.status < 300, msg: res.msg, lesson: res.data };
 }
+
+export interface DeleteLessonPayload {
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+  token: string;
+}
+export async function deleteLessonService(data: DeleteLessonPayload) {
+  var { token, courseId, moduleId, lessonId } = data;
+  var res = await fetchFromCourse(
+    `${courseId}/${moduleId}/${lessonId}/delete`,
+    {
+      method: "delete",
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+
+  return { success: res.status < 300, msg: res.msg };
+}

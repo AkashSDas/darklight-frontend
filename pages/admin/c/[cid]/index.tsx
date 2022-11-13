@@ -1,18 +1,36 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 import EmojiPicker from "@components/shared/emoji-picker";
 import { AddIcon, ArrowDownIcon } from "@components/shared/icons";
+import SwitchButton from "@components/shared/switch-button";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useResizeTextareaHeight, useSaveCourseSettings } from "@lib/hooks";
-import { selectCourse, selectCourseData, updateCourse } from "@store/_course/slice";
+import { Course, selectCourse, selectCourseData, updateCourse } from "@store/_course/slice";
 import { deleteCourseThunk } from "@store/_course/thunk";
 
-function TitleInput({ title }: { title: string }) {
-  var dispatch = useAppDispatch();
+export default function CoursePage() {
+  var { loading, course, courseId } = useCourse();
+
+  if (loading || !courseId || !course) {
+    return <div>Loading...</div>;
+  }
+
+  return <CourseSettings />;
+}
+
+CoursePage.getLayout = function getLayout(page) {
+  return <CourseEditorLayout>{page}</CourseEditorLayout>;
+};
+
+// ==================================
+// Course inputs
+// ==================================
+
+function TitleInput() {
   var course = useAppSelector(selectCourseData);
-  var { ref } = useResizeTextareaHeight(title ?? "");
+  var { ref } = useResizeTextareaHeight(course.title ?? "");
+  var dispatch = useAppDispatch();
 
   return (
     <textarea
@@ -26,7 +44,7 @@ function TitleInput({ title }: { title: string }) {
           })
         )
       }
-      value={title}
+      value={course.title ?? ""}
       onKeyDownCapture={(e) => {
         if (e.key == "Enter") e.preventDefault();
       }}
@@ -36,10 +54,10 @@ function TitleInput({ title }: { title: string }) {
   );
 }
 
-function DescriptionInput({ description }: { description: string }) {
-  var dispatch = useAppDispatch();
+function DescriptionInput() {
   var course = useAppSelector(selectCourseData);
-  var { ref } = useResizeTextareaHeight(description ?? "");
+  var { ref } = useResizeTextareaHeight(course.description ?? "");
+  var dispatch = useAppDispatch();
 
   return (
     <textarea
@@ -53,7 +71,7 @@ function DescriptionInput({ description }: { description: string }) {
           })
         );
       }}
-      value={description}
+      value={course.description ?? ""}
       onKeyDownCapture={(e) => {
         if (e.key == "Enter") e.preventDefault();
       }}
@@ -63,58 +81,59 @@ function DescriptionInput({ description }: { description: string }) {
   );
 }
 
-export default function CoursePage() {
-  var { loading, course, courseId } = useCourse();
+function EmojiInput() {
+  var { isOpen, setIsOpen, wrapperRef } = useDropdown();
+  var { course } = useAppSelector(selectCourse);
+  var dispatch = useAppDispatch();
 
-  if (loading || !courseId || !course) {
-    return <div>Loading...</div>;
+  function onEmojiSelect(emoji: any) {
+    dispatch(
+      updateCourse({
+        ...course,
+        emoji: emoji.native,
+        lastEditedOn: new Date(Date.now()).toISOString(),
+      })
+    );
+    setIsOpen(false);
   }
 
-  return <CourseSettings />;
+  return (
+    <div
+      onClick={() => setIsOpen(true)}
+      ref={wrapperRef}
+      className="relative mb-3 w-[50px] h-[50px]"
+    >
+      {/* Emoji button */}
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
+        className="flex justify-center items-center w-[50px] h-[50px] text-[50px] cursor-pointer hover:bg-gray-100 rounded-lg font-urbanist"
+      >
+        {course.emoji ?? "✌🏼"}
+      </div>
+
+      {/* Emoji picker */}
+      {isOpen && (
+        <div className="top-[50px] absolute z-20 bg-slate-100">
+          <EmojiPicker
+            onSelect={onEmojiSelect}
+            handleClose={() => setIsOpen(false)}
+          />
+        </div>
+      )}
+    </div>
+  );
 }
 
+// ==================================
+// Settings
+// ==================================
+
 function CourseSettings() {
-  var dispatch = useAppDispatch();
-  var { isOpen, setIsOpen, wrapperRef } = useDropdown();
   var { loading, course } = useAppSelector(selectCourse);
   useSaveCourseSettings();
-
-  function EmojiInput() {
-    return (
-      <div
-        onClick={() => setIsOpen(true)}
-        ref={wrapperRef}
-        className="relative mb-3 w-[50px] h-[50px]"
-      >
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen(!isOpen);
-          }}
-          className="flex justify-center items-center w-[50px] h-[50px] text-[50px] cursor-pointer hover:bg-gray-100 rounded-lg font-urbanist"
-        >
-          {course.emoji ?? "✌🏼"}
-        </div>
-        {isOpen && (
-          <div className="top-[50px] absolute z-20 bg-slate-100">
-            <EmojiPicker
-              onSelect={(emoji) => {
-                dispatch(
-                  updateCourse({
-                    ...course,
-                    emoji: emoji.native,
-                    lastEditedOn: new Date(Date.now()).toISOString(),
-                  })
-                );
-                setIsOpen(false);
-              }}
-              handleClose={() => setIsOpen(false)}
-            />
-          </div>
-        )}
-      </div>
-    );
-  }
 
   function Divider() {
     return <div className="h-[1px] bg-[#F5F5F5]"></div>;
@@ -128,29 +147,35 @@ function CourseSettings() {
     <div className="w-full flex justify-center">
       <div className="max-w-[600px] w-full">
         <EmojiInput />
-        <TitleInput title={course.title} />
-        <DescriptionInput description={course.description ?? ""} />
+        <TitleInput />
+        <DescriptionInput />
 
         <div className="mt-4 flex flex-col gap-4">
           <Divider />
-          <TagsInput id={course.id} tags={course.tags} />
+          <TagsInput />
           <Divider />
-          <DifficultInput id={course.id} difficulty={course.difficulty} />
+          <DifficultInput />
           <Divider />
-          <PriceInput id={course.id} price={course.price} />
+          <PriceInput />
           <Divider />
-          <PublishInput id={course.id} stage={course.stage} />
+          <PublishInput />
           <Divider />
-          <DeleteCourse id={course.id} />
+          <DeleteCourse />
         </div>
       </div>
     </div>
   );
 }
 
-function DeleteCourse({ id }) {
-  var dispatch = useAppDispatch();
+/** It deletes the course that is being edited */
+function DeleteCourse() {
   var router = useRouter();
+  var dispatch = useAppDispatch();
+
+  async function deleteCourse() {
+    var res = await (await dispatch(deleteCourseThunk())).payload;
+    if (res) router.push("/");
+  }
 
   return (
     <div className="flex justify-between gap-1">
@@ -161,12 +186,10 @@ function DeleteCourse({ id }) {
         </div>
       </div>
 
+      {/* Delete course button */}
       <div className="relative max-w-[300px] w-full flex justify-end">
         <button
-          onClick={async () => {
-            var res = await (await dispatch(deleteCourseThunk())).payload;
-            if (res) router.push("/");
-          }}
+          onClick={deleteCourse}
           className="h-11 px-6 rounded-2xl bg-[#FFECEB] text-[#EA4335]"
         >
           Delete
@@ -176,10 +199,19 @@ function DeleteCourse({ id }) {
   );
 }
 
-function PublishInput({ id, stage }) {
-  var [active, setActive] = useState(stage == "draft" ? false : true);
+function PublishInput() {
+  var { course } = useAppSelector(selectCourse);
   var dispatch = useAppDispatch();
-  var course = useAppSelector(selectCourseData);
+
+  function togglePublish() {
+    dispatch(
+      updateCourse({
+        ...course,
+        stage: course.stage == "draft" ? "published" : "draft",
+        lastEditedOn: new Date(Date.now()).toISOString(),
+      })
+    );
+  }
 
   return (
     <div className="flex justify-between gap-1">
@@ -190,40 +222,27 @@ function PublishInput({ id, stage }) {
         </div>
       </div>
 
-      <div className="relative max-w-[300px] w-full flex justify-end">
-        <div
-          onClick={() => {
-            setActive(!active);
-            dispatch(
-              updateCourse({
-                ...course,
-                stage: stage == "draft" ? "published" : "draft",
-                lastEditedOn: new Date(Date.now()).toISOString(),
-              })
-            );
-          }}
-          className="flex justify-between items-center cursor-pointer"
-        >
-          <div
-            className={`w-14 h-8 ${
-              !active ? "bg-gray-300" : "bg-blue2"
-            }  rounded-full flex-shrink-0 p-1`}
-          >
-            <div
-              className={`bg-white w-6 h-6 rounded-full shadow-md transform ${
-                active ? "translate-x-6" : ""
-              } duration-300 ease-in-out`}
-            ></div>
-          </div>
-        </div>
-      </div>
+      <SwitchButton
+        checked={course.stage == "draft" ? false : true}
+        onChange={togglePublish}
+      />
     </div>
   );
 }
 
-function PriceInput({ id, price }) {
-  var dispatch = useAppDispatch();
+function PriceInput() {
   var course = useAppSelector(selectCourseData);
+  var dispatch = useAppDispatch();
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    dispatch(
+      updateCourse({
+        ...course,
+        price: e.target.value == "" ? null : Number(e.target.value),
+        lastEditedOn: new Date(Date.now()).toISOString(),
+      })
+    );
+  }
 
   return (
     <div className="flex justify-between gap-1">
@@ -238,25 +257,17 @@ function PriceInput({ id, price }) {
         <div className="w-[180px] flex items-center px-3 rounded-2xl h-11 border border-solid border-[#E9E9E9] font-urbanist text-base">
           <input
             id="price"
-            value={price ?? ""}
+            value={course.price ?? ""}
             type="number"
             autoComplete="off"
             min={0}
             placeholder="₹"
-            onChange={(e) => {
-              dispatch(
-                updateCourse({
-                  ...course,
-                  price: e.target.value == "" ? null : Number(e.target.value),
-                  lastEditedOn: new Date(Date.now()).toISOString(),
-                })
-              );
-            }}
+            onChange={handleChange}
             className="w-full outline-none flex-grow font-urbanist"
           />
 
           <div className="h-6 w-6 flex justify-center items-center rounded-md">
-            💷
+            💰
           </div>
         </div>
       </div>
@@ -264,10 +275,53 @@ function PriceInput({ id, price }) {
   );
 }
 
-function DifficultInput({ id, difficulty }) {
+function DifficultInput() {
   var { isOpen, setIsOpen, wrapperRef } = useDropdown();
-  var dispatch = useAppDispatch();
   var course = useAppSelector(selectCourseData);
+  var dispatch = useAppDispatch();
+
+  function updateDifficulty(difficulty: Course["difficulty"]) {
+    setIsOpen(false);
+    dispatch(
+      updateCourse({
+        ...course,
+        difficulty: difficulty as any,
+        lastEditedOn: new Date(Date.now()).toISOString(),
+      })
+    );
+  }
+
+  function DifficultyEmoji({
+    difficulty,
+  }: {
+    difficulty: Course["difficulty"];
+  }) {
+    if (difficulty == "beginner") var emoji = "👶";
+    else if (difficulty == "intermediate") var emoji = "👱‍♀️";
+    else if (difficulty == "advanced") var emoji = "👵";
+    else var emoji = "🥸";
+
+    return (
+      <span className="w-5 h-5 flex justify-center items-center">{emoji}</span>
+    );
+  }
+
+  function DifficultyLabel({
+    difficulty,
+  }: {
+    difficulty: Course["difficulty"];
+  }) {
+    if (difficulty == "beginner") var label = "Beginner";
+    else if (difficulty == "intermediate") var label = "Intermediate";
+    else if (difficulty == "advanced") var label = "Advanced";
+    else var label = "Beginner";
+
+    return (
+      <span className="text-[#686868] font-semibold font-urbanist flex-grow">
+        {label}
+      </span>
+    );
+  }
 
   return (
     <div className="flex justify-between gap-1">
@@ -278,66 +332,35 @@ function DifficultInput({ id, difficulty }) {
         </div>
       </div>
 
+      {/* Input */}
       <div
         ref={wrapperRef}
         className="relative max-w-[300px] w-full flex justify-end"
       >
+        {/* Current difficulty */}
         <div
           className="w-[180px] rounded-2xl h-11 border border-solid border-[#E9E9E9] flex gap-2 items-center cursor-pointer p-[6px]"
           onClick={() => setIsOpen(true)}
         >
-          <span className="w-5 h-5 flex justify-center items-center">
-            {difficulty == "beginner"
-              ? "👶"
-              : difficulty == "intermediate"
-              ? "👦"
-              : "👨"}
-          </span>{" "}
-          <span className="text-[#686868] font-semibold font-urbanist flex-grow">
-            {difficulty == "beginner"
-              ? "Beginner"
-              : difficulty == "intermediate"
-              ? "Intermediate"
-              : "Advanced"}
-          </span>
+          <DifficultyEmoji difficulty={course.difficulty} />
+          <DifficultyLabel difficulty={course.difficulty} />
           <span>
             <ArrowDownIcon className="h-6 w-6 stroke-[#686868]" />
           </span>
         </div>
 
+        {/* Dropdown */}
         {isOpen && (
           <div className="z-10 absolute top-0 right-0 w-[180px] px-2 py-3 rounded-xl bg-white border border-solid border-gray-100 shadow-lg flex flex-wrap gap-[6px]">
             <div className="w-full">
               {["beginner", "intermediate", "advanced"].map((difficulty) => (
                 <div
                   key={difficulty}
-                  onClick={(e) => {
-                    setIsOpen(false);
-                    dispatch(
-                      updateCourse({
-                        ...course,
-                        difficulty: difficulty as any,
-                        lastEditedOn: new Date(Date.now()).toISOString(),
-                      })
-                    );
-                  }}
+                  onClick={() => updateDifficulty(difficulty as any)}
                   className="h-7 w-full px-[2px] flex items-center rounded-lg gap-1 cursor-pointer hover:bg-gray-100"
                 >
-                  <span className="w-5 h-5 flex justify-center items-center">
-                    {difficulty == "beginner"
-                      ? "👶"
-                      : difficulty == "intermediate"
-                      ? "👦"
-                      : "👨"}
-                  </span>
-
-                  <span className="text-[#686868] font-medium font-urbanist flex-grow text-[14px]">
-                    {difficulty == "beginner"
-                      ? "Beginner"
-                      : difficulty == "intermediate"
-                      ? "Intermediate"
-                      : "Advanced"}
-                  </span>
+                  <DifficultyEmoji difficulty={difficulty as any} />
+                  <DifficultyLabel difficulty={difficulty as any} />
                 </div>
               ))}
             </div>
@@ -348,11 +371,37 @@ function DifficultInput({ id, difficulty }) {
   );
 }
 
-function TagsInput({ id, tags }) {
+function TagsInput() {
   var { isOpen, setIsOpen, wrapperRef } = useDropdown();
   var [value, setValue] = useState("");
   var course = useAppSelector(selectCourseData);
   var dispatch = useAppDispatch();
+  var tags = course.tags;
+
+  function removeTag(tag: string) {
+    dispatch(
+      updateCourse({
+        ...course,
+        tags: course.tags.filter((t) => t != tag),
+        lastEditedOn: new Date(Date.now()).toISOString(),
+      })
+    );
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    // Add tag
+    dispatch(
+      updateCourse({
+        ...course,
+        tags: [...course.tags, value],
+        lastEditedOn: new Date(Date.now()).toISOString(),
+      })
+    );
+
+    setValue("");
+  }
 
   return (
     <div className="flex justify-between gap-1">
@@ -363,11 +412,13 @@ function TagsInput({ id, tags }) {
         </div>
       </div>
 
+      {/* Dropdown input  */}
       <div
         ref={wrapperRef}
         onClick={() => setIsOpen(true)}
         className="relative max-w-[300px] w-full rounded-lg hover:bg-gray-50"
       >
+        {/* Display tags */}
         <div className="flex flex-wrap gap-[6px] justify-end cursor-pointer p-1">
           {tags.map((tag) => (
             <div
@@ -379,6 +430,7 @@ function TagsInput({ id, tags }) {
           ))}
         </div>
 
+        {/* Dropdown */}
         {isOpen && (
           <div className="z-10 absolute top-0 right-0 w-full px-2 py-3 rounded-xl bg-white border border-solid border-gray-100 shadow-lg flex flex-wrap gap-[6px]">
             <>
@@ -389,34 +441,15 @@ function TagsInput({ id, tags }) {
                 >
                   {tag}{" "}
                   <AddIcon
-                    onClick={() => {
-                      dispatch(
-                        updateCourse({
-                          ...course,
-                          tags: course.tags.filter((t) => t != tag),
-                          lastEditedOn: new Date(Date.now()).toISOString(),
-                        })
-                      );
-                    }}
+                    onClick={() => removeTag(tag)}
                     className="fill-[#686868] w-4 h-4 rotate-45 ml-1 cursor-pointer"
                   />
                 </div>
               ))}
             </>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                dispatch(
-                  updateCourse({
-                    ...course,
-                    tags: [...course.tags, value],
-                    lastEditedOn: new Date(Date.now()).toISOString(),
-                  })
-                );
-                setValue("");
-              }}
-            >
+            {/* Add tag input */}
+            <form onSubmit={handleSubmit}>
               <input
                 type="text"
                 autoFocus
@@ -432,7 +465,3 @@ function TagsInput({ id, tags }) {
     </div>
   );
 }
-
-CoursePage.getLayout = function getLayout(page) {
-  return <CourseEditorLayout>{page}</CourseEditorLayout>;
-};

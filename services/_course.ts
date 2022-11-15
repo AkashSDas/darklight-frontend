@@ -269,3 +269,17 @@ export async function deleteCourseService(data: DeleteCoursePayload) {
 
   return { success: res.status < 300, msg: res.msg };
 }
+
+export async function getAllCoursesService(next: string) {
+  var res = await fetchFromCourse("all", {
+    method: "get",
+    params: { next },
+  });
+  return {
+    success: res.status < 300,
+    msg: res.msg,
+    courses: res.data?.results,
+    next: res.data?.next,
+    hasNext: res.data?.hasNext,
+  };
+}

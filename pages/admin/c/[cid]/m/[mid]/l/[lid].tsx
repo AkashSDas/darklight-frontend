@@ -235,19 +235,22 @@ function ContentOptions() {
   var lesson = useAppSelector(selectActiveLesson);
 
   async function addContentBlock(content: typeof lesson.contents[number]) {
+    var newContentBlock = createContent(content.id);
+
+    // Update state
     dispatch(
       updateActiveLesson({
         ...lesson,
-        contents: [...lesson.contents, createContent(content.id)],
+        contents: [...lesson.contents, newContentBlock],
       })
     );
 
-    var c = createContent(content.id);
+    // Add content in database
     await dispatch(
       addContentThunk({
         addAt: lesson.contents.length,
-        type: c.type,
-        data: c.data,
+        type: content.id,
+        data: content.data,
       })
     );
   }
@@ -257,7 +260,7 @@ function ContentOptions() {
       {lessonContentOptions.map((content) => (
         <div
           key={content.id}
-          onClick={addContentBlock}
+          onClick={() => addContentBlock(content)}
           className="flex-grow w-full rounded-md p-2 flex flex-col gap-3 cursor-pointer hover:bg-slate-100"
         >
           <img

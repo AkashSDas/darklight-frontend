@@ -52,6 +52,7 @@ export function useDropdown() {
   return { wrapperRef, isOpen, setIsOpen };
 }
 
+// TODO: Fix height issues when textarea is having large content is reordered lesson content list
 /**
  *Resize textarea height dynamically
  *

@@ -296,7 +296,7 @@ function Paragraph({ index }) {
   // paragraph text
   var lesson = useAppSelector(selectActiveLesson);
   var content = lesson.contents[index] as ParagraphContent;
-  var text = content.data.filter((c) => c.key == "text")[0].value;
+  var text = content.data?.filter((c) => c.key == "text")[0].value ?? "";
   var [val, setVal] = useState(text);
   var { ref } = useResizeTextareaHeight(text);
 

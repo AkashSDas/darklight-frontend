@@ -1,7 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 import fetchAPI from "services";
-import { instructorSignupService, UserExistsPayload, userExistsService } from "services/_user";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 

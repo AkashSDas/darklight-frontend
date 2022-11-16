@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 import EmojiPicker from "@components/shared/emoji-picker";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useModule, useResizeTextareaHeight, useSaveModuleData } from "@lib/hooks";
-import { selectActiveModule, selectCourseData, updateActiveModule } from "@store/_course/slice";
-import { deleteModuleThunk } from "@store/_course/thunk";
+import { selectActiveModule, selectCourseData, updateActiveModule } from "@store/course/slice";
+import { deleteModuleThunk } from "@store/course/thunk";
 
 export default function ModulePage() {
   var { loading, course, courseId } = useCourse();

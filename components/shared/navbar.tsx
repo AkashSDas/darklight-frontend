@@ -3,8 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { useAppDispatch, useAppSelector, useDropdown } from "@lib/hooks";
-import { createCourseThunk } from "@store/_course/thunk";
 import { logoutThunk } from "@store/auth/thunk";
+import { createCourseThunk } from "@store/course/thunk";
 import { selectUserData } from "@store/user/slice";
 import { instructorSignupThunk } from "@store/user/thunk";
 

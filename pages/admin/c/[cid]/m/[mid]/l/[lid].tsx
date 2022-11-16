@@ -9,8 +9,8 @@ import Markdown from "@components/shared/markdown";
 import SwitchButton from "@components/shared/switch-button";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight } from "@lib/hooks";
 import { createContent, lessonContentOptions, ParagraphContent } from "@lib/lesson-editor";
-import { deleteContent, Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateCourse, updateLessonInModule } from "@store/_course/slice";
-import { addContentThunk, deleteContentThunk, deleteLessonThunk, reorderContentThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/_course/thunk";
+import { deleteContent, Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateCourse, updateLessonInModule } from "@store/course/slice";
+import { addContentThunk, deleteContentThunk, deleteLessonThunk, reorderContentThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/course/thunk";
 
 export default function LessonPage() {
   var { loading, course, courseId } = useCourse();

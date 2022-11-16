@@ -6,8 +6,8 @@ import EmojiPicker from "@components/shared/emoji-picker";
 import { AddIcon, ArrowDownIcon } from "@components/shared/icons";
 import SwitchButton from "@components/shared/switch-button";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useResizeTextareaHeight, useSaveCourseSettings } from "@lib/hooks";
-import { Course, selectCourse, selectCourseData, updateCourse } from "@store/_course/slice";
-import { deleteCourseThunk } from "@store/_course/thunk";
+import { Course, selectCourse, selectCourseData, updateCourse } from "@store/course/slice";
+import { deleteCourseThunk } from "@store/course/thunk";
 
 export default function CoursePage() {
   var { loading, course, courseId } = useCourse();

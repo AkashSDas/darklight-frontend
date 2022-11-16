@@ -4,8 +4,8 @@ import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { useAppDispatch, useAppSelector, useCourse, useLesson, useModule } from "@lib/hooks";
-import { addNewLessonToModule, Module, selectCourse, selectCourseLoading, selectPreview, updateActiveLesson, updateActiveModule, updateActiveModuleId, updateCourse, updatePreview } from "@store/_course/slice";
-import { createLessonThunk, createModuleThunk, reorderModulesThunk } from "@store/_course/thunk";
+import { addNewLessonToModule, Module, selectCourse, selectCourseLoading, selectPreview, updateActiveLesson, updateActiveModule, updateActiveModuleId, updateCourse, updatePreview } from "@store/course/slice";
+import { createLessonThunk, createModuleThunk, reorderModulesThunk } from "@store/course/thunk";
 
 import Button from "./button";
 import { AddIcon, ArrowRightIcon, DotIcon, DotsIcon, MenuIcon, SettingsIcon } from "./icons";

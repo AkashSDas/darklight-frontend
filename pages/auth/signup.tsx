@@ -12,10 +12,10 @@ import { completeOAuthSignupSchema, signupSchema } from "@lib/validations";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Google from "@public/brand-svg/google.svg";
 import Twitter from "@public/brand-svg/twitter.svg";
-import { selectAuthLoading, selectInitLoading } from "@store/_auth/slice";
-import { cancelOAuthThunk, completeOAuthThunk, getLoggedInUserThunk, getNewAccessTokenThunk, signupThunk } from "@store/_auth/thunk";
 import { selectUserAvailability, selectUserData } from "@store/_user/slice";
 import { userExistsThunk } from "@store/_user/thunk";
+import { selectAuthLoading, selectInitLoading } from "@store/auth/slice";
+import { cancelOAuthThunk, completeOAuthThunk, getLoggedInUserThunk, getNewAccessTokenThunk, signupThunk } from "@store/auth/thunk";
 
 // TODO: disable submit button in case of no availability
 

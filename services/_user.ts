@@ -19,11 +19,6 @@ export async function userExistsService(payload: UserExistsPayload) {
   else return false;
 }
 
-export async function getLoggedInUserService() {
-  var res = await fetchFromUser("me", { method: "get" });
-  return res.data?.user || null;
-}
-
 export async function instructorSignupService(token: string) {
   var res = await fetchFromUser("instructor-signup", {
     method: "post",

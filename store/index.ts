@@ -1,7 +1,7 @@
 import { AnyAction, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import _auth from "@store/_auth/slice";
 import _course from "@store/_course/slice";
 import _user from "@store/_user/slice";
+import _auth from "@store/auth/slice";
 
 /** Redux store */
 var store = configureStore({

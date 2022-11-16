@@ -12,8 +12,8 @@ import { loginSchema } from "@lib/validations";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Google from "@public/brand-svg/google.svg";
 import Twitter from "@public/brand-svg/twitter.svg";
-import { selectAuthLoading } from "@store/_auth/slice";
-import { loginThunk } from "@store/_auth/thunk";
+import { selectAuthLoading } from "@store/auth/slice";
+import { loginThunk } from "@store/auth/thunk";
 
 import { FormLabel, ValidationMsg } from "./signup";
 

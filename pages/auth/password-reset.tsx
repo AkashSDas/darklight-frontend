@@ -7,8 +7,8 @@ import { PasswordResetPayload } from "services/_auth";
 import Button from "@components/shared/button";
 import { useAppDispatch, useAppSelector } from "@lib/hooks";
 import { forgotPasswordSchema, passwordResetSchema } from "@lib/validations";
-import { selectAuthLoading } from "@store/_auth/slice";
-import { forgotPasswordThunk, passwordResetThunk } from "@store/_auth/thunk";
+import { selectAuthLoading } from "@store/auth/slice";
+import { forgotPasswordThunk, passwordResetThunk } from "@store/auth/thunk";
 
 import { FormLabel, ValidationMsg } from "./signup";
 
@@ -66,7 +66,10 @@ function PasswordResetorm() {
   async function handleSubmit(values: typeof initialValues) {
     if (router.query?.token) {
       await dispatch(
-        passwordResetThunk({ ...values, token: router.query.token as string })
+        passwordResetThunk({
+          token: router.query.token as string,
+          data: { ...values },
+        })
       );
     }
   }

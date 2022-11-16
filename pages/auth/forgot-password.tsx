@@ -5,8 +5,8 @@ import Link from "next/link";
 import Button from "@components/shared/button";
 import { useAppDispatch, useAppSelector } from "@lib/hooks";
 import { forgotPasswordSchema } from "@lib/validations";
-import { selectAuthLoading } from "@store/_auth/slice";
-import { forgotPasswordThunk } from "@store/_auth/thunk";
+import { selectAuthLoading } from "@store/auth/slice";
+import { forgotPasswordThunk } from "@store/auth/thunk";
 
 import { FormLabel, ValidationMsg } from "./signup";
 
@@ -62,7 +62,7 @@ function ForgotPasswordForm() {
   var initialValues = { email: "" };
 
   async function handleSubmit(values: typeof initialValues) {
-    await dispatch(forgotPasswordThunk(values.email));
+    await dispatch(forgotPasswordThunk({ email: values.email }));
   }
 
   var formik = useFormik({

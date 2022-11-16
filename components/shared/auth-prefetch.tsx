@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "@lib/hooks";
-import { selectInitLoading } from "@store/_auth/slice";
-import { getLoggedInUserThunk, getNewAccessTokenThunk } from "@store/_auth/thunk";
+import { selectInitLoading } from "@store/auth/slice";
+import { getLoggedInUserThunk, getNewAccessTokenThunk } from "@store/auth/thunk";
 
 export default function AuthPrefetch({ children }) {
   var dispatch = useAppDispatch();

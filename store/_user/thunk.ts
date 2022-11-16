@@ -1,4 +1,6 @@
+import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
+import fetchAPI from "services";
 import { instructorSignupService, UserExistsPayload, userExistsService } from "services/_user";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -6,15 +8,28 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../";
 import { updateAvailabilityStatus, updateUserData } from "./slice";
 
+function fetchFromUser(endpoint: string, opts: AxiosRequestConfig) {
+  const BASE_URL = "/user";
+  return fetchAPI(`${BASE_URL}${endpoint}`, opts);
+}
+
 export var userExistsThunk = createAsyncThunk(
   "_user/available",
   async function userExists(
-    { field, value }: UserExistsPayload,
+    { field, value }: { field: "username" | "email"; value: string },
     { getState, dispatch }
   ) {
     var { availability } = (getState() as RootState)._user;
-    var available = await userExistsService({ field, value });
-    dispatch(updateAvailabilityStatus({ ...availability, [field]: available }));
+    var res = await fetchFromUser(`/available?${field}=${value}`, {
+      method: "get",
+    });
+
+    dispatch(
+      updateAvailabilityStatus({
+        ...availability,
+        [field]: res.data?.available ?? false,
+      })
+    );
   }
 );
 
@@ -22,21 +37,21 @@ export var instructorSignupThunk = createAsyncThunk(
   "_user/instructor-signup",
   async function instructorSignup(_, { getState, dispatch }) {
     var { accessToken } = (getState() as RootState)._auth;
-    if (!accessToken) return toast.error("You are not logged in");
+    var user = (getState() as RootState)._user.data;
+    if (!accessToken || !user) return toast.error("You are not logged in");
 
-    var res = await instructorSignupService(accessToken);
+    var res = await fetchFromUser("/instructor-signup", {
+      method: "post",
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
 
-    if (res) {
-      let user = (getState() as RootState)._user.data;
-      if (user) {
-        dispatch(
-          updateUserData({ ...user, roles: [...user.roles, "instructor"] })
-        );
-
-        return toast.success("You are now an instructor!");
-      }
+    if (res.status < 300) {
+      toast.success("You are now an instructor!");
+      dispatch(
+        updateUserData({ ...user, roles: [...user.roles, "instructor"] })
+      );
+    } else {
+      toast.error(res.msg);
     }
-
-    toast.error(res.msg);
   }
 );

@@ -4,7 +4,7 @@ import fetchAPI from "services";
 
 import { normalizeUser } from "@lib/response";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { updateUserData } from "@store/_user/slice";
+import { updateUserData } from "@store/user/slice";
 
 import { changeLoginState } from "./slice";
 

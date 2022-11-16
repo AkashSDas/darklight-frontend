@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 
 import { useAppDispatch, useAppSelector, useDropdown } from "@lib/hooks";
 import { createCourseThunk } from "@store/_course/thunk";
-import { selectUserData } from "@store/_user/slice";
-import { instructorSignupThunk } from "@store/_user/thunk";
 import { logoutThunk } from "@store/auth/thunk";
+import { selectUserData } from "@store/user/slice";
+import { instructorSignupThunk } from "@store/user/thunk";
 
 import Avatar from "./avatar";
 import Button from "./button";

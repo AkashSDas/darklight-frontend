@@ -1,4 +1,4 @@
-import { User } from "@store/_user/slice";
+import { User } from "@store/user/slice";
 
 /**
  * @params data: response data from back-end

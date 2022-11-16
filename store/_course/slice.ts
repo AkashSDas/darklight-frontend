@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "@store/_user/slice";
+import { User } from "@store/user/slice";
 
 import { RootState } from "../";
 import { updateCourseInfoThunk, updateModuleThunk } from "./thunk";

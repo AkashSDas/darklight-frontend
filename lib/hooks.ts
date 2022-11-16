@@ -3,8 +3,8 @@ import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
 
-import { selectActiveLesson, selectActiveModule, selectCourse } from "@store/_course/slice";
-import { getCourseThunk, getLessonThunk, getModuleThunk, updateContentThunk, updateCourseInfoThunk, updateModuleThunk } from "@store/_course/thunk";
+import { selectActiveLesson, selectActiveModule, selectCourse } from "@store/course/slice";
+import { getCourseThunk, getLessonThunk, getModuleThunk, updateContentThunk, updateCourseInfoThunk, updateModuleThunk } from "@store/course/thunk";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -181,8 +181,8 @@ export function useSaveCourseSettings() {
       async function saveSetting() {
         await dispatch(
           updateCourseInfoThunk({
-            courseId: course.id,
-            payload: {
+            id: course.id,
+            data: {
               emoji: course.emoji,
               title: course.title,
               description: course.description,
@@ -226,7 +226,7 @@ export function useSaveModuleData() {
           updateModuleThunk({
             courseId: course.id,
             moduleId: moduleData.id,
-            payload: {
+            data: {
               title: moduleData.title,
               description: moduleData.description,
               emoji: moduleData.emoji,
@@ -292,3 +292,31 @@ export function useSaveLessonContentData(updateAt: number) {
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [dispatch, course, moduleData, lesson, content, updateAt]);
 }
+
+export const useWindowSize = () => {
+  const getSize = () => ({
+    width: typeof window !== "undefined" && window.innerWidth,
+    height: typeof window !== "undefined" && window.innerHeight,
+  });
+
+  const [windowSize, setWindowSize] = useState(() => ({ width: 0, height: 0 }));
+
+  const handleResize = () => {
+    setWindowSize(() => getSize());
+  };
+
+  var windowType = typeof window;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowSize(() => getSize());
+    }
+  }, [windowType]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowSize;
+};

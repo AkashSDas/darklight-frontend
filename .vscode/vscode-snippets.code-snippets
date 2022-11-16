@@ -58,5 +58,18 @@
       "})"
     ],
     "description": "Create a thunk"
+  },
+  "Course Thunk": {
+    "scope": "typescript",
+    "prefix": "coThunk",
+    "body": [
+      "export var ${1:name}Thunk = createAsyncThunk(",
+      "   '_course/$2',",
+      "   async function($3, {getState, dispatch}) {",
+      "       var state = (getState() as RootState)$4",
+      "       $5",
+      "})"
+    ],
+    "description": "Create a thunk"
   }
 }

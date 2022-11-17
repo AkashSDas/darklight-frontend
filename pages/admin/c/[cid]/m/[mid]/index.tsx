@@ -121,8 +121,8 @@ function DeleteModule() {
   var dispatch = useAppDispatch();
 
   async function handleDelete() {
-    await dispatch(deleteModuleThunk());
-    router.push(`/admin/c/${courseId}`);
+    var deleted = await dispatch(deleteModuleThunk());
+    if (deleted) router.push(`/admin/c/${courseId}`);
   }
 
   return (

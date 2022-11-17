@@ -1,9 +1,15 @@
 import moment from "moment";
 import { useRouter } from "next/router";
-import { getCourseService } from "services/_course";
+import toast from "react-hot-toast";
+import fetchAPI from "services";
 import useSWR from "swr";
 
 import Button from "@components/shared/button";
+
+async function getCourseService(slug: string) {
+  var res = await fetchAPI("/course/" + slug, { method: "get" });
+  if (res.status < 300) return res.data;
+}
 
 export default function CourseSellPage() {
   var router = useRouter();

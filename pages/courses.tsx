@@ -1,6 +1,16 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getAllCoursesService } from "services/_course";
+import toast from "react-hot-toast";
+import fetchAPI from "services";
+
+async function getAllCoursesService(next: string) {
+  var res = await fetchAPI("/course/all", { method: "get", params: [next] });
+  if (res.status < 300) {
+    return res.data;
+  } else {
+    toast.error("Error fetching courses");
+  }
+}
 
 export default function CoursesPage() {
   var [next, setNext] = useState("");
@@ -12,7 +22,7 @@ export default function CoursesPage() {
   async function getCourses() {
     setLoading(true);
     var response = await getAllCoursesService(next);
-    setCourses(courses.concat(response.courses));
+    setCourses(courses.concat(response.results));
     setNext(response.next);
     setHasNext(response.hasNext);
     setLoading(false);

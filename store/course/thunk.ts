@@ -485,3 +485,25 @@ export var reorderContentThunk = createAsyncThunk(
     }
   }
 );
+
+export var buyCourseThunk = createAsyncThunk(
+  "_course/buy",
+  async function (courseId: string, { getState, dispatch }) {
+    var state = getState() as RootState;
+    var { accessToken } = state._auth;
+    var { data } = state._user;
+
+    if (accessToken) {
+      let res = await fetchAPI(`/course-profile/buy`, {
+        method: "post",
+        headers: { Authorization: `Bearer ${accessToken}` },
+        data: { courseId, userId: data.id },
+      });
+
+      if (res.status < 300) {
+        toast.success("Course purchased!");
+        return true;
+      } else toast.error(res.msg);
+    }
+  }
+);

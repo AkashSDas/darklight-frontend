@@ -66,7 +66,7 @@ function CourseCard({ course }) {
     "https://cdn.dribbble.com/users/27766/screenshots/3488007/media/30313b019754da503ec0860771a5536b.png?compress=1&resize=400x300";
 
   return (
-    <Link href={`/course/${course._id}`}>
+    <Link href={`/courses/${course._id}`}>
       <div className="w-[300px] flex flex-col gap-2 overflow-hidden bg-white hover:shadow-sm cursor-pointer">
         <img
           className="object-cover w-[300px] h-[200px] rounded-md"

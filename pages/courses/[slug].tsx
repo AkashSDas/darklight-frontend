@@ -1,10 +1,11 @@
 import moment from "moment";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import fetchAPI from "services";
 import useSWR from "swr";
 
 import Button from "@components/shared/button";
+import { useAppDispatch } from "@lib/hooks";
+import { buyCourseThunk } from "@store/course/thunk";
 
 async function getCourseService(slug: string) {
   var res = await fetchAPI("/course/" + slug, { method: "get" });
@@ -13,6 +14,7 @@ async function getCourseService(slug: string) {
 
 export default function CourseSellPage() {
   var router = useRouter();
+  var dispatch = useAppDispatch();
   var { data, error, isValidating } = useSWR(
     `/api/course/slug=${router.query?.slug}`,
     () => {
@@ -139,7 +141,14 @@ export default function CourseSellPage() {
 
         <div className="w-fit px-3">
           <Button
-            onClick={() => {}}
+            onClick={async () => {
+              var hasPurchased = await (
+                await dispatch(buyCourseThunk(data.id))
+              ).payload;
+              if (hasPurchased) {
+                router.push(`/learn/${data.id}`);
+              }
+            }}
             label="Enroll"
             variant="contained"
             size="lg"

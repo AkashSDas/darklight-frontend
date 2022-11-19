@@ -29,7 +29,7 @@ var initialState: UserState = {
 };
 
 export const userSlice = createSlice({
-  name: "_user",
+  name: "user",
   initialState,
   reducers: {
     updateAvailabilityStatus: (
@@ -47,8 +47,8 @@ export const userSlice = createSlice({
 
 export var { updateAvailabilityStatus, updateUserData } = userSlice.actions;
 export var userSliceName = userSlice.name;
-export var selectUserData = (state: RootState) => state._user.data;
-export var selectUserLoading = (state: RootState) => state._user.loading;
+export var selectUserData = (state: RootState) => state.user.data;
+export var selectUserLoading = (state: RootState) => state.user.loading;
 export var selectUserAvailability = (state: RootState) =>
-  state._user.availability;
+  state.user.availability;
 export default userSlice.reducer;

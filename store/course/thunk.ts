@@ -491,7 +491,7 @@ export var buyCourseThunk = createAsyncThunk(
   async function (courseId: string, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { data } = state._user;
+    var { data } = state.user;
 
     if (accessToken) {
       let res = await fetchAPI(`/course-profile/buy`, {

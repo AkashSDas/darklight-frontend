@@ -13,12 +13,12 @@ function fetchFromUser(endpoint: string, opts: AxiosRequestConfig) {
 }
 
 export var userExistsThunk = createAsyncThunk(
-  "_user/available",
+  "user/available",
   async function userExists(
     { field, value }: { field: "username" | "email"; value: string },
     { getState, dispatch }
   ) {
-    var { availability } = (getState() as RootState)._user;
+    var { availability } = (getState() as RootState).user;
     var res = await fetchFromUser(`/available?${field}=${value}`, {
       method: "get",
     });
@@ -33,10 +33,10 @@ export var userExistsThunk = createAsyncThunk(
 );
 
 export var instructorSignupThunk = createAsyncThunk(
-  "_user/instructor-signup",
+  "user/instructor-signup",
   async function instructorSignup(_, { getState, dispatch }) {
     var { accessToken } = (getState() as RootState).auth;
-    var user = (getState() as RootState)._user.data;
+    var user = (getState() as RootState).user.data;
     if (!accessToken || !user) return toast.error("You are not logged in");
 
     var res = await fetchFromUser("/instructor-signup", {

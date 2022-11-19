@@ -1,6 +1,6 @@
 import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import CourseEditorLayout from "@components/shared/course-editor-layout";
@@ -9,7 +9,7 @@ import Markdown from "@components/shared/markdown";
 import SwitchButton from "@components/shared/switch-button";
 import { useAppDispatch, useAppSelector, useCourse, useDropdown, useLesson, useModule, useResizeTextareaHeight } from "@lib/hooks";
 import { createContent, lessonContentOptions, ParagraphContent } from "@lib/lesson-editor";
-import { deleteContent, Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateCourse, updateLessonInModule } from "@store/course/slice";
+import { deleteContent, Lesson, selectActiveLesson, selectPreview, updateActiveLesson, updateLessonInModule } from "@store/course/slice";
 import { addContentThunk, deleteContentThunk, deleteLessonThunk, reorderContentThunk, updateContentThunk, updateLessonMetadataThunk } from "@store/course/thunk";
 
 export default function LessonPage() {

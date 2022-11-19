@@ -18,7 +18,7 @@ var initialState: AuthState = {
 };
 
 export var authSlice = createSlice({
-  name: "_auth",
+  name: "auth",
   initialState,
   reducers: {
     changeLoginState: (state, action: PayloadAction<string | null>) => {
@@ -107,9 +107,9 @@ export var authSlice = createSlice({
 
 export var { changeLoginState } = authSlice.actions;
 export var authSliceName = authSlice.name;
-export var selectAccessToken = (state: RootState) => state._auth.accessToken;
-export var selectAuthLoading = (state: RootState) => state._auth.loading;
+export var selectAccessToken = (state: RootState) => state.auth.accessToken;
+export var selectAuthLoading = (state: RootState) => state.auth.loading;
 export var selectInitLoading = (state: RootState) =>
-  state._auth.loggedInUserLoading || state._auth.accessTokenLoading;
+  state.auth.loggedInUserLoading || state.auth.accessTokenLoading;
 
 export default authSlice.reducer;

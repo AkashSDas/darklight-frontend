@@ -35,7 +35,7 @@ export var userExistsThunk = createAsyncThunk(
 export var instructorSignupThunk = createAsyncThunk(
   "_user/instructor-signup",
   async function instructorSignup(_, { getState, dispatch }) {
-    var { accessToken } = (getState() as RootState)._auth;
+    var { accessToken } = (getState() as RootState).auth;
     var user = (getState() as RootState)._user.data;
     if (!accessToken || !user) return toast.error("You are not logged in");
 

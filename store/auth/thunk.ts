@@ -20,7 +20,7 @@ const WENT_WRONG_MSG = "Something went wrong, please try again";
 // ================================
 
 export var signupThunk = createAsyncThunk(
-  "_auth/signup",
+  "auth/signup",
   async function signup(data: {
     username: string;
     email: string;
@@ -37,7 +37,7 @@ export var signupThunk = createAsyncThunk(
 );
 
 export var cancelOAuthThunk = createAsyncThunk(
-  "_auth/cancel-oauth",
+  "auth/cancel-oauth",
   async function cancelOAuth(_, { dispatch }) {
     var res = await fetchFromAuth("/cancel-oauth", { method: "post" });
 
@@ -47,7 +47,7 @@ export var cancelOAuthThunk = createAsyncThunk(
 );
 
 export var completeOAuthThunk = createAsyncThunk(
-  "_auth/complete-oauth",
+  "auth/complete-oauth",
   async function completeOAuth(data: { email: string; username: string }) {
     var res = await fetchFromAuth("/complete-oauth", { method: "post", data });
 
@@ -64,7 +64,7 @@ export var completeOAuthThunk = createAsyncThunk(
 // ================================
 
 export var loginThunk = createAsyncThunk(
-  "_auth/login",
+  "auth/login",
   async function login(
     data: { email: string; password: string },
     { dispatch }
@@ -82,7 +82,7 @@ export var loginThunk = createAsyncThunk(
 );
 
 export var getNewAccessTokenThunk = createAsyncThunk(
-  "_auth/access-token",
+  "auth/access-token",
   async function getNewAccessToken(_, { dispatch }) {
     var res = await fetchFromAuth("/access-token", { method: "get" });
 
@@ -94,7 +94,7 @@ export var getNewAccessTokenThunk = createAsyncThunk(
 );
 
 export var getLoggedInUserThunk = createAsyncThunk(
-  "_auth/me",
+  "auth/me",
   async function getLoggedInUser(_, { dispatch }) {
     var res = await fetchAPI("/user/me", { method: "get" });
 
@@ -109,7 +109,7 @@ export var getLoggedInUserThunk = createAsyncThunk(
 // ================================
 
 export var forgotPasswordThunk = createAsyncThunk(
-  "_auth/forgot-password",
+  "auth/forgot-password",
   async function forgotPassword(data: { email: string }) {
     var res = await fetchFromAuth("/forgot-password", { method: "post", data });
 
@@ -122,7 +122,7 @@ export var forgotPasswordThunk = createAsyncThunk(
 );
 
 export var passwordResetThunk = createAsyncThunk(
-  "_auth/password-reset",
+  "auth/password-reset",
   async function passwordReset({
     token,
     data,
@@ -148,7 +148,7 @@ export var passwordResetThunk = createAsyncThunk(
 // ================================
 
 export var verifyEmailThunk = createAsyncThunk(
-  "_auth/verify-email",
+  "auth/verify-email",
   async function verifyEmail(data: { email: string }) {
     var res = await fetchFromAuth("/verify-email", { method: "post", data });
 
@@ -161,7 +161,7 @@ export var verifyEmailThunk = createAsyncThunk(
 );
 
 export var logoutThunk = createAsyncThunk(
-  "_auth/logout",
+  "auth/logout",
   async function logout(_, { dispatch }) {
     var res = await fetchFromAuth("/logout", { method: "post" });
 

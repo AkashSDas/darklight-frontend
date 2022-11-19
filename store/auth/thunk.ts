@@ -89,8 +89,6 @@ export var getNewAccessTokenThunk = createAsyncThunk(
     if (res.status < 300 && res.data) {
       dispatch(updateUserData(normalizeUser(res.data.user)));
       dispatch(changeLoginState(res.data.accessToken));
-    } else {
-      toast.error(WENT_WRONG_MSG);
     }
   }
 );

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { LoginPayload } from "services/_auth";
 
 import Button from "@components/shared/button";
 import { useAppDispatch, useAppSelector } from "@lib/hooks";
@@ -85,12 +84,9 @@ function LoginWithEmailForm() {
   // Formik settings
   // ===============================================
 
-  var initialValues: LoginPayload = {
-    email: "",
-    password: "",
-  };
+  var initialValues = { email: "", password: "" };
 
-  async function handleSubmit(values: LoginPayload) {
+  async function handleSubmit(values: typeof initialValues) {
     await dispatch(loginThunk(values));
   }
 

@@ -2,13 +2,12 @@ import { useFormik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { PasswordResetPayload } from "services/_auth";
 
 import Button from "@components/shared/button";
 import { useAppDispatch, useAppSelector } from "@lib/hooks";
-import { forgotPasswordSchema, passwordResetSchema } from "@lib/validations";
+import { passwordResetSchema } from "@lib/validations";
 import { selectAuthLoading } from "@store/auth/slice";
-import { forgotPasswordThunk, passwordResetThunk } from "@store/auth/thunk";
+import { passwordResetThunk } from "@store/auth/thunk";
 
 import { FormLabel, ValidationMsg } from "./signup";
 

@@ -3,7 +3,6 @@ import debounce from "lodash.debounce";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { CompleteOAuthPayload, SignupPayload } from "services/_auth";
 
 import Button from "@components/shared/button";
 import Navbar from "@components/shared/navbar";
@@ -12,8 +11,8 @@ import { completeOAuthSignupSchema, signupSchema } from "@lib/validations";
 import Facebook from "@public/brand-svg/facebook.svg";
 import Google from "@public/brand-svg/google.svg";
 import Twitter from "@public/brand-svg/twitter.svg";
-import { selectAuthLoading, selectInitLoading } from "@store/auth/slice";
-import { cancelOAuthThunk, completeOAuthThunk, getLoggedInUserThunk, getNewAccessTokenThunk, signupThunk } from "@store/auth/thunk";
+import { selectAuthLoading } from "@store/auth/slice";
+import { cancelOAuthThunk, completeOAuthThunk, signupThunk } from "@store/auth/thunk";
 import { selectUserAvailability, selectUserData } from "@store/user/slice";
 import { userExistsThunk } from "@store/user/thunk";
 
@@ -153,13 +152,9 @@ function SignupWithEmailForm() {
   // Formik settings
   // ===============================================
 
-  var initialValues: SignupPayload = {
-    email: "",
-    username: "",
-    password: "",
-  };
+  var initialValues = { email: "", username: "", password: "" };
 
-  async function handleSubmit(values: SignupPayload) {
+  async function handleSubmit(values: typeof initialValues) {
     await dispatch(signupThunk(values));
   }
 
@@ -367,12 +362,12 @@ function CompleteOAuthSignupForm() {
   // Formik settings
   // ===============================================
 
-  var initialValues: CompleteOAuthPayload = {
+  var initialValues = {
     email: user.email || "",
     username: user.username || "",
   };
 
-  async function handleSubmit(values: CompleteOAuthPayload) {
+  async function handleSubmit(values: typeof initialValues) {
     await dispatch(completeOAuthThunk(values));
   }
 
@@ -544,5 +539,3 @@ function CompleteOAuthSignupForm() {
     </form>
   );
 }
-
-// SignupPage.getLayout = getAuthLayout;

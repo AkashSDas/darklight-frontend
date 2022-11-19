@@ -504,6 +504,8 @@ export var buyCourseThunk = createAsyncThunk(
         toast.success("Course purchased!");
         return true;
       } else toast.error(res.msg);
+    } else {
+      toast.error("You are not logged in!");
     }
   }
 );

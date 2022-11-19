@@ -17,7 +17,7 @@ function fetchFromCourse(endpoint: string, opts: AxiosRequestConfig) {
 // ==================================
 
 export var getCourseThunk = createAsyncThunk(
-  "_course/get",
+  "course/get",
   async function (id: string, { getState, dispatch }) {
     var state = getState() as RootState;
 
@@ -33,7 +33,7 @@ export var getCourseThunk = createAsyncThunk(
 );
 
 export var createCourseThunk = createAsyncThunk(
-  "_course/create",
+  "course/create",
   async function (_, { getState, dispatch }) {
     var state = getState() as RootState;
 
@@ -56,7 +56,7 @@ export var createCourseThunk = createAsyncThunk(
 );
 
 export var updateCourseInfoThunk = createAsyncThunk(
-  "_course/update-info",
+  "course/update-info",
   async function (
     {
       id,
@@ -86,11 +86,11 @@ export var updateCourseInfoThunk = createAsyncThunk(
 );
 
 export var deleteCourseThunk = createAsyncThunk(
-  "_course/delete",
+  "course/delete",
   async function deleteCourse(_, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course } = state._course;
+    var { course } = state.course;
 
     if (accessToken) {
       var res = await fetchFromCourse(`/${course.id}`, {
@@ -120,7 +120,7 @@ export var deleteCourseThunk = createAsyncThunk(
 // ==================================
 
 export var getModuleThunk = createAsyncThunk(
-  "_course/module/get",
+  "course/module/get",
   async function (
     { courseId, moduleId }: { courseId: string; moduleId: string },
     { getState, dispatch }
@@ -138,11 +138,11 @@ export var getModuleThunk = createAsyncThunk(
 );
 
 export var createModuleThunk = createAsyncThunk(
-  "_course/module/create",
+  "course/module/create",
   async function (id: string, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course } = state._course;
+    var { course } = state.course;
 
     if (accessToken) {
       var res = await fetchFromCourse(`/${course.id}`, {
@@ -173,7 +173,7 @@ export var createModuleThunk = createAsyncThunk(
 );
 
 export var updateModuleThunk = createAsyncThunk(
-  "_course/module/update",
+  "course/module/update",
   async function (
     {
       courseId,
@@ -208,7 +208,7 @@ export var updateModuleThunk = createAsyncThunk(
 );
 
 export var reorderModulesThunk = createAsyncThunk(
-  "_course/module/reorder",
+  "course/module/reorder",
   async function (
     { courseId, modules }: { courseId: string; modules: Module[] },
     { getState, dispatch }
@@ -235,11 +235,11 @@ export var reorderModulesThunk = createAsyncThunk(
 );
 
 export var deleteModuleThunk = createAsyncThunk(
-  "_course/module/delete",
+  "course/module/delete",
   async function (_, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course, activeModuleId } = state._course;
+    var { course, activeModuleId } = state.course;
 
     if (accessToken) {
       let res = await fetchFromCourse(`/${course.id}/${activeModuleId}`, {
@@ -267,7 +267,7 @@ export var deleteModuleThunk = createAsyncThunk(
 // ==================================
 
 export var createLessonThunk = createAsyncThunk(
-  "_course/lesson/create",
+  "course/lesson/create",
   async function (
     { courseId, moduleId }: { courseId: string; moduleId: string },
     { getState, dispatch }
@@ -298,7 +298,7 @@ export var createLessonThunk = createAsyncThunk(
 );
 
 export var getLessonThunk = createAsyncThunk(
-  "_course/lesson/get",
+  "course/lesson/get",
   async function (
     {
       courseId,
@@ -323,11 +323,11 @@ export var getLessonThunk = createAsyncThunk(
 );
 
 export var updateLessonMetadataThunk = createAsyncThunk(
-  "_course/lesson/metadata",
+  "course/lesson/metadata",
   async function (_, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course, activeModuleId, activeLesson } = state._course;
+    var { course, activeModuleId, activeLesson } = state.course;
 
     if (accessToken) {
       await fetchFromCourse(
@@ -351,11 +351,11 @@ export var updateLessonMetadataThunk = createAsyncThunk(
 );
 
 export var deleteLessonThunk = createAsyncThunk(
-  "_course/lesson/delete",
+  "course/lesson/delete",
   async function (_, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course, activeModuleId, activeLesson } = state._course;
+    var { course, activeModuleId, activeLesson } = state.course;
 
     if (accessToken) {
       let res = await fetchFromCourse(
@@ -383,14 +383,14 @@ export var deleteLessonThunk = createAsyncThunk(
 // ==================================
 
 export var addContentThunk = createAsyncThunk(
-  "_course/content/add",
+  "course/content/add",
   async function (
     data: { type: string; data: any; addAt: number },
     { getState, dispatch }
   ) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course, activeModuleId, activeLesson } = state._course;
+    var { course, activeModuleId, activeLesson } = state.course;
 
     if (accessToken) {
       let res = await fetchFromCourse(
@@ -418,14 +418,14 @@ export var addContentThunk = createAsyncThunk(
 );
 
 export var updateContentThunk = createAsyncThunk(
-  "_course/content/update",
+  "course/content/update",
   async function (
     data: { type: string; data: any; updateAt: number },
     { getState, dispatch }
   ) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course, activeModuleId, activeLesson } = state._course;
+    var { course, activeModuleId, activeLesson } = state.course;
 
     if (accessToken) {
       await fetchFromCourse(
@@ -443,11 +443,11 @@ export var updateContentThunk = createAsyncThunk(
 );
 
 export var deleteContentThunk = createAsyncThunk(
-  "_course/content/delete",
+  "course/content/delete",
   async function (data: { deleteAt: number }, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course, activeModuleId, activeLesson } = state._course;
+    var { course, activeModuleId, activeLesson } = state.course;
 
     if (accessToken) {
       await fetchFromCourse(
@@ -465,11 +465,11 @@ export var deleteContentThunk = createAsyncThunk(
 );
 
 export var reorderContentThunk = createAsyncThunk(
-  "_course/content/reorder",
+  "course/content/reorder",
   async function (data: { content: any }, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;
-    var { course, activeModuleId, activeLesson } = state._course;
+    var { course, activeModuleId, activeLesson } = state.course;
 
     if (accessToken) {
       await fetchFromCourse(
@@ -487,7 +487,7 @@ export var reorderContentThunk = createAsyncThunk(
 );
 
 export var buyCourseThunk = createAsyncThunk(
-  "_course/buy",
+  "course/buy",
   async function (courseId: string, { getState, dispatch }) {
     var state = getState() as RootState;
     var { accessToken } = state.auth;

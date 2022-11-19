@@ -65,7 +65,7 @@ var initialState: CourseState = {
 };
 
 export var courseSlice = createSlice({
-  name: "_course",
+  name: "course",
   initialState,
   reducers: {
     updateCourse(state, action: PayloadAction<Course>) {
@@ -171,19 +171,18 @@ export var {
   rmModule,
 } = courseSlice.actions;
 
-export var selectCourse = (state: RootState) => state._course;
-export var selectCourseData = (state: RootState) => state._course.course;
-export var selectCourseLoading = (state: RootState) => state._course.loading;
-export var selectPreview = (state: RootState) => state._course.previewLesson;
-export var selectActiveLesson = (state: RootState) =>
-  state._course.activeLesson;
+export var selectCourse = (state: RootState) => state.course;
+export var selectCourseData = (state: RootState) => state.course.course;
+export var selectCourseLoading = (state: RootState) => state.course.loading;
+export var selectPreview = (state: RootState) => state.course.previewLesson;
+export var selectActiveLesson = (state: RootState) => state.course.activeLesson;
 export var selectModuleLoading = (state: RootState) =>
-  state._course.moduleLoading;
+  state.course.moduleLoading;
 export var selectLessonLoading = (state: RootState) =>
-  state._course.lessonLoading;
+  state.course.lessonLoading;
 export var selectActiveModule = (state: RootState) =>
-  state._course.course?.modules.find(
-    (module) => module.id === state._course.activeModuleId
+  state.course.course?.modules.find(
+    (module) => module.id === state.course.activeModuleId
   );
 
 export var courseSliceName = courseSlice.name;

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import fetchAPI from "services";
+
+import fetchAPI from "@lib/service";
 
 async function getAllCoursesService(next: string) {
   var res = await fetchAPI("/course/all", { method: "get", params: [next] });

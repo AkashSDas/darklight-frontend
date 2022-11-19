@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
-import fetchAPI from "services";
 
 import { normalizeUser } from "@lib/response";
+import fetchAPI from "@lib/service";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { updateUserData } from "@store/user/slice";
 

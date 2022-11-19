@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
-import fetchAPI from "services";
 
+import fetchAPI from "@lib/service";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "../";

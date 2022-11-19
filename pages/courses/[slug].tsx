@@ -1,10 +1,10 @@
 import moment from "moment";
 import { useRouter } from "next/router";
-import fetchAPI from "services";
 import useSWR from "swr";
 
 import Button from "@components/shared/button";
 import { useAppDispatch } from "@lib/hooks";
+import fetchAPI from "@lib/service";
 import { buyCourseThunk } from "@store/course/thunk";
 
 async function getCourseService(slug: string) {

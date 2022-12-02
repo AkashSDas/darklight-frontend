@@ -1,0 +1,11 @@
+.btn {
+  @apply font-urbanist font-semibold h-11 rounded-[18px] px-5 flex items-center justify-center;
+}
+
+.btn__text {
+  @apply text-text2 hover:text-text1 hover:bg-background3 active:bg-border;
+}
+
+.btn__contained {
+  @apply bg-primary text-text3 hover:brightness-95 active:brightness-90;
+}

@@ -1,5 +1,6 @@
 .badge {
-  @apply flex items-center justify-center px-[4px] py-[1px] rounded-[3px] bg-border;
+  @apply inline-flex items-center justify-center px-[4px] py-[1px] rounded-[3px] 
+  bg-border w-fit;
 }
 
 .badge__highlight {

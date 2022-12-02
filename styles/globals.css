@@ -5,3 +5,19 @@
 body {
   @apply font-urbanist bg-background1 text-text2;
 }
+
+.h1 {
+  @apply text-[48.83px] leading-[100%] font-gilroy text-text1;
+}
+
+.h2 {
+  @apply text-[39.1px] leading-[100%] font-gilroy text-text1;
+}
+
+.h3 {
+  @apply text-[31.3px] leading-[100%] font-gilroy text-text1;
+}
+
+.h4 {
+  @apply text-[25px] leading-[100%] font-gilroy text-text1;
+}

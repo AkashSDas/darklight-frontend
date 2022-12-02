@@ -12,6 +12,18 @@ const nextConfig = {
 
     return config;
   },
+
+  // Images
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "media.giphy.com",
+        port: "",
+        pathname: "/media/**",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

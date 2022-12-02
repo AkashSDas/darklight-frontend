@@ -1,7 +1,7 @@
 import styles from "../../styles/components/badges/text.module.css";
 
 interface Props {
-  children: string;
+  children: JSX.Element | JSX.Element[] | string;
   variant: "highlight" | "regular";
 }
 

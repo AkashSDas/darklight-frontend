@@ -1,7 +1,7 @@
 import { Button } from "../button";
 import Logo from "../../public/logo.svg";
 
-function Navbar() {
+export function Navbar() {
   return (
     <nav className="hidden lg:flex w-full h-[70px] px-8 items-center justify-between">
       <Logo />
@@ -17,5 +17,3 @@ function Navbar() {
     </nav>
   );
 }
-
-export default Navbar;

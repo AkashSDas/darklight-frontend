@@ -1,3 +1,5 @@
+var { fontFamily } = require("tailwindcss/defaultTheme");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -7,8 +9,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        urbanist: ["var(--font-urbanist)"],
-        gilroy: ["var(--font-gilroy)"],
+        urbanist: ["var(--font-urbanist)", ...fontFamily.sans],
+        gilroy: ["var(--font-gilroy)", ...fontFamily.sans],
       },
       colors: {
         background1: "#FFFFFF",

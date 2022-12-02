@@ -1,8 +1,11 @@
 import "../styles/globals.css";
-import type { AppProps } from "next/app";
+
 import { Urbanist } from "@next/font/google";
 import localFont from "@next/font/local";
+
 import { Navbar } from "../components/bar";
+
+import type { AppProps } from "next/app";
 
 const urbanist = Urbanist({ variable: "--font-urbanist" });
 const gilroy = localFont({

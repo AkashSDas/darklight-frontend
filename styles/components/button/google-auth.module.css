@@ -1,0 +1,9 @@
+.btn {
+  @apply flex items-center pl-3 border border-solid border-border 
+  h-11 rounded-[18px] font-urbanist font-semibold hover:bg-background3
+  active:bg-border;
+}
+
+.btn__text {
+  @apply text-text1 flex items-center justify-center px-3;
+}

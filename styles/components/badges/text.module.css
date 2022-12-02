@@ -1,0 +1,11 @@
+.badge {
+  @apply flex items-center justify-center px-[4px] py-[1px] rounded-[3px] bg-border;
+}
+
+.badge__highlight {
+  @apply text-light-primary;
+}
+
+.badge__regular {
+  @apply text-text2;
+}

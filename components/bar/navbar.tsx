@@ -1,4 +1,4 @@
-import Button from "../button";
+import { Button } from "../button";
 import Logo from "../../public/logo.svg";
 
 function Navbar() {

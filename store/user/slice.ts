@@ -17,10 +17,13 @@ export interface User {
 interface UserState {
   accessToken?: string;
   details?: User;
+  loading: boolean;
 }
 
 var initialState: UserState = {
   accessToken: undefined,
+  details: undefined,
+  loading: false,
 };
 
 var userSlice = createSlice({
@@ -33,9 +36,12 @@ var userSlice = createSlice({
     setDetails(state, action: PayloadAction<User>) {
       state.details = action.payload;
     },
+    setUserLoading(state, action: PayloadAction<boolean>) {
+      state.loading = action.payload;
+    },
   },
 });
 
-export var { setAccessToken, setDetails } = userSlice.actions;
+export var { setAccessToken, setDetails, setUserLoading } = userSlice.actions;
 
 export default userSlice.reducer;

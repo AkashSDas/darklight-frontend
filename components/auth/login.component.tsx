@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -7,6 +8,7 @@ import { useSWRConfig } from "swr";
 import { LoginInput } from "../../lib/auth.lib";
 import { loginSchema } from "../../lib/yup.lib";
 import { login } from "../../services/auth.service";
+import { TextBadge } from "../badges";
 import { RegularButton } from "../button";
 import { FormLabel } from "../form";
 
@@ -72,14 +74,9 @@ export function LoginForm() {
           <div className="flex items-center justify-between">
             <FormLabel htmlFor="password" label="Password" variant="regular" />
 
-            {displayPasswordError && (
-              <FormLabel
-                label={
-                  displayPasswordError ? (formik.errors.password as string) : ""
-                }
-                variant="error"
-              />
-            )}
+            <Link href="/auth/forgot-password" className="text-link text-sm">
+              Forgot password
+            </Link>
           </div>
 
           <input

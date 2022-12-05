@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply font-urbanist bg-background1 text-text2;
+  @apply font-urbanist font-medium bg-background1 text-text2;
 }
 
 .h1 {
@@ -20,4 +20,9 @@ body {
 
 .h4 {
   @apply text-[25px] leading-[100%] font-gilroy text-text1;
+}
+
+.auth__form__input {
+  @apply h-12 rounded-[14px] border-2 border-solid border-border 
+  focus:border-light-primary focus:outline-none px-3;
 }

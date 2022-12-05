@@ -7,8 +7,8 @@ import { AuthGif } from "../../components/gifs";
 
 function SignupPage() {
   return (
-    <div className="w-full flex justify-center">
-      <section className="flex items-center gap-8 mt-16">
+    <div className="font-urbanist font-medium w-full flex justify-center">
+      <div className="flex items-center gap-8 mt-16">
         <aside className="w-[600px] overflow-hidden">
           <AuthGif src="https://media.giphy.com/media/oWjyixDbWuAk8/giphy.gif" />
         </aside>
@@ -24,7 +24,7 @@ function SignupPage() {
           </div>
 
           <TextBadge variant="highlight">
-            <TextBadge variant="regular">🗝️</TextBadge>
+            <TextBadge variant="regular">👇</TextBadge>
             <TextBadge variant="highlight">use your socail account</TextBadge>
           </TextBadge>
 
@@ -45,7 +45,7 @@ function SignupPage() {
             </Link>
           </div>
         </main>
-      </section>
+      </div>
     </div>
   );
 }

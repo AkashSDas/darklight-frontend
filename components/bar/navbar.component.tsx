@@ -2,13 +2,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSWRConfig } from "swr";
 
-import { useUser } from "../../lib/hooks.lib";
+import { useAccessToken } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
 import { logout } from "../../services/auth.service";
 import { RegularButton } from "../button";
 
 export function Navbar() {
-  var { accessToken } = useUser();
+  var { accessToken } = useAccessToken();
   var { mutate } = useSWRConfig();
 
   async function logoutUser() {

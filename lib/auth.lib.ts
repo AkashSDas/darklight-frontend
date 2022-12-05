@@ -17,3 +17,8 @@ export interface PasswordResetInput {
   password: string;
   confirmPassword: string;
 }
+
+export interface CompleteOAuthInput {
+  username: string;
+  email: string;
+}

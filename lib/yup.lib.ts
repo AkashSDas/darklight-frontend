@@ -53,3 +53,12 @@ export var passwordResetSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), null], "Must match"),
 });
+
+export var completeOAuthSchema = yup.object().shape({
+  username: yup
+    .string()
+    .min(3, "Too short")
+    .max(32, "Too long")
+    .required("Required"),
+  email: yup.string().email("Invalid").required("Required"),
+});

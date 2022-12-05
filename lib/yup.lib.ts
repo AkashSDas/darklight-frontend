@@ -21,3 +21,16 @@ export var signupSchema = yup.object().shape({
     .matches(/(.*[0-9]{2,})/, "2 numbers")
     .matches(/(.*[[!@#$%^&*()\-__+.]{1,})/, "1 special character"),
 });
+
+export var loginSchema = yup.object().shape({
+  email: yup.string().email("Invalid").required("Required"),
+  password: yup
+    .string()
+    .min(8, "Too short")
+    .max(64, "Too long")
+    .required("Required")
+    .matches(/(.*[a-z]{3,})/, "3 lowercase letters")
+    .matches(/(.*[A-Z]{2,})/, "2 uppercase letters")
+    .matches(/(.*[0-9]{2,})/, "2 numbers")
+    .matches(/(.*[[!@#$%^&*()\-__+.]{1,})/, "1 special character"),
+});

@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-import { SignupInput } from "../lib/auth.lib";
+import { LoginInput, SignupInput } from "../lib/auth.lib";
 import fetchFromAPI from "../lib/axios.lib";
 
 function fetchFromAuth(URL: string, config: AxiosRequestConfig) {
@@ -26,6 +26,20 @@ export async function getNewAccessToken() {
   if (response.statusCode == 200) {
     return {
       success: response.success,
+      user: response.data.user,
+      accessToken: response.data.accessToken,
+    };
+  }
+
+  return { success: false };
+}
+
+export async function login(input: LoginInput) {
+  var response = await fetchFromAuth("login", { data: input, method: "POST" });
+  if (response.statusCode == 200) {
+    return {
+      success: response.success,
+      message: response.data.message,
       user: response.data.user,
       accessToken: response.data.accessToken,
     };

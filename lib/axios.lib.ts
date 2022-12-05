@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 
 var axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  withCredentials: true,
 });
 
 async function fetchFromAPI(URL: string, config: AxiosRequestConfig) {

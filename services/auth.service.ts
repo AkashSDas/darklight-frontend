@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-import { LoginInput, SignupInput } from "../lib/auth.lib";
+import { ForgotPasswordInput, LoginInput, SignupInput } from "../lib/auth.lib";
 import fetchFromAPI from "../lib/axios.lib";
 
 function fetchFromAuth(URL: string, config: AxiosRequestConfig) {
@@ -50,4 +50,20 @@ export async function login(input: LoginInput) {
 
 export async function logout() {
   await fetchFromAuth("logout", { method: "GET" });
+}
+
+export async function forgotPassword(input: ForgotPasswordInput) {
+  var response = await fetchFromAuth("forgot-password", {
+    data: input,
+    method: "POST",
+  });
+
+  if (response.statusCode == 200) {
+    return {
+      success: response.success,
+      message: response.data.message,
+    };
+  }
+
+  return { success: false, error: response.error };
 }

@@ -34,3 +34,7 @@ export var loginSchema = yup.object().shape({
   //   .matches(/(.*[0-9]{2,})/, "2 numbers")
   //   .matches(/(.*[[!@#$%^&*()\-__+.]{1,})/, "1 special character"),
 });
+
+export var forgotPasswordSchema = yup.object().shape({
+  email: yup.string().email("Invalid").required("Required"),
+});

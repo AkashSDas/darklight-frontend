@@ -98,3 +98,14 @@ export async function completeOAuth(input: CompleteOAuthInput) {
 
   return { success: false };
 }
+
+export async function cancelOAuth() {
+  var response = await fetchFromAuth("cancel-oauth", {
+    method: "DELETE",
+  });
+  if (response.statusCode == 200) {
+    return { success: response.success };
+  }
+
+  return { success: false };
+}

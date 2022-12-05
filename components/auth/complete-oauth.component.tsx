@@ -19,7 +19,7 @@ export function CompleteOAuthForm() {
   var { user } = useUser();
 
   var formik = useFormik<CompleteOAuthInput>({
-    initialValues: { username: "", email: user.email },
+    initialValues: { username: user.username ?? "", email: user.email },
     onSubmit: async function onSubmit(values) {
       setLoading(true);
       var response = await completeOAuth(values);

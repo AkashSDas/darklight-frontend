@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useSWRConfig } from "swr";
 
 import { SignupForm } from "../../components/auth";
 import { CompleteOAuthForm } from "../../components/auth/complete-oauth.component";
@@ -6,9 +7,16 @@ import { TextBadge } from "../../components/badges";
 import { SignupWithFacebook, SignupWithGoogle, SignupWithTwitter } from "../../components/button";
 import { AuthGif } from "../../components/gifs";
 import { useUser } from "../../lib/hooks.lib";
+import { cancelOAuth } from "../../services/auth.service";
 
 function SignupPage() {
   var { user } = useUser();
+  var { mutate } = useSWRConfig();
+
+  async function cancelOAuthSignup() {
+    await cancelOAuth();
+    await mutate("user", { success: null, user: null, error: null });
+  }
 
   function Info() {
     if (!user) {
@@ -26,7 +34,9 @@ function SignupPage() {
         Your account <TextBadge variant="regular">👑</TextBadge> {user.fullName}{" "}
         will be connected to your new DarkLight account. Wrong identity?{" "}
         <TextBadge variant="regular">🥤</TextBadge>{" "}
-        <span className="text-link cursor-pointer">Start over</span>
+        <span onClick={cancelOAuthSignup} className="text-link cursor-pointer">
+          Start over
+        </span>
       </p>
     );
   }

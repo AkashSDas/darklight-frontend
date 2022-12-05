@@ -5,11 +5,8 @@ import { toast } from "react-hot-toast";
 import { useSWRConfig } from "swr";
 
 import { LoginInput } from "../../lib/auth.lib";
-import { useAppDispatch } from "../../lib/hooks.lib";
-import { normalizeJsonToUser } from "../../lib/user.lib";
 import { loginSchema } from "../../lib/yup.lib";
 import { login } from "../../services/auth.service";
-import { setAccessToken, setDetails } from "../../store/user/slice";
 import { RegularButton } from "../button";
 import { FormLabel } from "../form";
 
@@ -31,7 +28,7 @@ export function LoginForm() {
         toast.success(response.message);
 
         let { accessToken, user, success } = response;
-        mutate({ success, accessToken, user });
+        await mutate("access-token", { success, accessToken, user });
         router.push("/");
       }
     },

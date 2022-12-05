@@ -1,7 +1,25 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useSWRConfig } from "swr";
+
+import { useUser } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
+import { logout } from "../../services/auth.service";
 import { RegularButton } from "../button";
 
 export function Navbar() {
+  var { accessToken } = useUser();
+  var { mutate } = useSWRConfig();
+
+  async function logoutUser() {
+    await logout();
+    await mutate("access-token", {
+      success: null,
+      accessToken: null,
+      user: null,
+    });
+  }
+
   return (
     <nav className="hidden lg:flex w-full h-[70px] px-8 items-center justify-between">
       <Logo />
@@ -11,8 +29,23 @@ export function Navbar() {
         <RegularButton variant="text">Search</RegularButton>
         <RegularButton variant="text">Teach</RegularButton>
         <div className="border-l border-l-border border-solid h-[22px]"></div>
-        <RegularButton variant="text">Login</RegularButton>
-        <RegularButton variant="contained">Signup</RegularButton>
+        {!accessToken && (
+          <>
+            <Link href="/auth/login">
+              <RegularButton variant="text">Login</RegularButton>
+            </Link>
+
+            <Link href="/auth/signup">
+              <RegularButton variant="contained">Signup</RegularButton>
+            </Link>
+          </>
+        )}
+
+        {accessToken && (
+          <RegularButton onClick={logoutUser} variant="text">
+            Logout
+          </RegularButton>
+        )}
       </div>
     </nav>
   );

@@ -47,3 +47,7 @@ export async function login(input: LoginInput) {
 
   return { success: false };
 }
+
+export async function logout() {
+  await fetchFromAuth("logout", { method: "GET" });
+}

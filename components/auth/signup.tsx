@@ -1,15 +1,21 @@
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { SignupInput } from "../../lib/auth.lib";
+import { useAppDispatch } from "../../lib/hooks.lib";
+import { normalizeJsonToUser } from "../../lib/user.lib";
 import { signupSchema } from "../../lib/yup.lib";
 import { signup } from "../../services/auth.service";
+import { setAccessToken, setDetails } from "../../store/user/slice";
 import { RegularButton } from "../button";
 import { FormLabel } from "../form";
 
 export function SignupForm() {
   var [loading, setLoading] = useState(false);
+  var dispatch = useAppDispatch();
+  var router = useRouter();
 
   var formik = useFormik<SignupInput>({
     initialValues: { username: "", email: "", password: "" },
@@ -18,12 +24,13 @@ export function SignupForm() {
       var response = await signup(values);
       setLoading(false);
 
-      console.log(response);
-
       if (!response.success) toast.error("Failed to signup, please try again");
       else {
         formik.resetForm();
         toast.success(response.message);
+        dispatch(setAccessToken(response.accessToken));
+        dispatch(setDetails(normalizeJsonToUser(response.user)));
+        router.push("/");
       }
     },
     validationSchema: signupSchema,

@@ -1,5 +1,6 @@
 .btn {
-  @apply font-urbanist font-semibold h-11 rounded-[18px] px-5 flex items-center justify-center;
+  @apply font-urbanist font-semibold h-11 rounded-[18px] px-5 flex items-center 
+  justify-center cursor-pointer;
 }
 
 .btn__text {

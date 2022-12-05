@@ -1,5 +1,5 @@
-import { Button } from "../button";
 import Logo from "../../public/logo.svg";
+import { RegularButton } from "../button";
 
 export function Navbar() {
   return (
@@ -7,12 +7,12 @@ export function Navbar() {
       <Logo />
 
       <div className="flex items-center justify-end gap-4">
-        <Button variant="text">Explore</Button>
-        <Button variant="text">Search</Button>
-        <Button variant="text">Teach</Button>
+        <RegularButton variant="text">Explore</RegularButton>
+        <RegularButton variant="text">Search</RegularButton>
+        <RegularButton variant="text">Teach</RegularButton>
         <div className="border-l border-l-border border-solid h-[22px]"></div>
-        <Button variant="text">Login</Button>
-        <Button variant="contained">Signup</Button>
+        <RegularButton variant="text">Login</RegularButton>
+        <RegularButton variant="contained">Signup</RegularButton>
       </div>
     </nav>
   );

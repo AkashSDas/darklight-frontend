@@ -30,7 +30,8 @@ export function LoginForm() {
         toast.success(response.message);
 
         let { accessToken, user, success } = response;
-        await mutate("access-token", { success, accessToken, user });
+        await mutate("access-token", { success, accessToken });
+        await mutate("user", { success, user, error: null });
         router.push("/");
       }
     },

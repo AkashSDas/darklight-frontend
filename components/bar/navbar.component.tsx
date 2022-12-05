@@ -1,23 +1,19 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useSWRConfig } from "swr";
 
-import { useAccessToken } from "../../lib/hooks.lib";
+import { useAccessToken, useUser } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
 import { logout } from "../../services/auth.service";
 import { RegularButton } from "../button";
 
 export function Navbar() {
-  var { accessToken } = useAccessToken();
+  var { user } = useUser();
   var { mutate } = useSWRConfig();
 
   async function logoutUser() {
     await logout();
-    await mutate("access-token", {
-      success: null,
-      accessToken: null,
-      user: null,
-    });
+    await mutate("access-token", { success: null, accessToken: null });
+    await mutate("user", { success: null, user: null, error: null });
   }
 
   return (
@@ -29,7 +25,7 @@ export function Navbar() {
         <RegularButton variant="text">Search</RegularButton>
         <RegularButton variant="text">Teach</RegularButton>
         <div className="border-l border-l-border border-solid h-[22px]"></div>
-        {!accessToken && (
+        {!user && (
           <>
             <Link href="/auth/login">
               <RegularButton variant="text">Login</RegularButton>
@@ -41,7 +37,7 @@ export function Navbar() {
           </>
         )}
 
-        {accessToken && (
+        {user && (
           <RegularButton onClick={logoutUser} variant="text">
             Logout
           </RegularButton>

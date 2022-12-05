@@ -3,7 +3,12 @@ import TwitterIcon from "../../public/social-icons/twitter.svg";
 import styles from "../../styles/components/button/oauth.module.css";
 
 export function SignupWithFacebook() {
-  function openSignupWindow() {}
+  function openSignupWindow() {
+    window.open(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup/facebook`,
+      "_self"
+    );
+  }
 
   return (
     <button onClick={openSignupWindow} className={styles.btn}>
@@ -13,7 +18,12 @@ export function SignupWithFacebook() {
 }
 
 export function LoginWithFacebook() {
-  function openLoginWindow() {}
+  function openLoginWindow() {
+    window.open(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/facebook`,
+      "_self"
+    );
+  }
 
   return (
     <button onClick={openLoginWindow} className={styles.btn}>
@@ -23,7 +33,12 @@ export function LoginWithFacebook() {
 }
 
 export function SignupWithTwitter() {
-  function openSignupWindow() {}
+  function openSignupWindow() {
+    window.open(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup/twitter`,
+      "_self"
+    );
+  }
 
   return (
     <button onClick={openSignupWindow} className={styles.btn}>
@@ -33,7 +48,12 @@ export function SignupWithTwitter() {
 }
 
 export function LoginWithTwitter() {
-  function openLoginWindow() {}
+  function openLoginWindow() {
+    window.open(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/twitter`,
+      "_self"
+    );
+  }
 
   return (
     <button onClick={openLoginWindow} className={styles.btn}>

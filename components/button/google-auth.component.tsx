@@ -2,7 +2,12 @@ import GoogleIcon from "../../public/social-icons/google.svg";
 import styles from "../../styles/components/button/google-auth.module.css";
 
 export function SignupWithGoogle() {
-  function openSignupWindow() {}
+  function openSignupWindow() {
+    window.open(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup/google`,
+      "_self"
+    );
+  }
 
   return (
     <button onClick={openSignupWindow} className={styles.btn}>
@@ -13,7 +18,12 @@ export function SignupWithGoogle() {
 }
 
 export function LoginWithGoogle() {
-  function openLoginWindow() {}
+  function openLoginWindow() {
+    window.open(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/google`,
+      "_self"
+    );
+  }
 
   return (
     <button onClick={openLoginWindow} className={styles.btn}>

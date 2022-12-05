@@ -1,13 +1,31 @@
 import { useFormik } from "formik";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
+import { SignupInput } from "../../lib/auth.lib";
 import { signupSchema } from "../../lib/yup.lib";
-import { Button } from "../button";
+import { signup } from "../../services/auth.service";
+import { RegularButton } from "../button";
 import { FormLabel } from "../form";
 
 export function SignupForm() {
-  var formik = useFormik({
+  var [loading, setLoading] = useState(false);
+
+  var formik = useFormik<SignupInput>({
     initialValues: { username: "", email: "", password: "" },
-    onSubmit: function onSubmit(values) {},
+    onSubmit: async function onSubmit(values) {
+      setLoading(true);
+      var response = await signup(values);
+      setLoading(false);
+
+      console.log(response);
+
+      if (!response.success) toast.error("Failed to signup, please try again");
+      else {
+        formik.resetForm();
+        toast.success(response.message);
+      }
+    },
     validationSchema: signupSchema,
   });
 
@@ -100,9 +118,9 @@ export function SignupForm() {
           />
         </div>
 
-        <Button variant="contained" type="submit">
-          Signup with email
-        </Button>
+        <RegularButton variant="contained" type="submit" disabled={loading}>
+          {!loading ? "Signup with email" : "...Signing up"}
+        </RegularButton>
       </form>
     </section>
   );

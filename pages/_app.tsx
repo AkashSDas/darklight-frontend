@@ -1,5 +1,7 @@
 import "../styles/globals.css";
 
+import { Toaster } from "react-hot-toast";
+
 import { Urbanist } from "@next/font/google";
 import localFont from "@next/font/local";
 
@@ -18,6 +20,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <div className={`${urbanist.variable} ${gilroy.variable} font-sans`}>
       <Navbar />
       <Component {...pageProps} />
+
+      <Toaster />
     </div>
   );
 }

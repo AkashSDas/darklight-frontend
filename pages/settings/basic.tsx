@@ -3,11 +3,7 @@ import { ReactElement } from "react";
 import { SettingsLayout } from "../../components/user-setting";
 
 function BasicSettingsPage() {
-  return (
-    <div>
-      <h1>Settings page</h1>
-    </div>
-  );
+  return <div></div>;
 }
 
 BasicSettingsPage.getLayout = function getLayout(page: ReactElement) {

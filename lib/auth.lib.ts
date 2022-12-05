@@ -12,3 +12,8 @@ export interface LoginInput {
 export interface ForgotPasswordInput {
   email: string;
 }
+
+export interface PasswordResetInput {
+  password: string;
+  confirmPassword: string;
+}

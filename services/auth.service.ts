@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-import { ForgotPasswordInput, LoginInput, SignupInput } from "../lib/auth.lib";
+import { ForgotPasswordInput, LoginInput, PasswordResetInput, SignupInput } from "../lib/auth.lib";
 import fetchFromAPI from "../lib/axios.lib";
 
 function fetchFromAuth(URL: string, config: AxiosRequestConfig) {
@@ -56,6 +56,25 @@ export async function forgotPassword(input: ForgotPasswordInput) {
   var response = await fetchFromAuth("forgot-password", {
     data: input,
     method: "POST",
+  });
+
+  if (response.statusCode == 200) {
+    return {
+      success: response.success,
+      message: response.data.message,
+    };
+  }
+
+  return { success: false, error: response.error };
+}
+
+export async function passwordResetPassword(
+  input: PasswordResetInput,
+  token: string
+) {
+  var response = await fetchFromAuth(`password-reset/${token}`, {
+    data: input,
+    method: "PUT",
   });
 
   if (response.statusCode == 200) {

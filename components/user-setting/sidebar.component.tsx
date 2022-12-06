@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Settings from "../../public/icons/settings.svg";
@@ -8,7 +9,9 @@ export function Sidebar() {
   return (
     <aside className="w-[300px] flex flex-col gap-4 py-4 h-full fixed border border-solid border-border">
       <div className="h-[34px] flex items-center px-4">
-        <Logo />
+        <Link href="/" className="cursor-pointer">
+          <Logo />
+        </Link>
       </div>
 
       <ul>
@@ -49,13 +52,15 @@ function SidebarItem({
   var router = useRouter();
 
   return (
-    <li
-      className={`${
-        router.pathname?.includes(id) && "bg-background3"
-      } text-[#555555] h-11 w-full flex items-center px-4 gap-3 cursor-pointer hover:bg-background3 active:bg-border`}
-    >
-      <div>{icon}</div>
-      <div>{label}</div>
-    </li>
+    <Link href={`/settings/${id}`}>
+      <li
+        className={`${
+          router.pathname?.includes(id) && "bg-background3"
+        } text-[#555555] h-11 w-full flex items-center px-4 gap-3 cursor-pointer hover:bg-background3 active:bg-border`}
+      >
+        <div>{icon}</div>
+        <div>{label}</div>
+      </li>
+    </Link>
   );
 }

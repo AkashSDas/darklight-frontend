@@ -20,3 +20,13 @@ export async function me(accessToken: string) {
 
   return { success: false };
 }
+
+export async function updateProfileImage(accessToken: string, data: FormData) {
+  var response = await fetchFromUser("profile-image", {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data,
+  });
+  if (response.statusCode == 200) return { success: response.success };
+  return { success: false };
+}

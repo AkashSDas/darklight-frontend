@@ -33,5 +33,10 @@ export function useUser() {
   );
 
   var { data, error } = useSWR("user", () => me(accessToken), {});
-  return { success: data?.success, user: data?.user, error: error };
+  return {
+    success: data?.success,
+    user: data?.user,
+    error: error,
+    accessToken,
+  };
 }

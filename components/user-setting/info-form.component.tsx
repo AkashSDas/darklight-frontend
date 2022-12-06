@@ -1,8 +1,10 @@
 import { useFormik } from "formik";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 import { useUser } from "../../lib/hooks.lib";
+import { updateProfileImage } from "../../services/user.service";
 import { RegularButton } from "../button";
 import { FormLabel } from "../form";
 import { CameraIcon } from "../icons";
@@ -128,24 +130,71 @@ function DetailsForm() {
   );
 }
 
-function ProfileImageForm({ URL }: { URL?: string }) {
+function ProfileImageForm() {
+  var [loading, setLoading] = useState(false);
+  var [profileImage, setProfileImage] = useState();
+  var ref = useRef<any>();
+  var { user, accessToken } = useUser();
+
+  function updateFile(e: any) {
+    var file = e.target.files[0];
+    setProfileImage(file);
+  }
+
+  async function uploadImage() {
+    if (!profileImage) return;
+    setLoading(true);
+
+    var formData = new FormData();
+    formData.append("profileImage", profileImage);
+    var { success } = await updateProfileImage(accessToken, formData);
+    if (success) toast.success("Profile image update");
+    else toast.error("Failed to update profile image");
+    setLoading(false);
+  }
+
   return (
     <div className="flex flex-col gap-2 items-center">
-      <div className="w-[200px] h-[128px] relative">
+      <div
+        onClick={() => {
+          if (loading) return;
+          ref.current.click();
+        }}
+        className="w-[200px] h-[128px] relative"
+      >
         <Image
           src={
-            URL ??
-            "https://media.giphy.com/media/9PgvV8ale90lQwfQTZ/giphy-downsized.gif"
+            user.profileImage?.URL ??
+            (profileImage
+              ? URL.createObjectURL(profileImage)
+              : "https://media.giphy.com/media/9PgvV8ale90lQwfQTZ/giphy-downsized.gif")
           }
           alt="User avatar"
           fill
           className="object-cover rounded-[41px]"
         />
+
+        <div className="bg-black opacity-40 cursor-pointer rounded-[41px] flex justify-center items-center w-full h-full absolute top-0 left-0">
+          <span className="text-text3">{loading ? "Editing" : "Edit"}</span>
+          <input
+            ref={ref}
+            hidden
+            type="file"
+            onChange={updateFile}
+            accept="image/x-png,image/gif,image/jpeg"
+          />
+        </div>
       </div>
 
-      <button className="h-9 px-2 rounded-xl border border-solid border-border flex gap-2 items-center">
+      <button
+        disabled={loading}
+        onClick={uploadImage}
+        className="h-9 px-2 rounded-xl border border-solid border-border flex gap-2 items-center"
+      >
         <CameraIcon size="18" />
-        <span className="text-text2">Update photo</span>
+        <span className="text-text2">
+          {loading ? "...Uploading" : "Update photo"}
+        </span>
       </button>
     </div>
   );

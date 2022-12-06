@@ -46,26 +46,19 @@ export function useUser() {
 export function useEditableCourse() {
   var router = useRouter();
   var { accessToken, user } = useUser();
-  var { mutate } = useSWRConfig();
-
-  useEffect(
-    function refetchEditableCourse() {
-      if (accessToken) mutate("editable-course");
-    },
-    [accessToken, mutate]
-  );
-
   var { data, error } = useSWR(
-    "editable-course",
+    accessToken && user ? "editable-course" : null,
     () =>
       getEditableCourse(
         router.query.courseId as string,
         accessToken,
         user.roles
-      ),
-    {}
+      )
   );
 
-  console.log(data?.course);
-  return { course: data?.course, success: data?.success, error };
+  return {
+    course: data?.course,
+    success: data?.success,
+    error,
+  };
 }

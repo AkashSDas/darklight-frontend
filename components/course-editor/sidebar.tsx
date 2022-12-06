@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Logo from "../../public/logo.svg";
-import { CollectionIcon, PaymentCardIcon, SettingsIcon, UserCircleIcon } from "../icons";
+import { PaymentCardIcon, SettingsIcon, UserCircleIcon } from "../icons";
 import { EyeIcon } from "../icons/eye";
 import { MobileIcon } from "../icons/mobile";
 
@@ -58,7 +58,7 @@ function SidebarItem({
   var router = useRouter();
 
   return (
-    <Link href={`/settings/${id}`}>
+    <Link href={`/courses/123/${id}`}>
       <li
         className={`${
           router.pathname?.includes(id) && "bg-background3"

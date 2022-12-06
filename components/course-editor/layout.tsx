@@ -3,10 +3,10 @@ import Sidebar from "./sidebar";
 
 function CourseEditorLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div className="flex">
       <Sidebar />
 
-      <div className="ml-[300px]">
+      <div className="ml-[300px] w-full">
         <Navbar />
         {children}
       </div>

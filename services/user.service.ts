@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 
 import fetchFromAPI from "../lib/axios.lib";
+import { UpdateDetailsInput } from "../lib/user.lib";
 
 function fetchFromUser(URL: string, config: AxiosRequestConfig) {
   return fetchFromAPI(`/user/${URL}`, config);
@@ -26,6 +27,19 @@ export async function updateProfileImage(accessToken: string, data: FormData) {
     method: "PUT",
     headers: { Authorization: `Bearer ${accessToken}` },
     data,
+  });
+  if (response.statusCode == 200) return { success: response.success };
+  return { success: false };
+}
+
+export async function updateDetails(
+  accessToken: string,
+  input: UpdateDetailsInput
+) {
+  var response = await fetchFromUser("details", {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data: input,
   });
   if (response.statusCode == 200) return { success: response.success };
   return { success: false };

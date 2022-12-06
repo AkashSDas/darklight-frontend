@@ -12,3 +12,9 @@ export function normalizeJsonToUser(user: any): User {
     createdAt: new Date(user.createdAt).toISOString(),
   };
 }
+
+export interface UpdateDetailsInput {
+  username: string;
+  email: string;
+  fullName: string;
+}

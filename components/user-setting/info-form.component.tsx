@@ -4,7 +4,8 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 import { useUser } from "../../lib/hooks.lib";
-import { updateProfileImage } from "../../services/user.service";
+import { UpdateDetailsInput } from "../../lib/user.lib";
+import { updateDetails, updateProfileImage } from "../../services/user.service";
 import { RegularButton } from "../button";
 import { FormLabel } from "../form";
 import { CameraIcon } from "../icons";
@@ -20,15 +21,21 @@ export function InfoForm() {
 
 function DetailsForm() {
   var [loading, setLoading] = useState(false);
-  var { user } = useUser();
+  var { user, accessToken } = useUser();
 
-  var formik = useFormik({
+  var formik = useFormik<UpdateDetailsInput>({
     initialValues: {
       fullName: user.fullName ?? "",
       username: user.username,
       email: user.email,
     },
-    onSubmit: async function onSubmit(values) {},
+    onSubmit: async function onSubmit(values) {
+      setLoading(true);
+      var { success } = await updateDetails(accessToken, values);
+      if (success) toast.success("Details updated successfully");
+      else toast.error("Error updating details");
+      setLoading(false);
+    },
   });
 
   var displayUsernameError = formik.touched.username && formik.errors.username;

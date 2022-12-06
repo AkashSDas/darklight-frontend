@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 
 import { InfoForm, SettingsLayout } from "../../components/user-setting";
+import OAuthProviderInfo from "../../components/user-setting/oauth-provider-info.component";
 import { useUser } from "../../lib/hooks.lib";
 
 function BasicSettingsPage() {
@@ -16,6 +17,8 @@ function BasicSettingsPage() {
         ) : (
           <>
             <InfoForm />
+            <hr className="w-full bg-border h-[1px] my-2" />
+            <OAuthProviderInfo />
           </>
         )}
       </div>

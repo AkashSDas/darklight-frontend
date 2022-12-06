@@ -10,3 +10,7 @@
 .btn__contained {
   @apply bg-primary text-text3 hover:brightness-95 active:brightness-90;
 }
+
+.btn__outline {
+  @apply text-text1 border border-solid border-border hover:bg-background3 active:bg-border;
+}

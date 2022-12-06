@@ -32,14 +32,10 @@ export async function updateProfileImage(accessToken: string, data: FormData) {
   return { success: false };
 }
 
-export async function updateDetails(
-  accessToken: string,
-  input: UpdateDetailsInput
-) {
-  var response = await fetchFromUser("details", {
+export async function instructorSignup(accessToken: string) {
+  var response = await fetchFromUser("instructor-signup", {
     method: "PUT",
     headers: { Authorization: `Bearer ${accessToken}` },
-    data: input,
   });
   if (response.statusCode == 200) return { success: response.success };
   return { success: false };

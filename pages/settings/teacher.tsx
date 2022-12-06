@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 
+import InstructorSignup from "../../components/teacher-settings/instructor-signup";
 import { SettingsLayout } from "../../components/user-setting";
 import { useUser } from "../../lib/hooks.lib";
 
@@ -14,7 +15,9 @@ function TeacherSettingsPage() {
         ) : error ? (
           <div>Error encountered</div>
         ) : (
-          <></>
+          <>
+            <InstructorSignup />
+          </>
         )}
       </div>
     </main>

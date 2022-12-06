@@ -20,7 +20,7 @@ export default function OAuthProviderInfo() {
       </div>
 
       <div className="w-full max-w-[300px]">
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-6">
           {["google", "facebook", "twitter"].map((provider: any) => (
             <OAuthProviderBadge
               key={provider}

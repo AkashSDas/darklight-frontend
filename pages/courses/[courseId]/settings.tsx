@@ -8,6 +8,7 @@ import { useSWRConfig } from "swr";
 import { TextBadge } from "../../../components/badges";
 import CourseEditorLayout from "../../../components/course-editor/layout";
 import Banner from "../../../components/course-settings/banner";
+import DeleteCourse from "../../../components/course-settings/delete-course";
 import DescriptionInput from "../../../components/course-settings/description";
 import DifficultyLevelInput from "../../../components/course-settings/difficulty-input";
 import CourseTags from "../../../components/course-settings/tags-input";
@@ -34,6 +35,8 @@ function CourseSettingsPage() {
         <CourseTags />
         <hr className="my-4 bg-border opacity-50 w-full" />
         <DifficultyLevelInput />
+        <hr className="my-4 bg-border opacity-50 w-full" />
+        <DeleteCourse />
       </section>
     </main>
   );

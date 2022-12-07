@@ -40,3 +40,16 @@ export async function instructorSignup(accessToken: string) {
   if (response.statusCode == 200) return { success: response.success };
   return { success: false };
 }
+
+export async function updateDetails(
+  accessToken: string,
+  data: UpdateDetailsInput
+) {
+  var response = await fetchFromUser("details", {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data,
+  });
+  if (response.statusCode == 200) return { success: response.success };
+  return { success: false };
+}

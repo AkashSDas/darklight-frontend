@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { PasswordResetForm } from "../../../components/auth";
-import { TextBadge } from "../../../components/badges";
-import { AuthGif } from "../../../components/gifs";
+import { PasswordResetForm } from "../../../components/auth/password-reset";
+import { TextBadge } from "../../../components/badges/text";
+import { AuthGif } from "../../../components/gifs/auth";
 
 function PasswordResetPage() {
   return (

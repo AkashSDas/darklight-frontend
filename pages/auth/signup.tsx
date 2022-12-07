@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { useSWRConfig } from "swr";
 
-import { SignupForm } from "../../components/auth";
 import { CompleteOAuthForm } from "../../components/auth/complete-oauth";
-import { TextBadge } from "../../components/badges";
-import { SignupWithFacebook, SignupWithGoogle, SignupWithTwitter } from "../../components/button";
-import { AuthGif } from "../../components/gifs";
+import { SignupForm } from "../../components/auth/signup.component";
+import { TextBadge } from "../../components/badges/text";
+import { SignupWithGoogle } from "../../components/button/google-auth";
+import { SignupWithFacebook, SignupWithTwitter } from "../../components/button/oauth";
+import { AuthGif } from "../../components/gifs/auth";
 import { useUser } from "../../lib/hooks.lib";
 import { cancelOAuth } from "../../services/auth.service";
 

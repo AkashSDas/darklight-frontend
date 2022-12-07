@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 import CreateCourse from "../../components/teacher-settings/create-course";
 import InstructorSignup from "../../components/teacher-settings/instructor-signup";
-import { SettingsLayout } from "../../components/user-setting";
+import { SettingsLayout } from "../../components/user-setting/layout";
 import { useUser } from "../../lib/hooks.lib";
 
 function TeacherSettingsPage() {

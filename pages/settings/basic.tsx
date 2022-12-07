@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 
-import { InfoForm, SettingsLayout } from "../../components/user-setting";
+import { InfoForm } from "../../components/user-setting/info-form";
+import { SettingsLayout } from "../../components/user-setting/layout";
 import OAuthProviderInfo from "../../components/user-setting/oauth-provider-info";
 import UserRoles from "../../components/user-setting/user-roles";
 import { useUser } from "../../lib/hooks.lib";

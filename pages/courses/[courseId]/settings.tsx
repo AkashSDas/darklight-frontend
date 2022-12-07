@@ -1,11 +1,5 @@
-import { useFormik } from "formik";
-import debounce from "lodash.debounce";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { ReactElement, useCallback, useReducer, useRef, useState } from "react";
-import { useSWRConfig } from "swr";
+import { ReactElement } from "react";
 
-import { TextBadge } from "../../../components/badges";
 import CourseEditorLayout from "../../../components/course-editor/layout";
 import Banner from "../../../components/course-settings/banner";
 import DeleteCourse from "../../../components/course-settings/delete-course";
@@ -15,12 +9,7 @@ import PriceInput from "../../../components/course-settings/price-input";
 import PublishCourse from "../../../components/course-settings/publish-course";
 import CourseTags from "../../../components/course-settings/tags-input";
 import TitleInput from "../../../components/course-settings/title";
-import EmojiPicker from "../../../components/emoji/picker";
-import { CameraIcon } from "../../../components/icons";
-import { AddIcon } from "../../../components/icons/add";
-import { DescriptionIcon } from "../../../components/icons/description";
-import { useDropdown, useEditableCourse, useResizeTextareaHeight, useUser } from "../../../lib/hooks.lib";
-import { updateCourseSettings } from "../../../services/course.service";
+import { useEditableCourse } from "../../../lib/hooks.lib";
 
 function CourseSettingsPage() {
   var { loading, course, error } = useEditableCourse();

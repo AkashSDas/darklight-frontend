@@ -1,9 +1,10 @@
 import Link from "next/link";
 
-import { LoginForm } from "../../components/auth";
-import { TextBadge } from "../../components/badges";
-import { LoginWithFacebook, LoginWithGoogle, LoginWithTwitter } from "../../components/button";
-import { AuthGif } from "../../components/gifs";
+import { LoginForm } from "../../components/auth/login";
+import { TextBadge } from "../../components/badges/text";
+import { LoginWithGoogle } from "../../components/button/google-auth";
+import { LoginWithFacebook, LoginWithTwitter } from "../../components/button/oauth";
+import { AuthGif } from "../../components/gifs/auth";
 
 function LoginPage() {
   return (

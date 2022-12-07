@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import { ForgotPasswordForm } from "../../components/auth/forgot-password";
-import { TextBadge } from "../../components/badges";
-import { AuthGif } from "../../components/gifs";
+import { TextBadge } from "../../components/badges/text";
+import { AuthGif } from "../../components/gifs/auth";
 
 function ForgotPasswordPage() {
   return (

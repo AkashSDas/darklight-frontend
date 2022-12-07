@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-import { SettingsLayout } from "../../components/user-setting";
+import { SettingsLayout } from "../../components/user-setting/layout";
 import { useUser } from "../../lib/hooks.lib";
 
 function BillingSettingsPage() {

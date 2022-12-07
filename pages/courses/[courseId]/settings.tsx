@@ -9,6 +9,7 @@ import { TextBadge } from "../../../components/badges";
 import CourseEditorLayout from "../../../components/course-editor/layout";
 import Banner from "../../../components/course-settings/banner";
 import DescriptionInput from "../../../components/course-settings/description";
+import DifficultyLevelInput from "../../../components/course-settings/difficulty-input";
 import CourseTags from "../../../components/course-settings/tags-input";
 import TitleInput from "../../../components/course-settings/title";
 import EmojiPicker from "../../../components/emoji/picker";
@@ -32,6 +33,7 @@ function CourseSettingsPage() {
         <hr className="my-4 bg-border opacity-50 w-full" />
         <CourseTags />
         <hr className="my-4 bg-border opacity-50 w-full" />
+        <DifficultyLevelInput />
       </section>
     </main>
   );

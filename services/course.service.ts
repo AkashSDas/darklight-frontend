@@ -18,20 +18,31 @@ export async function createCourse(accessToken: string) {
   return { success: false };
 }
 
-export async function getEditableCourse(
-  id: string,
-  accessToken: string,
-  roles: string[]
-) {
-  if (!roles.includes("teacher")) return { success: false };
-
+export async function getEditableCourse(id: string) {
   var response = await fetchFromCourse(`${id}/editable`, {
     method: "GET",
-    headers: { Authorization: `Bearer ${accessToken}` },
   });
 
   if (response.statusCode == 200) {
     return { success: response.success, course: response.data };
   }
   return { success: false, error: response.error };
+}
+
+export async function updateCourseSettings(
+  accessToken: string,
+  id: string,
+  data: any
+) {
+  console.log(accessToken);
+  var response = await fetchFromCourse(`${id}/settings`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data,
+  });
+
+  if (response.statusCode == 200) {
+    return { success: response.success };
+  }
+  return { success: false };
 }

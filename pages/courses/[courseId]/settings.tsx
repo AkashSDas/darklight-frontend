@@ -9,9 +9,10 @@ import CourseEditorLayout from "../../../components/course-editor/layout";
 import Banner from "../../../components/course-settings/banner";
 import DescriptionInput from "../../../components/course-settings/description";
 import TitleInput from "../../../components/course-settings/title";
+import EmojiPicker from "../../../components/emoji/picker";
 import { CameraIcon } from "../../../components/icons";
 import { DescriptionIcon } from "../../../components/icons/description";
-import { useEditableCourse, useResizeTextareaHeight, useUser } from "../../../lib/hooks.lib";
+import { useDropdown, useEditableCourse, useResizeTextareaHeight, useUser } from "../../../lib/hooks.lib";
 import { updateCourseSettings } from "../../../services/course.service";
 
 function CourseSettingsPage() {

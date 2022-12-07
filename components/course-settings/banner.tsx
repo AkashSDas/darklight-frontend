@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { FormEventHandler, useReducer, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 import { useEditableCourse, useUser } from "../../lib/hooks.lib";
 import { updateCourseCover } from "../../services/course.service";
 import { CameraIcon } from "../icons";
-import { DescriptionIcon } from "../icons/description";
+import CourseEmojiInput from "./emoji-input";
 
 function Cover({ image }: { image: any }) {
   var { course } = useEditableCourse();
@@ -26,7 +26,7 @@ function Cover({ image }: { image: any }) {
 
       {/* Course emoji */}
       <div className="absolute -bottom-4 left-4 cursor-pointer hover:brightness-90 text-[60px] leading-[100%] w-fit h-fit flex justify-center items-center rounded-[3px] bg-background3 px-[3px] py-[1px]">
-        <span>🌕</span>
+        <CourseEmojiInput />
       </div>
     </div>
   );
@@ -57,12 +57,12 @@ export default function Banner() {
   var inputRef = useRef<any>(null);
 
   return (
-    <div className="w-full flex flex-col justify-center gap-2">
+    <div className="w-full flex flex-col justify-center">
       {/* Cover image and course emoji */}
       <Cover image={image} />
 
       {/* Update course cover button */}
-      <div className="flex items-center gap-4 mt-4">
+      <div className="self-end flex items-center gap-4 mt-2">
         <button
           disabled={uploading}
           onClick={() => inputRef.current.click()}

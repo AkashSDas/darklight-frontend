@@ -1,15 +1,22 @@
-import "emoji-mart/css/emoji-mart.css";
-
-import { init, Picker } from "emoji-mart";
-
 import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
-init({ data });
-
-export default function EmojiPicker() {
-  async function handleSelect(emoji: any) {
-    console.log(emoji.native);
-  }
-
-  return <Picker data={data} />;
+interface Props {
+  onSelect: (emoji: any) => void;
+  handleClose: () => void;
 }
+
+function EmojiPicker({ onSelect, handleClose }: Props) {
+  return (
+    <Picker
+      data={data}
+      onEmojiSelect={onSelect}
+      onOutSideClick={handleClose}
+      emojiButtonSize={44}
+      emojiButtonRadius={"12px"}
+      icons="outline"
+    />
+  );
+}
+
+export default EmojiPicker;

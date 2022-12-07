@@ -7,11 +7,6 @@ import { updateCourseCover } from "../../services/course.service";
 import { CameraIcon } from "../icons";
 import { DescriptionIcon } from "../icons/description";
 
-interface Props {
-  setShowForm: (showForm: boolean) => void;
-  showForm: boolean;
-}
-
 function Cover({
   image,
   uploadImage,
@@ -43,7 +38,7 @@ function Cover({
   );
 }
 
-export default function Banner({ setShowForm, showForm }: Props) {
+export default function Banner() {
   var { course } = useEditableCourse();
   var { accessToken } = useUser();
   var [uploading, setUploading] = useState(false);
@@ -74,16 +69,6 @@ export default function Banner({ setShowForm, showForm }: Props) {
 
       {/* Update course cover button */}
       <div className="flex items-center gap-4 mt-4">
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="h-9 rounded-xl flex items-center gap-2 px-2 hover:bg-background3 active:bg-border"
-        >
-          <DescriptionIcon size="18" />
-          <span className="text-sm">
-            {showForm ? "Hide" : "Add"} description
-          </span>
-        </button>
-
         <button
           disabled={uploading}
           onClick={() => inputRef.current.click()}

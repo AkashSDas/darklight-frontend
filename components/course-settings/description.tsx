@@ -4,18 +4,18 @@ import { useCallback, useState } from "react";
 import { useEditableCourse, useResizeTextareaHeight, useUser } from "../../lib/hooks.lib";
 import { updateCourseSettings } from "../../services/course.service";
 
-export default function TitleInput() {
+export default function DescriptionInput() {
   var { course, courseId, mutateCourse } = useEditableCourse();
   var { accessToken } = useUser();
-  var [title, setTitle] = useState(course?.title ?? "");
-  var { ref } = useResizeTextareaHeight(title);
+  var [description, setDescription] = useState(course?.description ?? "");
+  var { ref } = useResizeTextareaHeight(description);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  var titleCallback = useCallback(
+  var descriptionCallback = useCallback(
     debounce(async (value) => {
       if (value && courseId && accessToken) {
         let update = {
-          title: value,
+          description: value,
           lastEditedOn: new Date(Date.now()),
         };
         await updateCourseSettings(accessToken, courseId, update);
@@ -31,11 +31,11 @@ export default function TitleInput() {
       onKeyDown={(e) => {
         if (e.key === "Enter") e.preventDefault();
       }}
-      value={title}
+      value={description}
       onChange={async (e) => {
-        setTitle(e.target.value);
+        setDescription(e.target.value);
         let update = {
-          title: e.target.value,
+          description: e.target.value,
           lastEditedOn: new Date(Date.now()),
         };
         let optimisticData = {
@@ -49,10 +49,10 @@ export default function TitleInput() {
           revalidate: false,
         });
 
-        await titleCallback(e.target.value);
+        await descriptionCallback(e.target.value);
       }}
-      placeholder="Untitled"
-      className="w-full leading-[100%] text-text1 placeholder:text-border text-[40px] font-gilroy font-extrabold outline-none resize-none"
+      placeholder="Add a description"
+      className="w-full placeholder:text-border text-[18px] outline-none resize-none"
     />
   );
 }

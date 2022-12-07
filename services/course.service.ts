@@ -34,7 +34,6 @@ export async function updateCourseSettings(
   id: string,
   data: any
 ) {
-  console.log(accessToken);
   var response = await fetchFromCourse(`${id}/settings`, {
     method: "PUT",
     headers: { Authorization: `Bearer ${accessToken}` },

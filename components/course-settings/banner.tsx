@@ -7,13 +7,7 @@ import { updateCourseCover } from "../../services/course.service";
 import { CameraIcon } from "../icons";
 import { DescriptionIcon } from "../icons/description";
 
-function Cover({
-  image,
-  uploadImage,
-}: {
-  image: any;
-  uploadImage: FormEventHandler<HTMLImageElement>;
-}) {
+function Cover({ image }: { image: any }) {
   var { course } = useEditableCourse();
 
   return (
@@ -32,7 +26,7 @@ function Cover({
 
       {/* Course emoji */}
       <div className="absolute -bottom-4 left-4 cursor-pointer hover:brightness-90 text-[60px] leading-[100%] w-fit h-fit flex justify-center items-center rounded-[3px] bg-background3 px-[3px] py-[1px]">
-        🌕
+        <span>🌕</span>
       </div>
     </div>
   );
@@ -65,7 +59,7 @@ export default function Banner() {
   return (
     <div className="w-full flex flex-col justify-center gap-2">
       {/* Cover image and course emoji */}
-      <Cover image={image} uploadImage={uploadImage} />
+      <Cover image={image} />
 
       {/* Update course cover button */}
       <div className="flex items-center gap-4 mt-4">

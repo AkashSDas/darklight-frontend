@@ -11,6 +11,7 @@ import Banner from "../../../components/course-settings/banner";
 import DeleteCourse from "../../../components/course-settings/delete-course";
 import DescriptionInput from "../../../components/course-settings/description";
 import DifficultyLevelInput from "../../../components/course-settings/difficulty-input";
+import PublishCourse from "../../../components/course-settings/publish-course";
 import CourseTags from "../../../components/course-settings/tags-input";
 import TitleInput from "../../../components/course-settings/title";
 import EmojiPicker from "../../../components/emoji/picker";
@@ -35,6 +36,8 @@ function CourseSettingsPage() {
         <CourseTags />
         <hr className="my-4 bg-border opacity-50 w-full" />
         <DifficultyLevelInput />
+        <hr className="my-4 bg-border opacity-50 w-full" />
+        <PublishCourse />
         <hr className="my-4 bg-border opacity-50 w-full" />
         <DeleteCourse />
       </section>

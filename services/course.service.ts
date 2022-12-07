@@ -46,3 +46,20 @@ export async function updateCourseSettings(
   }
   return { success: false };
 }
+
+export async function updateCourseCover(
+  accessToken: string,
+  id: string,
+  data: any
+) {
+  var response = await fetchFromCourse(`${id}/cover`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data,
+  });
+
+  if (response.statusCode == 200) {
+    return { success: response.success };
+  }
+  return { success: false };
+}

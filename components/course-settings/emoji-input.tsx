@@ -45,9 +45,10 @@ export default function CourseEmojiInput() {
     <div
       onClick={() => setIsOpen(true)}
       ref={wrapperRef}
-      className="absolute -bottom-4 left-4 cursor-pointer hover:brightness-90 text-[60px] leading-[100%] w-fit h-fit flex justify-center items-center rounded-[3px] bg-background3 px-[3px] py-[1px]"
+      className="absolute -bottom-4 left-4 cursor-pointer text-[60px] leading-[100%] w-fit h-fit flex justify-center items-center rounded-[3px] bg-background3 px-[3px] py-[1px]"
     >
       <span
+        className="hover:brightness-90"
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(!isOpen);

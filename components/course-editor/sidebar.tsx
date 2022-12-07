@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { useEditableCourse } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
 import { PaymentCardIcon, SettingsIcon, UserCircleIcon } from "../icons";
 import { EyeIcon } from "../icons/eye";
@@ -56,9 +57,10 @@ function SidebarItem({
   icon: JSX.Element;
 }) {
   var router = useRouter();
+  var { courseId } = useEditableCourse();
 
   return (
-    <Link href={`/courses/123/${id}`}>
+    <Link href={`/courses/${courseId}/${id}`}>
       <li
         className={`${
           router.pathname?.includes(id) && "bg-background3"

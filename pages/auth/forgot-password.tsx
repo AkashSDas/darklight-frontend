@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { ForgotPasswordForm } from "../../components/auth/forgot-password.component";
+import { ForgotPasswordForm } from "../../components/auth/forgot-password";
 import { TextBadge } from "../../components/badges";
 import { AuthGif } from "../../components/gifs";
 

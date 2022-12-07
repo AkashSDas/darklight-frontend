@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useSWRConfig } from "swr";
 
 import { SignupForm } from "../../components/auth";
-import { CompleteOAuthForm } from "../../components/auth/complete-oauth.component";
+import { CompleteOAuthForm } from "../../components/auth/complete-oauth";
 import { TextBadge } from "../../components/badges";
 import { SignupWithFacebook, SignupWithGoogle, SignupWithTwitter } from "../../components/button";
 import { AuthGif } from "../../components/gifs";

@@ -3,7 +3,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 import { useEditableCourse } from "../../lib/hooks.lib";
 import { TextBadge } from "../badges";
-import { IconButton } from "../button/icons.component";
+import { IconButton } from "../button/icons";
 import { MenuIcon, SearchIcon } from "../icons";
 import { AnnouncementIcon } from "../icons/announcment";
 import { NotificationIcon } from "../icons/notification";

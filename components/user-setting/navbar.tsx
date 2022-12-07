@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { useUser } from "../../lib/hooks.lib";
 import { RegularButton } from "../button";
-import { IconButton } from "../button/icons.component";
+import { IconButton } from "../button/icons";
 import { MenuIcon, SearchIcon, SettingsIcon } from "../icons";
 
 export function Navbar() {

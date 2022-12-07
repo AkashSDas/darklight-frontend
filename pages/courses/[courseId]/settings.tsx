@@ -5,12 +5,15 @@ import { useRouter } from "next/router";
 import { ReactElement, useCallback, useReducer, useRef, useState } from "react";
 import { useSWRConfig } from "swr";
 
+import { TextBadge } from "../../../components/badges";
 import CourseEditorLayout from "../../../components/course-editor/layout";
 import Banner from "../../../components/course-settings/banner";
 import DescriptionInput from "../../../components/course-settings/description";
+import CourseTags from "../../../components/course-settings/tags-input";
 import TitleInput from "../../../components/course-settings/title";
 import EmojiPicker from "../../../components/emoji/picker";
 import { CameraIcon } from "../../../components/icons";
+import { AddIcon } from "../../../components/icons/add";
 import { DescriptionIcon } from "../../../components/icons/description";
 import { useDropdown, useEditableCourse, useResizeTextareaHeight, useUser } from "../../../lib/hooks.lib";
 import { updateCourseSettings } from "../../../services/course.service";
@@ -26,6 +29,9 @@ function CourseSettingsPage() {
         <Banner />
         <TitleInput />
         <DescriptionInput />
+        <hr className="my-4 bg-border opacity-50 w-full" />
+        <CourseTags />
+        <hr className="my-4 bg-border opacity-50 w-full" />
       </section>
     </main>
   );

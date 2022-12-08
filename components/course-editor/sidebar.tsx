@@ -16,23 +16,41 @@ export default function Sidebar() {
   var router = useRouter();
   var [addingGroup, setAddingGroup] = useState(false);
   var { accessToken } = useUser();
-  var { courseId, mutateCourse, course } = useEditableCourse();
+  var { courseId, mutateCourse } = useEditableCourse();
 
   async function createGroup() {
     if (courseId && accessToken) {
       setAddingGroup(true);
-      var response = await addGroup(courseId, accessToken);
+
+      var newData = await mutateCourse(async (oldData) => {
+        var response = await addGroup(courseId, accessToken);
+
+        if (!response.success) {
+          return {
+            success: false,
+            error: "Failed to create group",
+            course: oldData?.course,
+          };
+        }
+
+        return {
+          success: true,
+          error: null,
+          course: {
+            ...oldData?.course,
+            groups: [...oldData?.course?.groups, response.group],
+          },
+        };
+      });
+
       setAddingGroup(false);
 
-      if (response.success) {
-        mutateCourse({
-          ...course,
-          groups: [...course.groups, response.group],
-        });
-        toast.success("Group created");
-        router.push(`/courses/${courseId}/groups/${response.group._id}`);
+      if (!newData?.success) {
+        toast.error(newData?.error ?? "Failed to create group");
       } else {
-        toast.error("Failed to create group");
+        toast.success("Group created");
+        let newGroup = newData.course.groups[newData.course.groups.length - 1];
+        router.push(`/courses/${courseId}/groups/${newGroup._id}`);
       }
     }
   }
@@ -73,6 +91,8 @@ export default function Sidebar() {
         />
       </ul>
 
+      <Groups />
+
       <button
         disabled={addingGroup}
         onClick={createGroup}
@@ -81,6 +101,18 @@ export default function Sidebar() {
         {addingGroup ? "Creating..." : "Add group"}
       </button>
     </aside>
+  );
+}
+
+function Groups() {
+  var { course } = useEditableCourse();
+
+  return (
+    <ul className="mt-4">
+      {course?.groups.map((group: any) => (
+        <div key={group._id}>{group.title ?? "Untitled"}</div>
+      ))}
+    </ul>
   );
 }
 

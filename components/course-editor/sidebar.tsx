@@ -6,9 +6,13 @@ import toast from "react-hot-toast";
 import { useEditableCourse, useUser } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
 import { addGroup } from "../../services/group.service";
+import { TextBadge } from "../badges/text";
+import { AddIcon } from "../icons/add";
 import { EyeIcon } from "../icons/eye";
 import { MobileIcon } from "../icons/mobile";
+import { MoreIcon } from "../icons/more";
 import { PaymentCardIcon } from "../icons/payment-card";
+import { RightArrowIcon } from "../icons/right-arrow";
 import { SettingsIcon } from "../icons/settings";
 import { UserCircleIcon } from "../icons/user-circle";
 
@@ -106,11 +110,39 @@ export default function Sidebar() {
 
 function Groups() {
   var { course } = useEditableCourse();
+  var router = useRouter();
 
   return (
-    <ul className="mt-4">
+    <ul className="mt-4 flex flex-col">
       {course?.groups.map((group: any) => (
-        <div key={group._id}>{group.title ?? "Untitled"}</div>
+        <div
+          onClick={() => {
+            router.push(`/courses/${course._id}/groups/${group._id}`);
+          }}
+          key={group._id}
+          className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
+        >
+          <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+            <RightArrowIcon size="18" />
+          </button>
+
+          <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
+            {group.emoji ?? "🌑"}
+          </span>
+          <span className="text-sm font-urbanist font-medium flex-grow">
+            {group.title ?? "Untitled"}
+          </span>
+
+          <div className="hidden group-hover:flex items-center gap-1 ">
+            <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+              <AddIcon size="18" />
+            </button>
+
+            <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+              <MoreIcon size="18" />
+            </button>
+          </div>
+        </div>
       ))}
     </ul>
   );

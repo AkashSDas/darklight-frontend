@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-import { useEditableCourse } from "../../lib/hooks.lib";
+import { useEditableCourse, useUser } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
+import { addGroup } from "../../services/group.service";
 import { EyeIcon } from "../icons/eye";
 import { MobileIcon } from "../icons/mobile";
 import { PaymentCardIcon } from "../icons/payment-card";
@@ -10,8 +13,32 @@ import { SettingsIcon } from "../icons/settings";
 import { UserCircleIcon } from "../icons/user-circle";
 
 export default function Sidebar() {
+  var router = useRouter();
+  var [addingGroup, setAddingGroup] = useState(false);
+  var { accessToken } = useUser();
+  var { courseId, mutateCourse, course } = useEditableCourse();
+
+  async function createGroup() {
+    if (courseId && accessToken) {
+      setAddingGroup(true);
+      var response = await addGroup(courseId, accessToken);
+      setAddingGroup(false);
+
+      if (response.success) {
+        mutateCourse({
+          ...course,
+          groups: [...course.groups, response.group],
+        });
+        toast.success("Group created");
+        router.push(`/courses/${courseId}/groups/${response.group._id}`);
+      } else {
+        toast.error("Failed to create group");
+      }
+    }
+  }
+
   return (
-    <aside className="w-[300px] flex flex-col gap-4 py-4 h-full fixed border border-solid border-border">
+    <aside className="w-[300px] flex flex-col gap-4 pt-4 h-full fixed border border-solid border-border">
       <div className="h-[34px] flex items-center px-4">
         <Link href="/" className="cursor-pointer">
           <Logo />
@@ -45,6 +72,14 @@ export default function Sidebar() {
           label="Course overview"
         />
       </ul>
+
+      <button
+        disabled={addingGroup}
+        onClick={createGroup}
+        className="mt-auto bg-[#E1E4FF] w-full h-11 flex items-center justify-center text-primary font-urbanist font-medium hover:brightness-95 active:brightness-90"
+      >
+        {addingGroup ? "Creating..." : "Add group"}
+      </button>
     </aside>
   );
 }

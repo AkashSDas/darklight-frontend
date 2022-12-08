@@ -61,6 +61,18 @@ export function useEditableCourse() {
   };
 }
 
+export function useEditableGroup() {
+  var router = useRouter();
+  var groupId = router.query.groupId as string;
+  var { course, loading: courseLoading, mutateCourse } = useEditableCourse();
+
+  return {
+    group: course?.groups.find((group: any) => group._id == groupId),
+    courseLoading,
+    mutateCourse,
+  };
+}
+
 /// Similar situation was faced in `editor-mode-0` in post_form.tsx
 export function useResizeTextareaHeight(
   value: string,

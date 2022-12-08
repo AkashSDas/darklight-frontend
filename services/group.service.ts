@@ -21,3 +21,23 @@ export async function addGroup(courseId: string, accessToken: string) {
   }
   return { success: false };
 }
+
+export async function updateGroupSettings(
+  courseId: string,
+  groupId: string,
+  input: any,
+  accessToken: string
+) {
+  console.log(groupId);
+  var response = await fetchFromGroup(courseId, `${groupId}`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data: input,
+  });
+
+  console.log(response.data);
+  if (response.statusCode == 200) {
+    return { success: response.success, group: response.data };
+  }
+  return { success: false };
+}

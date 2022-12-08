@@ -6,9 +6,9 @@ import toast from "react-hot-toast";
 import { useUser } from "../../lib/hooks.lib";
 import { UpdateDetailsInput } from "../../lib/user.lib";
 import { updateDetails, updateProfileImage } from "../../services/user.service";
-import { RegularButton } from "../button";
-import { FormLabel } from "../form";
-import { CameraIcon } from "../icons";
+import { RegularButton } from "../button/regular";
+import { FormLabel } from "../form/label";
+import { CameraIcon } from "../icons/camera";
 
 export function InfoForm() {
   return (

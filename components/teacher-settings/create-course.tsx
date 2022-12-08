@@ -4,8 +4,8 @@ import toast from "react-hot-toast";
 
 import { useUser } from "../../lib/hooks.lib";
 import { createCourse } from "../../services/course.service";
-import { TextBadge } from "../badges";
-import { RegularButton } from "../button";
+import { TextBadge } from "../badges/text";
+import { RegularButton } from "../button/regular";
 
 export default function CreateCourse() {
   var { user, accessToken } = useUser();

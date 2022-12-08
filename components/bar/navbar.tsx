@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { useSWRConfig } from "swr";
 
-import { useAccessToken, useUser } from "../../lib/hooks.lib";
+import { useUser } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
 import { logout } from "../../services/auth.service";
-import { RegularButton } from "../button";
+import { RegularButton } from "../button/regular";
 
 export function Navbar() {
   var { user } = useUser();

@@ -3,9 +3,11 @@ import { useRouter } from "next/router";
 
 import { useEditableCourse } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
-import { PaymentCardIcon, SettingsIcon, UserCircleIcon } from "../icons";
 import { EyeIcon } from "../icons/eye";
 import { MobileIcon } from "../icons/mobile";
+import { PaymentCardIcon } from "../icons/payment-card";
+import { SettingsIcon } from "../icons/settings";
+import { UserCircleIcon } from "../icons/user-circle";
 
 export default function Sidebar() {
   return (

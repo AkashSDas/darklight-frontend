@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Settings from "../../public/icons/settings.svg";
 import Logo from "../../public/logo.svg";
-import { CollectionIcon, PaymentCardIcon, SettingsIcon, UserCircleIcon } from "../icons";
+import { CollectionIcon } from "../icons/collection";
+import { PaymentCardIcon } from "../icons/payment-card";
+import { SettingsIcon } from "../icons/settings";
+import { UserCircleIcon } from "../icons/user-circle";
 
 export function Sidebar() {
   return (

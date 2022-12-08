@@ -2,9 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { useUser } from "../../lib/hooks.lib";
-import { RegularButton } from "../button";
 import { IconButton } from "../button/icons";
-import { MenuIcon, SearchIcon, SettingsIcon } from "../icons";
+import { RegularButton } from "../button/regular";
+import { MenuIcon } from "../icons/menu";
+import { SearchIcon } from "../icons/search";
+import { SettingsIcon } from "../icons/settings";
 
 export function Navbar() {
   var { user } = useUser();

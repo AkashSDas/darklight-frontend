@@ -2,11 +2,12 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 import { useEditableCourse } from "../../lib/hooks.lib";
-import { TextBadge } from "../badges";
+import { TextBadge } from "../badges/text";
 import { IconButton } from "../button/icons";
-import { MenuIcon, SearchIcon } from "../icons";
 import { AnnouncementIcon } from "../icons/announcment";
+import { MenuIcon } from "../icons/menu";
 import { NotificationIcon } from "../icons/notification";
+import { SearchIcon } from "../icons/search";
 
 dayjs.extend(relativeTime);
 

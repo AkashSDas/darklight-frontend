@@ -1,5 +1,5 @@
 import { useUser } from "../../lib/hooks.lib";
-import { TextBadge } from "../badges";
+import { TextBadge } from "../badges/text";
 
 export default function UserRoles() {
   var { user } = useUser();

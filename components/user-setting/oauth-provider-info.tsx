@@ -3,7 +3,7 @@ import Facebook from "../../public/social-icons/facebook.svg";
 import Google from "../../public/social-icons/google.svg";
 import Twitter from "../../public/social-icons/twitter.svg";
 import btnStyles from "../../styles/components/button/oauth.module.css";
-import { TextBadge } from "../badges";
+import { TextBadge } from "../badges/text";
 
 export default function OAuthProviderInfo() {
   var { user } = useUser();

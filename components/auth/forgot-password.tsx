@@ -5,8 +5,8 @@ import { toast } from "react-hot-toast";
 import { ForgotPasswordInput } from "../../lib/auth.lib";
 import { forgotPasswordSchema } from "../../lib/yup.lib";
 import { forgotPassword } from "../../services/auth.service";
-import { RegularButton } from "../button";
-import { FormLabel } from "../form";
+import { RegularButton } from "../button/regular";
+import { FormLabel } from "../form/label";
 
 export function ForgotPasswordForm() {
   var [loading, setLoading] = useState(false);

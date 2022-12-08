@@ -9,8 +9,8 @@ import { normalizeJsonToUser } from "../../lib/user.lib";
 import { signupSchema } from "../../lib/yup.lib";
 import { signup } from "../../services/auth.service";
 import { setAccessToken, setDetails } from "../../store/user/slice";
-import { RegularButton } from "../button";
-import { FormLabel } from "../form";
+import { RegularButton } from "../button/regular";
+import { FormLabel } from "../form/label";
 
 export function SignupForm() {
   var [loading, setLoading] = useState(false);

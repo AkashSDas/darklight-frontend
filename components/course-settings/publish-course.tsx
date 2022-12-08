@@ -1,5 +1,5 @@
 import { useEditableCourse } from "../../lib/hooks.lib";
-import { TextBadge } from "../badges";
+import { TextBadge } from "../badges/text";
 import SwitchButton from "../button/switch";
 
 export default function PublishCourse() {

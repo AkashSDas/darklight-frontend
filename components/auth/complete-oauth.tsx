@@ -9,8 +9,8 @@ import { normalizeJsonToUser } from "../../lib/user.lib";
 import { completeOAuthSchema } from "../../lib/yup.lib";
 import { completeOAuth } from "../../services/auth.service";
 import { setDetails } from "../../store/user/slice";
-import { RegularButton } from "../button";
-import { FormLabel } from "../form";
+import { RegularButton } from "../button/regular";
+import { FormLabel } from "../form/label";
 
 export function CompleteOAuthForm() {
   var [loading, setLoading] = useState(false);

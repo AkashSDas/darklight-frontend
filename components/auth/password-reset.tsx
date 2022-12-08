@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
-import { ForgotPasswordInput, PasswordResetInput } from "../../lib/auth.lib";
-import { forgotPasswordSchema, passwordResetSchema } from "../../lib/yup.lib";
-import { forgotPassword, passwordResetPassword } from "../../services/auth.service";
-import { RegularButton } from "../button";
-import { FormLabel } from "../form";
+import { PasswordResetInput } from "../../lib/auth.lib";
+import { passwordResetSchema } from "../../lib/yup.lib";
+import { passwordResetPassword } from "../../services/auth.service";
+import { RegularButton } from "../button/regular";
+import { FormLabel } from "../form/label";
 
 export function PasswordResetForm() {
   var [loading, setLoading] = useState(false);

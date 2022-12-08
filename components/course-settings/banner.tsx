@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 import { useEditableCourse, useUser } from "../../lib/hooks.lib";
 import { updateCourseCover } from "../../services/course.service";
-import { CameraIcon } from "../icons";
+import { CameraIcon } from "../icons/camera";
 import CourseEmojiInput from "./emoji-input";
 
 function Cover({ image }: { image: any }) {

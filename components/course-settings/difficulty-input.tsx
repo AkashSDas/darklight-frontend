@@ -1,9 +1,6 @@
-import { useState } from "react";
-
 import { useDropdown, useEditableCourse, useUser } from "../../lib/hooks.lib";
 import { updateCourseSettings } from "../../services/course.service";
-import { TextBadge } from "../badges";
-import { AddIcon } from "../icons/add";
+import { TextBadge } from "../badges/text";
 import { ArrowDownIcon } from "../icons/arrow-down";
 
 export default function DifficultyLevelInput() {

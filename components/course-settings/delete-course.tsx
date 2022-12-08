@@ -1,4 +1,4 @@
-import { TextBadge } from "../badges";
+import { TextBadge } from "../badges/text";
 
 export default function DeleteCourse() {
   return (

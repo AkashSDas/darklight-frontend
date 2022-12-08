@@ -57,7 +57,33 @@ export default function CourseTags() {
                   className="px-1 h-6 rounded-md flex justify-center items-center bg-background3 font-urbanist text-[14px] font-medium"
                 >
                   {tag}{" "}
-                  <div className="rotate-45">
+                  <div
+                    className="rotate-45"
+                    onClick={async () => {
+                      let update = {
+                        tags: [...course.tags].filter((t: string) => t != tag),
+                        lastEditedOn: new Date(Date.now()),
+                      };
+                      let optimisticData = {
+                        success: true,
+                        course: { ...course, ...update },
+                        error: null,
+                      };
+
+                      await mutateCourse(async () => optimisticData, {
+                        optimisticData,
+                        revalidate: false,
+                      });
+
+                      if (courseId && accessToken) {
+                        await updateCourseSettings(
+                          accessToken,
+                          courseId,
+                          update
+                        );
+                      }
+                    }}
+                  >
                     <AddIcon size="18" />
                   </div>
                 </div>

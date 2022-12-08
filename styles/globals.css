@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap");
+
 body {
-  @apply font-urbanist font-medium bg-background1 text-text2;
+  @apply font-urbanist bg-background1 text-text2;
 }
 
 .h1 {

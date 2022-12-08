@@ -8,9 +8,8 @@ import { useSWRConfig } from "swr";
 import { LoginInput } from "../../lib/auth.lib";
 import { loginSchema } from "../../lib/yup.lib";
 import { login } from "../../services/auth.service";
-import { TextBadge } from "../badges";
-import { RegularButton } from "../button";
-import { FormLabel } from "../form";
+import { RegularButton } from "../button/regular";
+import { FormLabel } from "../form/label";
 
 export function LoginForm() {
   var [loading, setLoading] = useState(false);
@@ -75,7 +74,10 @@ export function LoginForm() {
           <div className="flex items-center justify-between">
             <FormLabel htmlFor="password" label="Password" variant="regular" />
 
-            <Link href="/auth/forgot-password" className="text-link text-sm">
+            <Link
+              href="/auth/forgot-password"
+              className="text-link text-sm font-normal font-urbanist"
+            >
               Forgot password
             </Link>
           </div>

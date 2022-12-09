@@ -1,5 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 
+import { UpdateLessonSettings } from "@lib/course.lib";
+
 import fetchFromAPI from "../lib/axios.lib";
 
 function fetchFromLesson(
@@ -43,6 +45,31 @@ export async function getLesson(
 
   if (response.statusCode == 200) {
     return { success: response.success, lesson: response.data.lesson };
+  }
+  return { success: false };
+}
+
+export async function updateLessonSettings(
+  courseId: string,
+  groupId: string,
+  lessonId: string,
+  input: UpdateLessonSettings,
+  accessToken: string
+) {
+  var response = await fetchFromLesson(
+    courseId,
+    groupId,
+    `${lessonId}/settings`,
+    {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${accessToken}` },
+      data: input,
+    }
+  );
+
+  console.log(response);
+  if (response.statusCode == 200) {
+    return { success: response.success, lesson: response.data };
   }
   return { success: false };
 }

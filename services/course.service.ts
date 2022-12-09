@@ -62,3 +62,20 @@ export async function updateCourseCover(
   }
   return { success: false };
 }
+
+export async function reorderGroups(
+  accessToken: string,
+  id: string,
+  data: any
+) {
+  var response = await fetchFromCourse(`${id}/reorder`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data,
+  });
+
+  if (response.statusCode == 200) {
+    return { success: response.success };
+  }
+  return { success: false };
+}

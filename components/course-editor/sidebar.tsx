@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import toast from "react-hot-toast";
 
 import { useEditableCourse, useUser } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
+import { reorderGroups } from "../../services/course.service";
 import { addGroup } from "../../services/group.service";
 import { AddIcon } from "../icons/add";
 import { EyeIcon } from "../icons/eye";
@@ -108,42 +110,81 @@ export default function Sidebar() {
 }
 
 function Groups() {
-  var { course } = useEditableCourse();
+  var { course, mutateCourse } = useEditableCourse();
+  var { accessToken } = useUser();
   var router = useRouter();
 
   return (
-    <ul className="mt-4 flex flex-col">
-      {course?.groups.map((group: any) => (
-        <div
-          onClick={() => {
-            router.push(`/courses/${course._id}/groups/${group._id}`);
-          }}
-          key={group._id}
-          className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
-        >
-          <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
-            <RightArrowIcon size="18" />
-          </button>
+    <DragDropContext
+      onDragEnd={async (dropEvent) => {
+        // Reorder
+        var source = dropEvent.source.index;
+        var destination = dropEvent.destination?.index;
+        var groups = course?.groups.slice() || [];
+        var moveGroup = groups[source];
+        groups.splice(source, 1);
+        groups.splice(destination || 0, 0, moveGroup);
 
-          <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
-            {group.emoji ?? "🌑"}
-          </span>
-          <span className="text-sm font-urbanist font-medium flex-grow">
-            {group.title ?? "Untitled"}
-          </span>
+        let optimisticData = {
+          success: true,
+          error: null,
+          course: { ...course, groups, lastEditedOn: new Date(Date.now()) },
+        };
 
-          <div className="hidden group-hover:flex items-center gap-1 ">
-            <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
-              <AddIcon size="18" />
-            </button>
+        await mutateCourse(async () => optimisticData, {
+          optimisticData,
+          revalidate: false,
+        });
+        await reorderGroups(accessToken, course._id, { groups });
+      }}
+    >
+      <Droppable droppableId="course-editor-sidebar">
+        {(provided) => (
+          <ul
+            className="mt-4 flex flex-col"
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+          >
+            {course?.groups.map((group: any, index: number) => (
+              <Draggable key={group._id} draggableId={group._id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    onClick={() => {
+                      router.push(`/courses/${course._id}/groups/${group._id}`);
+                    }}
+                    className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
+                  >
+                    <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+                      <RightArrowIcon size="18" />
+                    </button>
 
-            <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
-              <MoreIcon size="18" />
-            </button>
-          </div>
-        </div>
-      ))}
-    </ul>
+                    <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
+                      {group.emoji ?? "🌑"}
+                    </span>
+                    <span className="text-sm font-urbanist font-medium flex-grow">
+                      {group.title ?? "Untitled"}
+                    </span>
+
+                    <div className="hidden group-hover:flex items-center gap-1 ">
+                      <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+                        <AddIcon size="18" />
+                      </button>
+
+                      <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+                        <MoreIcon size="18" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </Draggable>
+            ))}
+          </ul>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 }
 

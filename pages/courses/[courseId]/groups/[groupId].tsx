@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 
 import CourseEditorLayout from "../../../../components/course-editor/layout";
+import GroupDescriptionInput from "../../../../components/group-settings/description-input";
 import GroupEmojiInput from "../../../../components/group-settings/emoji-input";
 import GroupTitleInput from "../../../../components/group-settings/title-input";
 import { useEditableGroup } from "../../../../lib/hooks.lib";
@@ -13,6 +14,7 @@ export default function GroupPage() {
       <section className="w-full max-w-[800px] flex flex-col gap-2">
         <GroupEmojiInput />
         <GroupTitleInput />
+        <GroupDescriptionInput />
       </section>
     </main>
   );

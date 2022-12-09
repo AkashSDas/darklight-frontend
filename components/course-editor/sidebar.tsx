@@ -137,6 +137,8 @@ function Groups() {
     setAddingLesson(false);
   }
 
+  var [openLessons, setOpenLessons] = useState(false);
+
   return (
     <DragDropContext
       onDragEnd={async (dropEvent) => {
@@ -175,35 +177,83 @@ function Groups() {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    onClick={() => {
-                      router.push(`/courses/${course._id}/groups/${group._id}`);
-                    }}
-                    className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
                   >
-                    <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
-                      <RightArrowIcon size="18" />
-                    </button>
-
-                    <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
-                      {group.emoji ?? "🌑"}
-                    </span>
-                    <span className="text-sm font-urbanist font-medium flex-grow">
-                      {group.title ?? "Untitled"}
-                    </span>
-
-                    <div className="hidden group-hover:flex items-center gap-1 ">
+                    <div
+                      onClick={() => {
+                        router.push(
+                          `/courses/${course._id}/groups/${group._id}`
+                        );
+                      }}
+                      className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
+                    >
                       <button
-                        onClick={createLesson}
-                        disabled={addingLesson}
-                        className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenLessons(!openLessons);
+                        }}
+                        className={`h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border ${
+                          openLessons ? "rotate-90" : ""
+                        }`}
                       >
-                        <AddIcon size="18" />
+                        <RightArrowIcon size="18" />
                       </button>
 
-                      <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
-                        <MoreIcon size="18" />
-                      </button>
+                      <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
+                        {group.emoji ?? "🌑"}
+                      </span>
+                      <span className="text-sm font-urbanist font-medium flex-grow">
+                        {group.title ?? "Untitled"}
+                      </span>
+
+                      <div className="hidden group-hover:flex items-center gap-1 ">
+                        <button
+                          onClick={createLesson}
+                          disabled={addingLesson}
+                          className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border"
+                        >
+                          <AddIcon size="18" />
+                        </button>
+
+                        <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+                          <MoreIcon size="18" />
+                        </button>
+                      </div>
                     </div>
+
+                    {openLessons && (
+                      <div>
+                        {group.lessons.map((lesson: any) => (
+                          <div
+                            onClick={() =>
+                              router.push(
+                                `/courses/${course._id}/groups/${group._id}/lessons/${lesson._id}`
+                              )
+                            }
+                            key={lesson._id}
+                            className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
+                          >
+                            <span className="w-[18px] h-[18px] opacity-0"></span>
+                            <svg
+                              width={20}
+                              height={16}
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M11.75 8a1.75 1.75 0 1 1-3.5 0 1.75 1.75 0 0 1 3.5 0Z"
+                                fill="#585858"
+                              />
+                            </svg>
+                            <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
+                              {lesson.emoji ?? "🌑"}
+                            </span>
+                            <span className="text-sm font-urbanist font-medium flex-grow">
+                              {lesson.title ?? "Untitled"}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </Draggable>

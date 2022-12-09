@@ -13,25 +13,6 @@ export default function GroupEmojiInput() {
   var { course, mutateCourse } = useEditableCourse();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  var emojiCallback = useCallback(
-    debounce(async (value) => {
-      if (value && group?._id && accessToken) {
-        let update = {
-          emoji: value,
-          lastEditedOn: new Date(Date.now()),
-        };
-
-        let input = {
-          ...course.groups.find((g: any) => g._id == group._id),
-          ...update,
-        };
-        await updateGroupSettings(course._id, group?._id, update, accessToken);
-      }
-    }, 500),
-
-    [group?._id]
-  );
-
   async function onEmojiSelect(emoji: any) {
     let update = { emoji: emoji.native, lastEditedOn: new Date(Date.now()) };
     let optimisticData = {
@@ -50,7 +31,11 @@ export default function GroupEmojiInput() {
       revalidate: false,
     });
 
-    await emojiCallback(emoji.native);
+    let input = {
+      ...course.groups.find((g: any) => g._id == group._id),
+      ...update,
+    };
+    await updateGroupSettings(course._id, group?._id, input, accessToken);
   }
 
   return (

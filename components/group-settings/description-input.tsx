@@ -9,7 +9,7 @@ export default function GroupDescriptionInput() {
   var { course, courseId, mutateCourse } = useEditableCourse();
   var { group } = useEditableGroup();
   var { accessToken } = useUser();
-  var { ref } = useResizeTextareaHeight(group?.title ?? "");
+  var { ref } = useResizeTextareaHeight(group?.description ?? "");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var descriptionCallback = useCallback(
@@ -49,7 +49,7 @@ export default function GroupDescriptionInput() {
       onKeyDown={(e) => {
         if (e.key === "Enter") e.preventDefault();
       }}
-      value={group?.description}
+      value={group?.description ?? ""}
       onChange={async (e) => {
         let update = {
           description: e.target.value,

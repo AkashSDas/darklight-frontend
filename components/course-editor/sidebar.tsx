@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import toast from "react-hot-toast";
+import { addLesson } from "services/lesson.service";
 
-import { useEditableCourse, useUser } from "../../lib/hooks.lib";
+import { useEditableCourse, useEditableGroup, useUser } from "../../lib/hooks.lib";
 import Logo from "../../public/logo.svg";
 import { reorderGroups } from "../../services/course.service";
 import { addGroup } from "../../services/group.service";
@@ -111,8 +112,30 @@ export default function Sidebar() {
 
 function Groups() {
   var { course, mutateCourse } = useEditableCourse();
+  var { group } = useEditableGroup();
   var { accessToken } = useUser();
   var router = useRouter();
+  var [addingLesson, setAddingLesson] = useState(false);
+
+  async function createLesson(e: any) {
+    e.stopPropagation();
+
+    // TODO: Add lesson to group in cache
+    setAddingLesson(true);
+    if (course?._id && accessToken && group?._id) {
+      var response = await addLesson(course._id, group._id, accessToken);
+
+      if (!response.success) {
+        toast.error("Failed to create lesson");
+      } else {
+        toast.success("Lesson created");
+        router.push(
+          `/courses/${course._id}/groups/${group._id}/lessons/${response.lesson._id}`
+        );
+      }
+    }
+    setAddingLesson(false);
+  }
 
   return (
     <DragDropContext
@@ -169,7 +192,11 @@ function Groups() {
                     </span>
 
                     <div className="hidden group-hover:flex items-center gap-1 ">
-                      <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+                      <button
+                        onClick={createLesson}
+                        disabled={addingLesson}
+                        className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border"
+                      >
                         <AddIcon size="18" />
                       </button>
 

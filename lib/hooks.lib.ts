@@ -71,7 +71,7 @@ export function useEditableGroup() {
     group: course?.groups.find((group: any) => group._id == groupId),
     courseLoading,
     mutateCourse,
-    courseId: course._id,
+    courseId: course?._id,
   };
 }
 
@@ -95,7 +95,7 @@ export function useEditableLesson() {
     mutateLesson: mutate,
     isValidating,
     courseId,
-    groupId: group._id,
+    groupId: group?._id,
   };
 }
 

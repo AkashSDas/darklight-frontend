@@ -5,6 +5,7 @@ import useSWR, { useSWRConfig } from "swr";
 
 import { getNewAccessToken } from "../services/auth.service";
 import { getEditableCourse } from "../services/course.service";
+import { getLesson } from "../services/lesson.service";
 import { me } from "../services/user.service";
 import { AppDispatch, RootState } from "../store";
 
@@ -70,6 +71,31 @@ export function useEditableGroup() {
     group: course?.groups.find((group: any) => group._id == groupId),
     courseLoading,
     mutateCourse,
+    courseId: course._id,
+  };
+}
+
+export function useEditableLesson() {
+  var router = useRouter();
+  var lessonId = router.query.lessonId as string;
+
+  var { courseId, group } = useEditableGroup();
+  var { accessToken } = useUser();
+
+  var { data, error, mutate, isValidating } = useSWR(
+    accessToken ? [courseId, group._id] : null,
+    () => getLesson(courseId, group._id, lessonId, accessToken)
+  );
+
+  return {
+    loading: !data && !error,
+    lesson: data?.lesson,
+    success: data?.success,
+    error,
+    mutateLesson: mutate,
+    isValidating,
+    courseId,
+    groupId: group._id,
   };
 }
 

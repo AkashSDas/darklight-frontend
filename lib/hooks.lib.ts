@@ -83,7 +83,7 @@ export function useEditableLesson() {
   var { accessToken } = useUser();
 
   var { data, error, mutate, isValidating } = useSWR(
-    accessToken ? [courseId, group._id] : null,
+    accessToken ? [courseId, group?._id] : null,
     () => getLesson(courseId, group._id, lessonId, accessToken)
   );
 

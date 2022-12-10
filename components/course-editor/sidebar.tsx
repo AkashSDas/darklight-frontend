@@ -135,6 +135,14 @@ function Groups() {
           optimisticData,
           revalidate: false,
         });
+
+        // Replacing group's lessons with their ids for making request in the back-end
+        groups = groups.map((group: any) => {
+          return {
+            ...group,
+            lessons: group.lessons.map((lesson: any) => lesson._id),
+          };
+        });
         await reorderGroups(accessToken, course._id, { groups });
       }}
     >

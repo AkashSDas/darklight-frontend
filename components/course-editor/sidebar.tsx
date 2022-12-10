@@ -145,15 +145,19 @@ function Groups() {
             {...provided.droppableProps}
             ref={provided.innerRef}
           >
-            {course?.groups.map((group: any, index: number) => (
-              <Draggable key={group._id} draggableId={group._id} index={index}>
+            {course?.groups.map((groupItem: any, index: number) => (
+              <Draggable
+                key={groupItem._id}
+                draggableId={groupItem._id}
+                index={index}
+              >
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <GroupItem group={group} />
+                    <GroupItem group={groupItem} />
                   </div>
                 )}
               </Draggable>

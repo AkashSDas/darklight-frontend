@@ -1,9 +1,10 @@
 import { AnyAction, configureStore, ThunkAction } from "@reduxjs/toolkit";
 
+import contentBlockReducer from "./content-block/slice";
 import userReducer from "./user/slice";
 
 var store = configureStore({
-  reducer: { user: userReducer },
+  reducer: { user: userReducer, contentBlock: contentBlockReducer },
 });
 
 export type AppDispatch = typeof store.dispatch;

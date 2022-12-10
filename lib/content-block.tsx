@@ -1,3 +1,13 @@
+export type ContentBlockType =
+  | "paragraph"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "quote"
+  | "divider"
+  | "code"
+  | "image";
+
 export var contentBlocks = [
   { name: "Paragraph", description: "Plain text", icon: <Paragraph /> },
   {

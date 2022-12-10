@@ -1,61 +1,77 @@
-export type ContentBlockType =
-  | "paragraph"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "quote"
-  | "divider"
-  | "code"
-  | "image";
+export enum ContentBlockType {
+  PARAGRAPH = "paragraph",
+  IMAGE = "image",
+  H1 = "h1",
+  H2 = "h2",
+  H3 = "h3",
+  DIVIDER = "divider",
+  QUOTE = "quote",
+  CODE = "code",
+}
 
 export var contentBlocks = [
-  { name: "Paragraph", description: "Plain text", icon: <Paragraph /> },
   {
+    type: ContentBlockType.PARAGRAPH,
+    name: "Paragraph",
+    description: "Plain text",
+    icon: <Paragraph />,
+  },
+  {
+    type: ContentBlockType.H1,
     name: "Heading 1",
     description: "Big section heading",
     icon: <Heading1 />,
   },
   {
+    type: ContentBlockType.H2,
     name: "Heading 2",
     description: "Medium section heading",
     icon: <Heading2 />,
   },
   {
+    type: ContentBlockType.H3,
     name: "Heading 3",
     description: "Small section heading",
     icon: <Heading3 />,
   },
   {
+    type: ContentBlockType.PARAGRAPH,
     name: "Bulleted list",
     description: "Unordered list",
     icon: <UnorderedList />,
   },
   {
+    type: ContentBlockType.PARAGRAPH,
     name: "Numbered list",
     description: "List with number",
     icon: <OrderedList />,
   },
   {
+    type: ContentBlockType.QUOTE,
     name: "Quote",
     description: "Capture a quote",
     icon: <Quote />,
   },
   {
+    type: ContentBlockType.DIVIDER,
     name: "Divider",
     description: "Visually divide block",
     icon: <Divider />,
   },
   {
+    type: ContentBlockType.PARAGRAPH,
     name: "Callout",
     description: "Make writing stand out",
     icon: <Callout />,
   },
   {
+    type: ContentBlockType.CODE,
     name: "Code",
     description: "Capture a code snippet",
     icon: <Code />,
   },
   {
+    type: ContentBlockType.IMAGE,
     name: "Image",
     description: "Add an image",
     icon: <UploadImage />,

@@ -19,6 +19,8 @@ export default function LessonPage() {
         <section className="w-full max-w-[840px] flex flex-col gap-2 px-16">
           <LessonEmojiInput />
           <TitleInput />
+
+          <hr className="bg-border my-2 h-[1px]" />
         </section>
       </main>
 

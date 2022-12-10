@@ -1,11 +1,17 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { createContent } from "services/lesson-content.service";
 
 import { ArrowDownIcon } from "@components/icons/arrow-down";
 import { TableIcon } from "@components/icons/table";
-import { contentBlocks } from "@lib/content-block";
+import { contentBlocks, ContentBlockType } from "@lib/content-block";
+import { useEditableGroup, useEditableLesson, useUser } from "@lib/hooks.lib";
 
 export default function ContentBlockDropdown() {
   var [show, setShow] = useState(true);
+  var { accessToken } = useUser();
+  var { lesson, mutateLesson } = useEditableLesson();
+  var { courseId, group } = useEditableGroup();
 
   function Header() {
     return (
@@ -26,6 +32,32 @@ export default function ContentBlockDropdown() {
     );
   }
 
+  var [loading, setLoading] = useState(false);
+
+  async function addContentBlock(type: ContentBlockType) {
+    if (loading) return;
+
+    if (courseId && group?._id && lesson._id && accessToken) {
+      setLoading(true);
+
+      var response = await createContent(
+        courseId,
+        group._id,
+        lesson._id,
+        type,
+        accessToken
+      );
+
+      if (response.success) {
+        toast.success("Content block added");
+      }
+
+      await mutateLesson();
+
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <Header />
@@ -34,6 +66,7 @@ export default function ContentBlockDropdown() {
         <div className="flex flex-col px-3 gap-2">
           {contentBlocks.map((block) => (
             <div
+              onClick={() => addContentBlock(block.type)}
               key={block.name}
               className="w-full flex gap-3 px-1 py-2 justify-center cursor-pointer hover:bg-background3 active:bg-border rounded-md"
             >

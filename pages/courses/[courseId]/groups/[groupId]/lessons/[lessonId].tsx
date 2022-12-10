@@ -3,6 +3,7 @@ import { ReactElement } from "react";
 import CourseEditorLayout from "@components/course-editor/layout";
 import { SearchIcon } from "@components/icons/search";
 import LessonEmojiInput from "@components/lesson-editor-settings/emoji-input";
+import TitleInput from "@components/lesson-editor-settings/title-input";
 import ContentBlockDropdown from "@components/lesson-layout/content-block-dropdown";
 import SearchBlockInput from "@components/lesson-layout/search-block-input";
 import { useEditableLesson } from "@lib/hooks.lib";
@@ -17,6 +18,7 @@ export default function LessonPage() {
       <main className="mt-4 mr-[300px] w-full flex flex-col gap-2 items-center">
         <section className="w-full max-w-[840px] flex flex-col gap-2 px-16">
           <LessonEmojiInput />
+          <TitleInput />
         </section>
       </main>
 

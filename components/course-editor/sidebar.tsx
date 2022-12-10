@@ -112,32 +112,7 @@ export default function Sidebar() {
 
 function Groups() {
   var { course, mutateCourse } = useEditableCourse();
-  var { group } = useEditableGroup();
   var { accessToken } = useUser();
-  var router = useRouter();
-  var [addingLesson, setAddingLesson] = useState(false);
-
-  async function createLesson(e: any) {
-    e.stopPropagation();
-
-    // TODO: Add lesson to group in cache
-    setAddingLesson(true);
-    if (course?._id && accessToken && group?._id) {
-      var response = await addLesson(course._id, group._id, accessToken);
-
-      if (!response.success) {
-        toast.error("Failed to create lesson");
-      } else {
-        toast.success("Lesson created");
-        router.push(
-          `/courses/${course._id}/groups/${group._id}/lessons/${response.lesson._id}`
-        );
-      }
-    }
-    setAddingLesson(false);
-  }
-
-  var [openLessons, setOpenLessons] = useState(false);
 
   return (
     <DragDropContext
@@ -178,82 +153,7 @@ function Groups() {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <div
-                      onClick={() => {
-                        router.push(
-                          `/courses/${course._id}/groups/${group._id}`
-                        );
-                      }}
-                      className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
-                    >
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setOpenLessons(!openLessons);
-                        }}
-                        className={`h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border ${
-                          openLessons ? "rotate-90" : ""
-                        }`}
-                      >
-                        <RightArrowIcon size="18" />
-                      </button>
-
-                      <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
-                        {group.emoji ?? "🌑"}
-                      </span>
-                      <span className="text-sm font-urbanist font-medium flex-grow">
-                        {group.title ?? "Untitled"}
-                      </span>
-
-                      <div className="hidden group-hover:flex items-center gap-1 ">
-                        <button
-                          onClick={createLesson}
-                          disabled={addingLesson}
-                          className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border"
-                        >
-                          <AddIcon size="18" />
-                        </button>
-
-                        <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
-                          <MoreIcon size="18" />
-                        </button>
-                      </div>
-                    </div>
-
-                    {openLessons && (
-                      <div>
-                        {group.lessons.map((lesson: any) => (
-                          <div
-                            onClick={() =>
-                              router.push(
-                                `/courses/${course._id}/groups/${group._id}/lessons/${lesson._id}`
-                              )
-                            }
-                            key={lesson._id}
-                            className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
-                          >
-                            <span className="w-[18px] h-[18px] opacity-0"></span>
-                            <svg
-                              width={20}
-                              height={16}
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M11.75 8a1.75 1.75 0 1 1-3.5 0 1.75 1.75 0 0 1 3.5 0Z"
-                                fill="#585858"
-                              />
-                            </svg>
-                            <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
-                              {lesson.emoji ?? "🌑"}
-                            </span>
-                            <span className="text-sm font-urbanist font-medium flex-grow">
-                              {lesson.title ?? "Untitled"}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <GroupItem group={group} />
                   </div>
                 )}
               </Draggable>
@@ -262,6 +162,115 @@ function Groups() {
         )}
       </Droppable>
     </DragDropContext>
+  );
+}
+
+function GroupItem({ group: groupItem }: { group: any }) {
+  var { course, mutateCourse } = useEditableCourse();
+  var { accessToken } = useUser();
+  var router = useRouter();
+  var [addingLesson, setAddingLesson] = useState(false);
+  var router = useRouter();
+  var [addingLesson, setAddingLesson] = useState(false);
+  var [openLessons, setOpenLessons] = useState(false);
+
+  async function createLesson(e: any) {
+    e.stopPropagation();
+
+    // TODO: Add lesson to group in cache
+    setAddingLesson(true);
+    if (course?._id && accessToken && groupItem?._id) {
+      var response = await addLesson(course._id, groupItem._id, accessToken);
+
+      if (!response.success) {
+        toast.error("Failed to create lesson");
+      } else {
+        toast.success("Lesson created");
+        router.push(
+          `/courses/${course._id}/groups/${groupItem._id}/lessons/${response.lesson._id}`
+        );
+      }
+    }
+    setAddingLesson(false);
+  }
+
+  return (
+    <>
+      <div
+        onClick={() => {
+          router.push(`/courses/${course._id}/groups/${groupItem._id}`);
+        }}
+        className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
+      >
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenLessons(!openLessons);
+          }}
+          className={`h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border ${
+            openLessons ? "rotate-90" : ""
+          }`}
+        >
+          <RightArrowIcon size="18" />
+        </button>
+
+        <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
+          {groupItem.emoji ?? "🌑"}
+        </span>
+        <span className="text-sm font-urbanist font-medium flex-grow">
+          {groupItem.title ?? "Untitled"}
+        </span>
+
+        <div className="hidden group-hover:flex items-center gap-1 ">
+          <button
+            onClick={createLesson}
+            disabled={addingLesson}
+            className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border"
+          >
+            <AddIcon size="18" />
+          </button>
+
+          <button className="h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border">
+            <MoreIcon size="18" />
+          </button>
+        </div>
+      </div>
+
+      {openLessons && (
+        <div>
+          {groupItem.lessons.map((lesson: any) => (
+            <div
+              onClick={() =>
+                router.push(
+                  `/courses/${course._id}/groups/${groupItem._id}/lessons/${lesson._id}`
+                )
+              }
+              key={lesson._id}
+              className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
+            >
+              <span className="w-[18px] h-[18px] opacity-0"></span>
+              <svg
+                width={20}
+                height={16}
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.75 8a1.75 1.75 0 1 1-3.5 0 1.75 1.75 0 0 1 3.5 0Z"
+                  fill="#585858"
+                />
+              </svg>
+              <span className="text-sm px-[3px] py-[1px] rounded-sm bg-background3">
+                {lesson.emoji ?? "🌑"}
+              </span>
+              <span className="text-sm font-urbanist font-medium flex-grow">
+                {lesson.title ?? "Untitled"}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 

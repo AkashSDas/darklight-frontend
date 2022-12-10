@@ -1,7 +1,10 @@
 import { ReactElement } from "react";
 
 import CourseEditorLayout from "@components/course-editor/layout";
+import { SearchIcon } from "@components/icons/search";
 import LessonEmojiInput from "@components/lesson-editor-settings/emoji-input";
+import ContentBlockDropdown from "@components/lesson-layout/content-block-dropdown";
+import SearchBlockInput from "@components/lesson-layout/search-block-input";
 import { useEditableLesson } from "@lib/hooks.lib";
 
 export default function LessonPage() {
@@ -10,11 +13,19 @@ export default function LessonPage() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <main className="mt-4 w-full flex flex-col gap-2 items-center">
-      <section className="w-full max-w-[800px] flex flex-col gap-2">
-        <LessonEmojiInput />
-      </section>
-    </main>
+    <div className="flex relative">
+      <main className="mt-4 mr-[300px] w-full flex flex-col gap-2 items-center">
+        <section className="w-full max-w-[840px] flex flex-col gap-2 px-16">
+          <LessonEmojiInput />
+        </section>
+      </main>
+
+      <aside className="w-full right-0 max-w-[300px] flex flex-col gap-2 py-4 fixed overflow-y-scroll h-full">
+        <SearchBlockInput />
+        <hr className="bg-border my-2 mx-4 h-[1px]" />
+        <ContentBlockDropdown />
+      </aside>
+    </div>
   );
 }
 

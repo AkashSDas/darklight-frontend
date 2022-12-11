@@ -33,7 +33,7 @@ export function useUser() {
       if (accessToken) mutate("user");
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [accessToken]
   );
 
   var { data, error } = useSWR("user", () => me(accessToken), {

@@ -30,7 +30,7 @@ export default function LessonPage() {
         <hr className="bg-border my-2 mx-4 h-[1px]" />
         <ContentBlockDropdown />
 
-        <div className="my-8" />
+        <div className="my-8"></div>
       </aside>
     </div>
   );

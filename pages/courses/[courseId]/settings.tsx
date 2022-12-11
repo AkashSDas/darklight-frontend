@@ -32,6 +32,8 @@ function CourseSettingsPage() {
         <PublishCourse />
         <hr className="my-4 bg-border opacity-50 w-full" />
         <DeleteCourse />
+
+        <div className="my-8"></div>
       </section>
     </main>
   );

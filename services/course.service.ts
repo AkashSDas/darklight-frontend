@@ -79,3 +79,20 @@ export async function reorderGroups(
   }
   return { success: false };
 }
+
+export async function updateCourseStatus(
+  id: string,
+  accessToken: string,
+  stage: "draft" | "published"
+) {
+  var response = await fetchFromCourse(`${id}/status`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data: { stage },
+  });
+
+  if (response.statusCode == 200) {
+    return { success: response.success };
+  }
+  return { success: false };
+}

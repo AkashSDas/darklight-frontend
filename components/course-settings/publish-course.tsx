@@ -1,9 +1,12 @@
-import { useEditableCourse } from "../../lib/hooks.lib";
+import { updateCourseStatus } from "services/course.service";
+
+import { useEditableCourse, useUser } from "../../lib/hooks.lib";
 import { TextBadge } from "../badges/text";
 import SwitchButton from "../button/switch";
 
 export default function PublishCourse() {
   var { course } = useEditableCourse();
+  var { accessToken } = useUser();
 
   return (
     <section className="w-full flex justify-between items-center gap-2">
@@ -19,7 +22,13 @@ export default function PublishCourse() {
       <div className="max-w-[300px] flex items-center justify-end w-full">
         <SwitchButton
           checked={course.stage == "draft" ? false : true}
-          onChange={() => {}}
+          onChange={async () => {
+            if (course.stage == "draft") {
+              await updateCourseStatus(course.id, accessToken, "published");
+            } else {
+              await updateCourseStatus(course.id, accessToken, "draft");
+            }
+          }}
         />
       </div>
     </section>

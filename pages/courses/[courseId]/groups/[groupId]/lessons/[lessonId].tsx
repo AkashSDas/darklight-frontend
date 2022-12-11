@@ -25,10 +25,12 @@ export default function LessonPage() {
         </section>
       </main>
 
-      <aside className="w-full right-0 max-w-[300px] flex flex-col gap-2 py-4 fixed overflow-y-scroll h-full">
+      <aside className="w-full right-0 max-w-[300px] flex flex-col gap-2 py-4 fixed overflow-y-scroll h-full border-l border-solid border-l-border">
         <SearchBlockInput />
         <hr className="bg-border my-2 mx-4 h-[1px]" />
         <ContentBlockDropdown />
+
+        <div className="my-8" />
       </aside>
     </div>
   );

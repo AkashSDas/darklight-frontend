@@ -62,13 +62,38 @@ export async function updateContent(
     }
   );
 
-  console.log(response);
   if (response.statusCode == 200) {
     return {
       success: true,
       lesson: response.data.lesson,
       content: response.data.content,
     };
+  }
+
+  return { success: false, error: response.error };
+}
+
+export async function reorderContent(
+  courseId: string,
+  groupId: string,
+  lessonId: string,
+  contentIds: string[],
+  accessToken: string
+) {
+  var response = await fetchFromContent(
+    courseId,
+    groupId,
+    lessonId,
+    `reorder`,
+    {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${accessToken}` },
+      data: { order: contentIds },
+    }
+  );
+
+  if (response.statusCode == 200) {
+    return { success: true, lesson: response.data };
   }
 
   return { success: false, error: response.error };

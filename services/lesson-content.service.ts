@@ -47,8 +47,7 @@ export async function updateContent(
   groupId: string,
   lessonId: string,
   contentId: string,
-  blockType: ContentBlockType,
-  data: { key: string; value: string },
+  data: { key: string; value: string }[] | FormData,
   accessToken: string
 ) {
   var response = await fetchFromContent(
@@ -59,7 +58,7 @@ export async function updateContent(
     {
       method: "PUT",
       headers: { Authorization: `Bearer ${accessToken}` },
-      data: { type: blockType, data: data },
+      data,
     }
   );
 

@@ -21,7 +21,6 @@ export default function ParagraphBlock({ id }: { id: string }) {
           group._id,
           lesson._id,
           id,
-          ContentBlockType.PARAGRAPH,
           input,
           accessToken
         );
@@ -57,7 +56,10 @@ export default function ParagraphBlock({ id }: { id: string }) {
             revalidate: false,
           });
 
-          await paragraphCallback(data);
+          await paragraphCallback({
+            type: ContentBlockType.PARAGRAPH,
+            data,
+          });
         }}
       />
     </div>

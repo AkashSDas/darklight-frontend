@@ -41,3 +41,36 @@ export async function createContent(
 
   return { success: false, error: response.error };
 }
+
+export async function updateContent(
+  courseId: string,
+  groupId: string,
+  lessonId: string,
+  contentId: string,
+  blockType: ContentBlockType,
+  data: { key: string; value: string },
+  accessToken: string
+) {
+  var response = await fetchFromContent(
+    courseId,
+    groupId,
+    lessonId,
+    `${contentId}`,
+    {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${accessToken}` },
+      data: { type: blockType, data: data },
+    }
+  );
+
+  console.log(response);
+  if (response.statusCode == 200) {
+    return {
+      success: true,
+      lesson: response.data.lesson,
+      content: response.data.content,
+    };
+  }
+
+  return { success: false, error: response.error };
+}

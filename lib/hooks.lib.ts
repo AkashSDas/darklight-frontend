@@ -32,10 +32,13 @@ export function useUser() {
     function refetchUserForAccessToken() {
       if (accessToken) mutate("user");
     },
-    [mutate, accessToken]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
-  var { data, error } = useSWR("user", () => me(accessToken), {});
+  var { data, error } = useSWR("user", () => me(accessToken), {
+    revalidateOnFocus: false,
+  });
   return {
     success: data?.success,
     user: data?.user,
@@ -47,8 +50,10 @@ export function useUser() {
 export function useEditableCourse() {
   var router = useRouter();
   var courseId = router.query.courseId as string;
-  var { data, error, mutate, isValidating } = useSWR(courseId, () =>
-    getEditableCourse(courseId)
+  var { data, error, mutate, isValidating } = useSWR(
+    courseId,
+    () => getEditableCourse(courseId),
+    { revalidateOnFocus: false }
   );
 
   return {
@@ -84,7 +89,8 @@ export function useEditableLesson() {
 
   var { data, error, mutate, isValidating } = useSWR(
     accessToken ? [courseId, group?._id] : null,
-    () => getLesson(courseId, group._id, lessonId, accessToken)
+    () => getLesson(courseId, group._id, lessonId, accessToken),
+    { revalidateOnFocus: false }
   );
 
   return {

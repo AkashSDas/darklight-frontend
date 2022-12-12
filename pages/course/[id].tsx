@@ -1,13 +1,12 @@
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { TextBadge } from "@components/badges/text";
 import { Navbar } from "@components/bar/navbar";
 import { RegularButton } from "@components/button/regular";
 import About from "@components/buy-course/about";
 import Instructor from "@components/buy-course/instructor";
 import Lessons from "@components/buy-course/lessons";
-import { ArrowDownIcon } from "@components/icons/arrow-down";
 
 export default function CoursePage() {
   function Badge({ children }: { children: string }) {
@@ -18,12 +17,49 @@ export default function CoursePage() {
     );
   }
 
+  var ref = useRef(null);
+  var isInView = useInView(ref);
+  var [showCourseInfoNav, setShowCourseInfoNav] = useState(false);
+
+  useEffect(() => {
+    if (!isInView) setShowCourseInfoNav(true);
+    else setShowCourseInfoNav(false);
+  }, [isInView]);
+
+  var variants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <div>
       <Navbar />
 
       <main className="flex justify-between mx-8 mt-4">
         <div className="w-full max-w-[800px] flex flex-col gap-3">
+          <motion.div
+            variants={variants}
+            initial="hidden"
+            animate={showCourseInfoNav ? "visible" : "hidden"}
+            transition={{ duration: 0.3 }}
+            className="flex fixed z-20 top-0 w-full max-w-[800px] items-center gap-4 py-2 bg-background1 border-b border-solid border-b-border"
+          >
+            <div className="w-[240px] h-[120px] relative">
+              <Image
+                src="https://media.giphy.com/media/cS83sLRzgVOeY/giphy.gif"
+                alt="Course cover image"
+                fill
+                className="object-cover rounded-2xl"
+              />
+            </div>
+
+            <h2 className="font-gilroy text-[25px] font-extrabold text-text1 flex-grow">
+              Dynamic Scope
+            </h2>
+
+            <RegularButton variant="contained">Enroll for ₹399</RegularButton>
+          </motion.div>
+
           {/* Emoji and cover image */}
           <div className="w-full h-[300px] relative mb-4">
             <Image
@@ -52,7 +88,7 @@ export default function CoursePage() {
           </p>
 
           {/* Basic info */}
-          <div className="flex items-center justify-between gap-1">
+          <div ref={ref} className="flex items-center justify-between gap-1">
             <div className="flex items-center gap-3">
               <Badge>Last updated on 21 Nov 22</Badge>
               <Badge>12h</Badge>

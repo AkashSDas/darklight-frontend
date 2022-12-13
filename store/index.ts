@@ -1,7 +1,9 @@
 import { AnyAction, configureStore, ThunkAction } from "@reduxjs/toolkit";
 
+import buyCourseReducer from "./buy-course/slice";
+
 var store = configureStore({
-  reducer: {},
+  reducer: { buyCourse: buyCourseReducer },
 });
 
 export type AppDispatch = typeof store.dispatch;

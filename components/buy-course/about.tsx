@@ -1,4 +1,16 @@
+import { useBuyCourse } from "@lib/hooks.lib";
+
 export default function About() {
+  var { info } = useBuyCourse();
+
+  function SkillBadge({ skill }: { skill: string }) {
+    return (
+      <span className="h-[32px] bg-background3 px-[10px] rounded-xl flex items-center justify-center">
+        {skill[0].toUpperCase() + skill.slice(1)}
+      </span>
+    );
+  }
+
   return (
     <section className="flex flex-col gap-4">
       <h2 className="font-gilroy text-[25px] font-extrabold text-text1">
@@ -6,31 +18,19 @@ export default function About() {
       </h2>
 
       <p className="leading-[140%] font-medium font-urbanist">
-        There was a lot that happened this week! First, Marques and Andrew
-        discuss the madness that has been going on with Twitter and Elon Musk.
-        Then they talk about the Metaverse before reminiscing about smartphone
-        features that they miss. Lastly, we wrap up with some trivia!
+        {info?.description}
       </p>
 
       {/* Skills you'll gain */}
       <div className="flex flex-col gap-3">
-        <h3 className="font-urbanist font-semibold text-[20px]">
+        <div className="font-urbanist font-semibold text-[18px]">
           🧰 Skills {"you'll"} gain
-        </h3>
+        </div>
 
         <div className="flex gap-3">
-          <span className="h-[32px] bg-background3 px-[10px] rounded-xl flex items-center justify-center">
-            Psychology
-          </span>
-          <span className="h-[32px] bg-background3 px-[10px] rounded-xl flex items-center justify-center">
-            World War
-          </span>
-          <span className="h-[32px] bg-background3 px-[10px] rounded-xl flex items-center justify-center">
-            Cinematography
-          </span>
-          <span className="h-[32px] bg-background3 px-[10px] rounded-xl flex items-center justify-center">
-            Copywriting
-          </span>
+          {info?.tags.map((tag: string) => (
+            <SkillBadge key={tag} skill={tag} />
+          ))}
         </div>
       </div>
     </section>

@@ -35,11 +35,6 @@ export default function Metadata() {
         {info?.title}
       </h1>
 
-      {/* Paragraph */}
-      <p className="leading-[140%] font-medium font-urbanist">
-        {info?.description}
-      </p>
-
       {/* Basic info */}
       <div ref={ref} className="flex items-center justify-between gap-1">
         <div className="flex items-center gap-3">

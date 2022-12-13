@@ -233,6 +233,7 @@ export function useBuyCourse() {
     loading: !data && !error,
     course: data?.course,
     info: getMainInfo(),
+    instructors: data?.course?.instructors,
     success: data?.success,
     error: data?.error || error,
   };

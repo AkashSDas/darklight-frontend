@@ -22,7 +22,10 @@ export default function DynamicHeader() {
     >
       <div className="w-[240px] h-[120px] relative">
         <Image
-          src="https://media.giphy.com/media/cS83sLRzgVOeY/giphy.gif"
+          src={
+            info?.coverImageURL ??
+            "https://media.giphy.com/media/cS83sLRzgVOeY/giphy.gif"
+          }
           alt="Course cover image"
           fill
           className="object-cover rounded-2xl"
@@ -33,7 +36,9 @@ export default function DynamicHeader() {
         {info?.title}
       </h2>
 
-      <RegularButton variant="contained">Enroll for ₹399</RegularButton>
+      <RegularButton variant="contained">
+        <>Enroll for ₹{info?.price}</>
+      </RegularButton>
     </motion.div>
   );
 }

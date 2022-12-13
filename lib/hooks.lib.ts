@@ -4,7 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import useSWR, { useSWRConfig } from "swr";
 
 import { getNewAccessToken } from "../services/auth.service";
-import { getEditableCourse } from "../services/course.service";
+import { getCourse, getEditableCourse } from "../services/course.service";
 import { getLesson } from "../services/lesson.service";
 import { me } from "../services/user.service";
 import { AppDispatch, RootState } from "../store";
@@ -201,4 +201,39 @@ export function useDropdown() {
   });
 
   return { wrapperRef, isOpen, setIsOpen };
+}
+
+export function useBuyCourse() {
+  var router = useRouter();
+  var { data, error } = useSWR(
+    router.query?.id ? `get-course/${router.query?.id}` : null,
+    () => getCourse(router.query.id as string)
+  );
+
+  function getMainInfo() {
+    if (data?.course) {
+      let c = data.course;
+      return {
+        difficulty: c.difficulty,
+        tags: c.tags,
+        enrolled: c.enrolled,
+        rating: c.rating,
+        price: c.price,
+        title: c.title,
+        description: c.description,
+        lastEditedOn: c.lastEditedOn,
+        emoji: c.emoji,
+        coverImageURL: c.coverImage?.URL,
+      };
+    }
+    return null;
+  }
+
+  return {
+    loading: !data && !error,
+    course: data?.course,
+    info: getMainInfo(),
+    success: data?.success,
+    error: data?.error || error,
+  };
 }

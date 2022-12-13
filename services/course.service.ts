@@ -96,3 +96,12 @@ export async function updateCourseStatus(
   }
   return { success: false };
 }
+
+export async function getCourse(id: string) {
+  var response = await fetchFromCourse(`${id}`, { method: "GET" });
+
+  if (response.statusCode == 200) {
+    return { success: response.success, course: response.data };
+  }
+  return { success: false, error: response.error };
+}

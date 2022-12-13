@@ -234,6 +234,7 @@ export function useBuyCourse() {
     course: data?.course,
     info: getMainInfo(),
     instructors: data?.course?.instructors,
+    groups: data?.course?.groups,
     success: data?.success,
     error: data?.error || error,
   };

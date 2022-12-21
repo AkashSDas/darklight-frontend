@@ -42,7 +42,7 @@ function PasswordResetSection(): JSX.Element {
 function SidePromotion(): JSX.Element {
   return (
     <aside className="w-[600px] overflow-hidden">
-      <AuthGif src="https://media.giphy.com/media/3o7aDgf134NzaaHI8o/giphy-downsized.gif" />
+      <AuthGif src="https://media.giphy.com/media/81xwEHX23zhvy/giphy.gif" />
     </aside>
   );
 }

@@ -19,7 +19,7 @@ export async function me(accessToken: string) {
     };
   }
 
-  return { success: false };
+  return { success: false, user: null };
 }
 
 export async function updateProfileImage(accessToken: string, data: FormData) {

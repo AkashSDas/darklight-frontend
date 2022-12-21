@@ -8,6 +8,13 @@ body {
   @apply font-urbanist bg-background1 text-text2;
 }
 
+button {
+  @apply font-urbanist text-text2 font-medium text-base
+  flex justify-center items-center
+  px-5 h-11 rounded-[18px] cursor-pointer
+  hover:bg-background3 active:bg-border;
+}
+
 .h1 {
   @apply text-[48.83px] leading-[100%] font-gilroy text-text1;
 }

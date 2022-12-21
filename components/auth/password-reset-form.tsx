@@ -1,43 +1,43 @@
 import { useFormik } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { passwordResetPassword } from "services/auth.service";
 
-import { PasswordResetInput } from "../../lib/auth.lib";
-import { passwordResetSchema } from "../../lib/yup.lib";
-import { passwordResetPassword } from "../../services/auth.service";
-import { RegularButton } from "../button/regular";
-import { FormLabel } from "../form/label";
+import { FormLabel } from "@components/form/label";
+import { PasswordResetInput } from "@lib/auth.lib";
+import { passwordResetSchema } from "@lib/yup.lib";
 
-export function PasswordResetForm() {
-  var [loading, setLoading] = useState(false);
+export default function PasswordResetForm(): JSX.Element {
   var router = useRouter();
+  var resetPasswordToken = router.query.token as string;
+  var [loading, setLoading] = useState(false);
 
   var formik = useFormik<PasswordResetInput>({
     initialValues: { password: "", confirmPassword: "" },
-    onSubmit: async function onSubmit(values) {
-      setLoading(true);
-      if (router.query.token) {
-        let response = await passwordResetPassword(
-          values,
-          router.query.token as string
-        );
-
-        if (!response.success) {
-          toast.error("Something went wrong, please try again");
-        } else {
-          formik.resetForm();
-          toast.success("Check your email for a password reset link");
-        }
-      }
-      setLoading(false);
-    },
+    onSubmit: handleSubmit,
     validationSchema: passwordResetSchema,
   });
 
   var displayPasswordError = formik.touched.password && formik.errors.password;
   var displayConfirmPasswordError =
     formik.touched.confirmPassword && formik.errors.confirmPassword;
+
+  async function handleSubmit(values: PasswordResetInput) {
+    if (!resetPasswordToken) return;
+
+    setLoading(true);
+    var response = await passwordResetPassword(values, resetPasswordToken);
+    setLoading(false);
+
+    if (!response.success) {
+      toast.error("Something went wrong, please try again");
+    } else {
+      formik.resetForm();
+      toast.success("Check your email for a password reset link");
+    }
+  }
 
   return (
     <section className="w-full max-w-[360px]">
@@ -75,7 +75,7 @@ export function PasswordResetForm() {
           <div className="flex items-center justify-between">
             <FormLabel
               htmlFor="confirmPassword"
-              label="Confirm password"
+              label="Confirm Password"
               variant="regular"
             />
 
@@ -99,14 +99,19 @@ export function PasswordResetForm() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className={`auth__form__input ${
-              displayPasswordError && "focus:border-error"
+              displayConfirmPasswordError && "focus:border-error"
             }`}
           />
         </div>
 
-        <RegularButton variant="contained" type="submit" disabled={loading}>
-          {!loading ? "Reset password" : "...Updating"}
-        </RegularButton>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Reset Password"}
+        </button>
       </form>
     </section>
   );

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useSWRConfig } from "swr";
 
-import { CompleteOAuthForm } from "../../components/auth/complete-oauth";
-import { SignupForm } from "../../components/auth/signup.component";
+import { CompleteOAuthForm } from "../../components/_auth/complete-oauth";
+import { SignupForm } from "../../components/_auth/signup.component";
 import { TextBadge } from "../../components/badges/text";
 import { SignupWithGoogle } from "../../components/button/google-auth";
 import { SignupWithFacebook, SignupWithTwitter } from "../../components/button/oauth";

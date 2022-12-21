@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { LoginForm } from "../../components/auth/login";
+import { LoginForm } from "../../components/_auth/login";
 import { TextBadge } from "../../components/badges/text";
 import { LoginWithGoogle } from "../../components/button/google-auth";
 import { LoginWithFacebook, LoginWithTwitter } from "../../components/button/oauth";

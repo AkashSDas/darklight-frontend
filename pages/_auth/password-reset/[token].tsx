@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { PasswordResetForm } from "../../../components/auth/password-reset";
+import { PasswordResetForm } from "../../../components/_auth/password-reset";
 import { TextBadge } from "../../../components/badges/text";
 import { AuthGif } from "../../../components/gifs/auth";
 

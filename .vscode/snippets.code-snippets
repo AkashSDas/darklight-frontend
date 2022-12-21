@@ -40,5 +40,18 @@
     "prefix": "cmpnext",
     "body": ["function $1(): JSX.Element {", "  return <div>$2</div>;", "}"],
     "description": "Create a normal component"
+  },
+  "Add base layout": {
+    "scope": "typescriptreact",
+    "prefix": "baselayout",
+    "body": [
+      "import { ReactElement } from 'react';",
+      "import BaseLayout from '@components/shared/base-layout';",
+      "",
+      "$1Page.getLayout = function getLayout(page: ReactElement) {",
+      "  return <BaseLayout>{page}</BaseLayout>;",
+      "};"
+    ],
+    "description": "Add base layout to a page"
   }
 }

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-import { ForgotPasswordForm } from "@components/_auth/forgot-password";
+import ForgotPasswordForm from "@components/auth/forgot-password-form";
 import { TextBadge } from "@components/badges/text";
 import { AuthGif } from "@components/gifs/auth";
 import BaseLayout from "@components/shared/base-layout";

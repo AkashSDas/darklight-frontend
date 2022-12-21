@@ -1,4 +1,4 @@
-import Navbar from "./navbar";
+import BaseNavbar from "./base-navbar";
 
 interface Props {
   children: JSX.Element | JSX.Element[] | string | string[] | null;
@@ -7,7 +7,7 @@ interface Props {
 export default function BaseLayout({ children }: Props): JSX.Element {
   return (
     <div>
-      <Navbar />
+      <BaseNavbar />
       {children}
     </div>
   );

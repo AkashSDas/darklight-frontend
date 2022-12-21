@@ -7,7 +7,7 @@ import DarkLightLogo from "@public/logo.svg";
 
 import { SettingsIcon } from "./icons";
 
-export default function Navbar(): JSX.Element {
+export default function BaseNavbar(): JSX.Element {
   var { user } = useUser();
 
   return (

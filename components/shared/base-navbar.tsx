@@ -36,7 +36,7 @@ export default function BaseNavbar(): JSX.Element {
   );
 }
 
-function VerticalLine(): JSX.Element {
+export function VerticalLine(): JSX.Element {
   return <div className="border-l border-solid border-l-border h-[22px]"></div>;
 }
 

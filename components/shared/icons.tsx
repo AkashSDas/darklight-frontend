@@ -14,3 +14,89 @@ export function SettingsIcon({ size }: IconProps): JSX.Element {
     </svg>
   );
 }
+
+export function CollectionIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M20 11H4M20 11C21.1046 11 22 11.8954 22 13V17C22 19.2091 20.2091 21 18 21H6C3.79086 21 2 19.2091 2 17V13C2 11.8954 2.89543 11 4 11M20 11V9C20 7.89543 19.1046 7 18 7M4 11V9C4 7.89543 4.89543 7 6 7M18 7H6M18 7V5C18 3.89543 17.1046 3 16 3H8C6.89543 3 6 3.89543 6 5V7M10 14H14"
+        stroke="#555555"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function PaymentIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={size}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="22"
+        y="3"
+        width="18"
+        height="20"
+        rx="4"
+        transform="rotate(90 22 3)"
+        stroke="#555555"
+        strokeWidth="1.5"
+      />
+      <circle cx="6" cy="17" r="1" fill="#555555" />
+      <path
+        d="M2 7L22 7L22 11L2 11L2 7Z"
+        stroke="#555555"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function UserProfileIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={size}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="#555555"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17 17C15.5186 15.7256 13.8139 15 12 15C10.1861 15 8.48139 15.7256 7 17"
+        stroke="#555555"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle
+        r="3"
+        transform="matrix(1 0 0 -1 12 9)"
+        stroke="#555555"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

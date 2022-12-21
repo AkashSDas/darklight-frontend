@@ -16,7 +16,8 @@ svg {
   @apply grid w-11 rounded-2xl;
 }
 
-.icon_btn svg.size_5 {
+.icon_btn svg.size_5,
+.icon svg.size_5 {
   @apply h-5 w-5;
 }
 

@@ -18,7 +18,7 @@ export async function signup(input: SignupInput) {
     };
   }
 
-  return { success: false };
+  return { success: false, error: response.error };
 }
 
 export async function getNewAccessToken() {
@@ -96,7 +96,7 @@ export async function completeOAuth(input: CompleteOAuthInput) {
     return { success: response.success, user: response.data.user };
   }
 
-  return { success: false };
+  return { success: false, error: response.error };
 }
 
 export async function cancelOAuth() {

@@ -2,43 +2,56 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { login } from "services/auth.service";
 import { useSWRConfig } from "swr";
 
-import { LoginInput } from "../../lib/auth.lib";
-import { loginSchema } from "../../lib/yup.lib";
-import { login } from "../../services/auth.service";
-import { RegularButton } from "../button/regular";
-import { FormLabel } from "../form/label";
+import { FormLabel } from "@components/form/label";
+import { LoginInput } from "@lib/auth.lib";
+import { loginSchema } from "@lib/yup.lib";
 
-export function LoginForm() {
-  var [loading, setLoading] = useState(false);
-  var { mutate } = useSWRConfig();
+export default function LoginForm(): JSX.Element {
   var router = useRouter();
+  var { mutate } = useSWRConfig();
+  var [loading, setLoading] = useState(false);
 
   var formik = useFormik<LoginInput>({
     initialValues: { email: "", password: "" },
-    onSubmit: async function onSubmit(values) {
-      setLoading(true);
-      var response = await login(values);
-      setLoading(false);
-
-      if (!response.success) toast.error("Failed to login, please try again");
-      else {
-        formik.resetForm();
-        toast.success(response.message);
-
-        let { accessToken, user, success } = response;
-        await mutate("access-token", { success, accessToken });
-        await mutate("user", { success, user, error: null });
-        router.push("/");
-      }
-    },
+    onSubmit: handleSubmit,
     validationSchema: loginSchema,
   });
 
   var displayEmailError = formik.touched.email && formik.errors.email;
   var displayPasswordError = formik.touched.password && formik.errors.password;
+
+  async function handleSubmit(values: LoginInput) {
+    setLoading(true);
+    var response = await login(values);
+    setLoading(false);
+
+    if (!response.success) toast.error("Failed to login");
+    else {
+      formik.resetForm();
+      toast.success("Logged in successfully");
+
+      let { accessToken, user, success } = response;
+      if (accessToken) {
+        await mutate(
+          "new-access-token",
+          { success, accessToken, user },
+          { revalidate: false }
+        );
+      } else if (user) {
+        await mutate(
+          "user",
+          { success, user, error: null },
+          { revalidate: false }
+        );
+      }
+
+      router.push("/");
+    }
+  }
 
   return (
     <section className="w-full max-w-[360px]">
@@ -74,10 +87,7 @@ export function LoginForm() {
           <div className="flex items-center justify-between">
             <FormLabel htmlFor="password" label="Password" variant="regular" />
 
-            <Link
-              href="/auth/forgot-password"
-              className="text-link text-sm font-normal font-urbanist"
-            >
+            <Link href="/auth/forgot-password" className="text-link text-sm">
               Forgot password
             </Link>
           </div>
@@ -95,9 +105,14 @@ export function LoginForm() {
           />
         </div>
 
-        <RegularButton variant="contained" type="submit" disabled={loading}>
-          {!loading ? "Login with email" : "...Logging in"}
-        </RegularButton>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Login with email"}
+        </button>
       </form>
     </section>
   );

@@ -14,36 +14,54 @@ export var useAppDispatch = () => useDispatch<AppDispatch>();
 export var useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export function useAccessToken() {
-  var { data, error } = useSWR("access-token", getNewAccessToken, {});
+  var { data, error, isLoading, mutate } = useSWR(
+    "new-access-token",
+    getNewAccessToken,
+    { shouldRetryOnError: false, revalidateOnFocus: false }
+  );
 
   return {
+    error,
+    isLoading,
     success: data?.success,
     accessToken: data?.accessToken,
-    error: error,
     user: data?.user,
+    mutateAccessToken: mutate,
   };
 }
 
+/** This hook handles getting user logged in using JWT OR an OAuth provider */
 export function useUser() {
-  var { accessToken } = useAccessToken();
-  var { mutate } = useSWRConfig();
+  var token = useAccessToken();
 
-  useEffect(
-    function refetchUserForAccessToken() {
-      if (accessToken) mutate("user");
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [accessToken]
+  // Make request only if the useAccessToken has failed to get user
+  // that would only mean either the user has signed up using OAuth OR the user has not signed up
+  var { data, error, isLoading, mutate } = useSWR(
+    "user",
+    () =>
+      !token.accessToken && !token.isLoading && token.error
+        ? me(token.accessToken)
+        : null,
+    { shouldRetryOnError: false, revalidateOnFocus: false }
   );
 
-  var { data, error } = useSWR("user", () => me(accessToken), {
-    revalidateOnFocus: false,
-  });
+  useEffect(
+    // This is for users who have logged in using OAuth providers (in that case they don't have access token)
+    // Error indicates that the user is not logged in using access token
+    function refetchUserWithNoAccessToken() {
+      if (!token.accessToken && !token.isLoading && token.error) mutate();
+    },
+    [token.accessToken, mutate, token.isLoading, token.error]
+  );
+
   return {
-    success: data?.success,
-    user: data?.user,
-    error: error,
-    accessToken,
+    error: error || token.error,
+    isLoading: isLoading || token.isLoading,
+    success: data?.success || token.success,
+    user: data?.user || token.user,
+    mutateUser: mutate,
+    mutateAccessToken: token.mutateAccessToken,
+    accessToken: token.accessToken,
   };
 }
 

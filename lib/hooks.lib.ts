@@ -38,10 +38,7 @@ export function useUser() {
   // that would only mean either the user has signed up using OAuth OR the user has not signed up
   var { data, error, isLoading, mutate } = useSWR(
     "user",
-    () =>
-      !token.accessToken && !token.isLoading && token.error
-        ? me(token.accessToken)
-        : null,
+    () => (!token.success ? me(token.accessToken) : null),
     { shouldRetryOnError: false, revalidateOnFocus: false }
   );
 

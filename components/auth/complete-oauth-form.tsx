@@ -1,43 +1,42 @@
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { completeOAuth } from "services/auth.service";
 
-import { CompleteOAuthInput } from "../../lib/auth.lib";
-import { useAppDispatch, useUser } from "../../lib/hooks.lib";
-import { normalizeJsonToUser } from "../../lib/user.lib";
-import { completeOAuthSchema } from "../../lib/yup.lib";
-import { completeOAuth } from "../../services/auth.service";
-import { setDetails } from "../../store/user/slice";
-import { RegularButton } from "../button/regular";
-import { FormLabel } from "../form/label";
+import { FormLabel } from "@components/form/label";
+import { CompleteOAuthInput } from "@lib/auth.lib";
+import { useUser } from "@lib/hooks.lib";
+import { completeOAuthSchema } from "@lib/yup.lib";
 
-export function CompleteOAuthForm() {
-  var [loading, setLoading] = useState(false);
-  var dispatch = useAppDispatch();
+// TODO: add debounce check for available username and email
+export default function CompleteOAuthForm(): JSX.Element {
   var router = useRouter();
-  var { user } = useUser();
+  var { user, mutateUser } = useUser();
+  var [loading, setLoading] = useState(false);
 
   var formik = useFormik<CompleteOAuthInput>({
-    initialValues: { username: user.username ?? "", email: user.email },
-    onSubmit: async function onSubmit(values) {
-      setLoading(true);
-      var response = await completeOAuth(values);
-      setLoading(false);
-
-      if (!response.success) toast.error("Failed to signup, please try again");
-      else {
-        formik.resetForm();
-        toast.success("Signup completed");
-        dispatch(setDetails(normalizeJsonToUser(response.user)));
-        router.push("/");
-      }
-    },
+    initialValues: { username: user.username ?? "", email: user.email ?? "" },
+    onSubmit: handleSubmit,
     validationSchema: completeOAuthSchema,
   });
 
   var displayUsernameError = formik.touched.username && formik.errors.username;
   var displayEmailError = formik.touched.email && formik.errors.email;
+
+  async function handleSubmit(values: CompleteOAuthInput) {
+    setLoading(true);
+    var response = await completeOAuth(values);
+    setLoading(false);
+
+    if (!response.success) toast.error(response.error.message);
+    else {
+      formik.resetForm();
+      toast.success("Signup completed");
+      await mutateUser();
+      router.push("/");
+    }
+  }
 
   return (
     <section className="w-full max-w-[360px]">
@@ -96,9 +95,14 @@ export function CompleteOAuthForm() {
           />
         </div>
 
-        <RegularButton variant="contained" type="submit" disabled={loading}>
-          {!loading ? "Complete your signup" : "...Saving"}
-        </RegularButton>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Complete your signup"}
+        </button>
       </form>
     </section>
   );

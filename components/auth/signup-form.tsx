@@ -1,44 +1,51 @@
 import { useFormik } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { signup } from "services/auth.service";
+import { useSWRConfig } from "swr";
 
-import { SignupInput } from "../../lib/auth.lib";
-import { useAppDispatch } from "../../lib/hooks.lib";
-import { normalizeJsonToUser } from "../../lib/user.lib";
-import { signupSchema } from "../../lib/yup.lib";
-import { signup } from "../../services/auth.service";
-import { setAccessToken, setDetails } from "../../store/user/slice";
-import { RegularButton } from "../button/regular";
-import { FormLabel } from "../form/label";
+import { FormLabel } from "@components/form/label";
+import { SignupInput } from "@lib/auth.lib";
+import { signupSchema } from "@lib/yup.lib";
 
-export function SignupForm() {
-  var [loading, setLoading] = useState(false);
-  var dispatch = useAppDispatch();
+// TODO: add debounce check for available username and email
+export default function SignupForm(): JSX.Element {
   var router = useRouter();
+  var { mutate } = useSWRConfig();
+  var [loading, setLoading] = useState(false);
 
   var formik = useFormik<SignupInput>({
     initialValues: { username: "", email: "", password: "" },
-    onSubmit: async function onSubmit(values) {
-      setLoading(true);
-      var response = await signup(values);
-      setLoading(false);
-
-      if (!response.success) toast.error("Failed to signup, please try again");
-      else {
-        formik.resetForm();
-        toast.success(response.message);
-        dispatch(setAccessToken(response.accessToken));
-        dispatch(setDetails(normalizeJsonToUser(response.user)));
-        router.push("/");
-      }
-    },
+    onSubmit: handleSubmit,
     validationSchema: signupSchema,
   });
 
   var displayUsernameError = formik.touched.username && formik.errors.username;
   var displayEmailError = formik.touched.email && formik.errors.email;
   var displayPasswordError = formik.touched.password && formik.errors.password;
+
+  async function handleSubmit(values: SignupInput) {
+    setLoading(true);
+    var response = await signup(values);
+    setLoading(false);
+
+    if (!response.success) toast.error(response.error.message);
+    else {
+      formik.resetForm();
+      toast.success(response.message);
+
+      let { accessToken, user, success } = response;
+      await mutate(
+        "new-access-token",
+        { success, accessToken, user },
+        { revalidate: false }
+      );
+
+      router.push("/");
+    }
+  }
 
   return (
     <section className="w-full max-w-[360px]">
@@ -125,9 +132,14 @@ export function SignupForm() {
           />
         </div>
 
-        <RegularButton variant="contained" type="submit" disabled={loading}>
-          {!loading ? "Signup with email" : "...Signing up"}
-        </RegularButton>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Signup with email"}
+        </button>
       </form>
     </section>
   );

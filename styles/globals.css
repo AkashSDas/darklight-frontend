@@ -8,6 +8,18 @@ body {
   @apply font-urbanist bg-background1 text-text2;
 }
 
+svg {
+  @apply fill-current text-text2;
+}
+
+.icon_btn {
+  @apply grid w-11 rounded-2xl;
+}
+
+.icon_btn svg.size_5 {
+  @apply h-5 w-5;
+}
+
 button {
   @apply font-urbanist text-text2 font-medium text-base
   flex justify-center items-center

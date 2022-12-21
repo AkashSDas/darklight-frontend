@@ -5,6 +5,8 @@ import { logout } from "services/auth.service";
 import { useUser } from "@lib/hooks.lib";
 import DarkLightLogo from "@public/logo.svg";
 
+import { SettingsIcon } from "./icons";
+
 export default function Navbar(): JSX.Element {
   var { user } = useUser();
 
@@ -63,6 +65,12 @@ function LoggedInActions(): JSX.Element {
   return (
     <>
       <button onClick={logoutUser}>Logout</button>
+
+      <Link href="/settings/basic">
+        <button className="icon_btn">
+          <SettingsIcon size="size_5" />
+        </button>
+      </Link>
     </>
   );
 }

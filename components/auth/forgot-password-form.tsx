@@ -1,34 +1,35 @@
 import { useFormik } from "formik";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { forgotPassword } from "services/auth.service";
 
-import { ForgotPasswordInput } from "../../lib/auth.lib";
-import { forgotPasswordSchema } from "../../lib/yup.lib";
-import { forgotPassword } from "../../services/auth.service";
-import { RegularButton } from "../button/regular";
-import { FormLabel } from "../form/label";
+import { FormLabel } from "@components/form/label";
+import { ForgotPasswordInput } from "@lib/auth.lib";
+import { forgotPasswordSchema } from "@lib/yup.lib";
 
-export function ForgotPasswordForm() {
+export default function ForgotPasswordForm(): JSX.Element {
   var [loading, setLoading] = useState(false);
 
   var formik = useFormik<ForgotPasswordInput>({
     initialValues: { email: "" },
-    onSubmit: async function onSubmit(values) {
-      setLoading(true);
-      var response = await forgotPassword(values);
-      setLoading(false);
-
-      if (!response.success) {
-        toast.error("Something went wrong, please try again");
-      } else {
-        formik.resetForm();
-        toast.success("Check your email for a password reset link");
-      }
-    },
+    onSubmit: handleSubmit,
     validationSchema: forgotPasswordSchema,
   });
 
   var displayEmailError = formik.touched.email && formik.errors.email;
+
+  async function handleSubmit(values: ForgotPasswordInput) {
+    setLoading(true);
+    var response = await forgotPassword(values);
+    setLoading(false);
+
+    if (!response.success) {
+      toast.error("Something went wrong, please try again");
+    } else {
+      formik.resetForm();
+      toast.success("Check your email for a password reset link");
+    }
+  }
 
   return (
     <section className="w-full max-w-[360px]">
@@ -59,9 +60,14 @@ export function ForgotPasswordForm() {
           />
         </div>
 
-        <RegularButton variant="contained" type="submit" disabled={loading}>
-          {!loading ? "Send instructions" : "...Sending"}
-        </RegularButton>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Send Reset Link"}
+        </button>
       </form>
     </section>
   );

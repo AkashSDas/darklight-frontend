@@ -10,7 +10,9 @@ export default function Navbar(): JSX.Element {
 
   return (
     <nav className="px-8 w-full h-[70px] flex justify-between items-center">
-      <DarkLightLogo />
+      <Link href="/">
+        <DarkLightLogo />
+      </Link>
 
       <div className="flex gap-4 justify-end items-center">
         <Link href="/explore">

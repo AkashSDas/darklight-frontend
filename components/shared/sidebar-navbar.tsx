@@ -24,7 +24,7 @@ export default function SidebarNavbar(): JSX.Element {
 
         <VerticalLine />
 
-        <Link href="/settings/basics">
+        <Link href="/settings/basic">
           <button className="icon_btn">
             <SettingsIcon size="size_5" />
           </button>

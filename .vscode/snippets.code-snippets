@@ -53,5 +53,18 @@
       "};"
     ],
     "description": "Add base layout to a page"
+  },
+  "Add user settings layout": {
+    "scope": "typescriptreact",
+    "prefix": "userSettingslayout",
+    "body": [
+      "import { ReactElement } from 'react';",
+      "import UserSettingsLayout from '@components/shared/user-settings-layout';",
+      "",
+      "$1Page.getLayout = function getLayout(page: ReactElement) {",
+      "  return <UserSettingsLayout>{page}</UserSettingsLayout>;",
+      "};"
+    ],
+    "description": "Add user settings layout to a page"
   }
 }

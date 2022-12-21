@@ -74,7 +74,7 @@ function LoggedOutActions(): JSX.Element {
         <button>Login</button>
       </Link>
 
-      <Link href="/auth/login">
+      <Link href="/auth/signup">
         <button className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]">
           Signup
         </button>

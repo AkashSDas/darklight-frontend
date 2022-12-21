@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ReactElement } from "react";
 
 import ForgotPasswordForm from "@components/auth/forgot-password-form";
@@ -30,6 +31,13 @@ function ForgotPasswordSection(): JSX.Element {
       </section>
 
       <ForgotPasswordForm />
+
+      <section>
+        Already have an account? <TextBadge variant="regular">🤦🏽‍♂️</TextBadge>{" "}
+        <Link href="/auth/login" className="text-link">
+          Login
+        </Link>
+      </section>
     </main>
   );
 }

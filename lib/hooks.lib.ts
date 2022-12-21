@@ -10,6 +10,7 @@ import { me } from "../services/user.service";
 import { AppDispatch, RootState } from "../store";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
+// TODO: Logout user when refresh token has expired
 export var useAppDispatch = () => useDispatch<AppDispatch>();
 export var useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
@@ -17,7 +18,13 @@ export function useAccessToken() {
   var { data, error, isLoading, mutate } = useSWR(
     "new-access-token",
     getNewAccessToken,
-    { shouldRetryOnError: false, revalidateOnFocus: false }
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+      refreshInterval(_latestData) {
+        return 30 * 60 * 1000; // Refresh every 30 minutes (access token expires in 30mins)
+      },
+    }
   );
 
   return {

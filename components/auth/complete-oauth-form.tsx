@@ -4,7 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { completeOAuth } from "services/auth.service";
 
-import { FormLabel } from "@components/form/label";
+import { FormLabel } from "@components/shared/form-label";
 import { CompleteOAuthInput } from "@lib/auth.lib";
 import { useUser } from "@lib/hooks.lib";
 import { completeOAuthSchema } from "@lib/yup.lib";

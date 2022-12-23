@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { updateDetails, updateProfileImage } from "services/user.service";
 
-import { FormLabel } from "@components/form/label";
+import { FormLabel } from "@components/shared/form-label";
 import { CameraIcon } from "@components/shared/icons";
 import { useUser } from "@lib/hooks.lib";
 import { UpdateDetailsInput } from "@lib/user.lib";

@@ -3,7 +3,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { forgotPassword } from "services/auth.service";
 
-import { FormLabel } from "@components/form/label";
+import { FormLabel } from "@components/shared/form-label";
 import { ForgotPasswordInput } from "@lib/auth.lib";
 import { forgotPasswordSchema } from "@lib/yup.lib";
 

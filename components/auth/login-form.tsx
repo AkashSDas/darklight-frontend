@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { login } from "services/auth.service";
 import { useSWRConfig } from "swr";
 
-import { FormLabel } from "@components/form/label";
+import { FormLabel } from "@components/shared/form-label";
 import { LoginInput } from "@lib/auth.lib";
 import { loginSchema } from "@lib/yup.lib";
 

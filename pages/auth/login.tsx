@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { ReactElement } from "react";
 
+import { AuthGif } from "@components/auth/auth-gifs";
 import LoginForm from "@components/auth/login-form";
 import { TextBadge } from "@components/badges/text";
 import { LoginWithGoogle } from "@components/button/google-auth";
 import { LoginWithFacebook, LoginWithTwitter } from "@components/button/oauth";
-import { AuthGif } from "@components/gifs/auth";
 import BaseLayout from "@components/shared/base-layout";
 
 export default function LoginPage(): JSX.Element {

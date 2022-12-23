@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ReactElement } from "react";
 
+import { AuthGif } from "@components/auth/auth-gifs";
 import PasswordResetForm from "@components/auth/password-reset-form";
 import { TextBadge } from "@components/badges/text";
-import { AuthGif } from "@components/gifs/auth";
 import BaseLayout from "@components/shared/base-layout";
 
 export default function PasswordResetPage(): JSX.Element {

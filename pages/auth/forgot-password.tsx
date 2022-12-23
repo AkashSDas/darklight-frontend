@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ReactElement } from "react";
 
+import { AuthGif } from "@components/auth/auth-gifs";
 import ForgotPasswordForm from "@components/auth/forgot-password-form";
 import { TextBadge } from "@components/badges/text";
-import { AuthGif } from "@components/gifs/auth";
 import BaseLayout from "@components/shared/base-layout";
 
 export default function ForgotPasswordPage(): JSX.Element {

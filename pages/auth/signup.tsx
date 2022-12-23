@@ -2,12 +2,12 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import { cancelOAuth } from "services/auth.service";
 
+import { AuthGif } from "@components/auth/auth-gifs";
 import CompleteOAuthForm from "@components/auth/complete-oauth-form";
 import SignupForm from "@components/auth/signup-form";
 import { TextBadge } from "@components/badges/text";
 import { SignupWithGoogle } from "@components/button/google-auth";
 import { SignupWithFacebook, SignupWithTwitter } from "@components/button/oauth";
-import { AuthGif } from "@components/gifs/auth";
 import BaseLayout from "@components/shared/base-layout";
 import { useUser } from "@lib/hooks.lib";
 

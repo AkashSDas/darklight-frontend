@@ -20,6 +20,9 @@ svg {
 .icon svg.size_5 {
   @apply h-5 w-5;
 }
+.icon svg.size_4 {
+  @apply h-[18px] w-[18px];
+}
 
 button {
   @apply font-urbanist text-text2 font-medium text-base

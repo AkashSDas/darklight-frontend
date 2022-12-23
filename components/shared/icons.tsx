@@ -1,5 +1,5 @@
 interface IconProps {
-  size: "size_5";
+  size: "size_5" | "size_4";
 }
 
 export function SettingsIcon({ size }: IconProps): JSX.Element {

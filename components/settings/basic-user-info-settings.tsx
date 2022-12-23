@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { updateProfileImage } from "services/user.service";
 
@@ -16,7 +16,7 @@ export default function BasicUserInfoSettings(): JSX.Element {
 
 function UpdateProfileImage(): JSX.Element {
   var { user, accessToken } = useUser();
-  var [image, setImage] = useState(null);
+  var [image, setImage] = useState<File | null>(null);
   var [loading, setLoading] = useState(false);
   var fileInputRef = useRef<any>(null);
 
@@ -29,9 +29,11 @@ function UpdateProfileImage(): JSX.Element {
   async function uploadImage() {
     if (!image) return;
     setLoading(true);
+
     var formData = new FormData();
     formData.append("profileImage", image);
     var { success } = await updateProfileImage(accessToken, formData);
+
     if (success) toast.success("Profile image updated");
     else toast.error("Failed to update profile image");
     setLoading(false);
@@ -40,16 +42,17 @@ function UpdateProfileImage(): JSX.Element {
   return (
     <section className="flex flex-col gap-2 items-center">
       <div
-        onClick={() => !loading && fileInputRef.current.click()}
+        onClick={() => {
+          if (loading) return;
+          fileInputRef.current.click();
+        }}
         className="w-[200px] h-[128px] relative"
       >
         {/* Profile image */}
         <Image
           src={
-            user.profileImage?.URL ??
-            (image
-              ? URL.createObjectURL(image)
-              : "https://media.giphy.com/media/9PgvV8ale90lQwfQTZ/giphy-downsized.gif")
+            (image ? URL.createObjectURL(image) : user.profileImage?.URL) ??
+            "https://media.giphy.com/media/9PgvV8ale90lQwfQTZ/giphy-downsized.gif"
           }
           alt="User avatar"
           fill
@@ -63,7 +66,7 @@ function UpdateProfileImage(): JSX.Element {
             ref={fileInputRef}
             hidden
             type="file"
-            onChange={uploadImage}
+            onChange={handleFileChange}
             accept="image/x-png,image/gif,image/jpeg"
           />
         </div>
@@ -73,10 +76,10 @@ function UpdateProfileImage(): JSX.Element {
       <button
         disabled={loading}
         onClick={uploadImage}
-        className="px-2 h-9 flex gap-2 items-center rounded-xl border border-solid border-border"
+        className="px-2 h-9 flex gap-2 items-center rounded-xl text-sm border border-solid border-border"
       >
         <span className="icon">
-          <CameraIcon size="size_5" />
+          <CameraIcon size="size_4" />
         </span>
         <span>{loading ? "Saving..." : "Update photo"}</span>
       </button>

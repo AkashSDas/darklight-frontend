@@ -8,8 +8,12 @@ body {
   @apply font-urbanist bg-background1 text-text2;
 }
 
-svg {
+svg.fill {
   @apply fill-current text-text2;
+}
+
+svg.stroke {
+  @apply stroke-current text-text2;
 }
 
 .icon_btn {

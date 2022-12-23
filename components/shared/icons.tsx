@@ -5,7 +5,7 @@ interface IconProps {
 export function SettingsIcon({ size }: IconProps): JSX.Element {
   return (
     <svg
-      className={size}
+      className={`${size} fill`}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -18,14 +18,14 @@ export function SettingsIcon({ size }: IconProps): JSX.Element {
 export function CollectionIcon({ size }: IconProps): JSX.Element {
   return (
     <svg
-      className={size}
+      className={`${size} stroke`}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M20 11H4M20 11C21.1046 11 22 11.8954 22 13V17C22 19.2091 20.2091 21 18 21H6C3.79086 21 2 19.2091 2 17V13C2 11.8954 2.89543 11 4 11M20 11V9C20 7.89543 19.1046 7 18 7M4 11V9C4 7.89543 4.89543 7 6 7M18 7H6M18 7V5C18 3.89543 17.1046 3 16 3H8C6.89543 3 6 3.89543 6 5V7M10 14H14"
-        stroke="#555555"
+        // stroke="#555555"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -36,7 +36,7 @@ export function CollectionIcon({ size }: IconProps): JSX.Element {
 export function PaymentIcon({ size }: IconProps): JSX.Element {
   return (
     <svg
-      className={size}
+      className={`${size} stroke`}
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -50,13 +50,11 @@ export function PaymentIcon({ size }: IconProps): JSX.Element {
         height="20"
         rx="4"
         transform="rotate(90 22 3)"
-        stroke="#555555"
         strokeWidth="1.5"
       />
-      <circle cx="6" cy="17" r="1" fill="#555555" />
+      <circle cx="6" cy="17" r="1" className="fill-current text-text2" />
       <path
         d="M2 7L22 7L22 11L2 11L2 7Z"
-        stroke="#555555"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -68,24 +66,16 @@ export function PaymentIcon({ size }: IconProps): JSX.Element {
 export function UserProfileIcon({ size }: IconProps): JSX.Element {
   return (
     <svg
-      className={size}
+      className={`${size} stroke`}
       width="24"
       height="24"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="#555555"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
+      <circle cx="12" cy="12" r="10" strokeWidth="1.5" strokeLinejoin="round" />
       <path
         d="M17 17C15.5186 15.7256 13.8139 15 12 15C10.1861 15 8.48139 15.7256 7 17"
-        stroke="#555555"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -93,7 +83,6 @@ export function UserProfileIcon({ size }: IconProps): JSX.Element {
       <circle
         r="3"
         transform="matrix(1 0 0 -1 12 9)"
-        stroke="#555555"
         strokeWidth="1.5"
         strokeLinejoin="round"
       />
@@ -104,16 +93,13 @@ export function UserProfileIcon({ size }: IconProps): JSX.Element {
 export function CameraIcon({ size }: IconProps): JSX.Element {
   return (
     <svg
-      className={size}
+      className={`${size} fill`}
       viewBox="0 0 25 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        d="M7.5 6V6.75C7.75076 6.75 7.98494 6.62467 8.12404 6.41603L7.5 6ZM8.90627 3.8906L8.28223 3.47457L8.28223 3.47457L8.90627 3.8906ZM16.0937 3.8906L16.7178 3.47457L16.7178 3.47457L16.0937 3.8906ZM17.5 6L16.876 6.41603C17.0151 6.62467 17.2492 6.75 17.5 6.75V6ZM14.75 13.5C14.75 14.7426 13.7426 15.75 12.5 15.75V17.25C14.5711 17.25 16.25 15.5711 16.25 13.5H14.75ZM12.5 15.75C11.2574 15.75 10.25 14.7426 10.25 13.5H8.75C8.75 15.5711 10.4289 17.25 12.5 17.25V15.75ZM10.25 13.5C10.25 12.2574 11.2574 11.25 12.5 11.25V9.75C10.4289 9.75 8.75 11.4289 8.75 13.5H10.25ZM12.5 11.25C13.7426 11.25 14.75 12.2574 14.75 13.5H16.25C16.25 11.4289 14.5711 9.75 12.5 9.75V11.25ZM8.12404 6.41603L9.5303 4.30662L8.28223 3.47457L6.87596 5.58397L8.12404 6.41603ZM10.5704 3.75H14.4296V2.25H10.5704V3.75ZM15.4697 4.30662L16.876 6.41603L18.124 5.58397L16.7178 3.47457L15.4697 4.30662ZM14.4296 3.75C14.8476 3.75 15.2379 3.95888 15.4697 4.30662L16.7178 3.47457C16.2077 2.70953 15.3491 2.25 14.4296 2.25V3.75ZM9.5303 4.30662C9.76214 3.95888 10.1524 3.75 10.5704 3.75V2.25C9.6509 2.25 8.79226 2.70953 8.28223 3.47457L9.5303 4.30662ZM21.75 10V17H23.25V10H21.75ZM18.5 20.25H6.5V21.75H18.5V20.25ZM3.25 17V10H1.75V17H3.25ZM6.5 20.25C4.70507 20.25 3.25 18.7949 3.25 17H1.75C1.75 19.6234 3.87665 21.75 6.5 21.75V20.25ZM21.75 17C21.75 18.7949 20.2949 20.25 18.5 20.25V21.75C21.1233 21.75 23.25 19.6234 23.25 17H21.75ZM18.5 6.75C20.2949 6.75 21.75 8.20507 21.75 10H23.25C23.25 7.37665 21.1233 5.25 18.5 5.25V6.75ZM6.5 5.25C3.87665 5.25 1.75 7.37665 1.75 10H3.25C3.25 8.20507 4.70507 6.75 6.5 6.75V5.25ZM6.5 6.75H7.5V5.25H6.5V6.75ZM18.5 5.25H17.5V6.75H18.5V5.25Z"
-        fill="#8B8B8B"
-      />
-      <ellipse cx="12.5" cy="6" rx="1" ry="1" fill="#8B8B8B" />
+      <path d="M7.5 6V6.75C7.75076 6.75 7.98494 6.62467 8.12404 6.41603L7.5 6ZM8.90627 3.8906L8.28223 3.47457L8.28223 3.47457L8.90627 3.8906ZM16.0937 3.8906L16.7178 3.47457L16.7178 3.47457L16.0937 3.8906ZM17.5 6L16.876 6.41603C17.0151 6.62467 17.2492 6.75 17.5 6.75V6ZM14.75 13.5C14.75 14.7426 13.7426 15.75 12.5 15.75V17.25C14.5711 17.25 16.25 15.5711 16.25 13.5H14.75ZM12.5 15.75C11.2574 15.75 10.25 14.7426 10.25 13.5H8.75C8.75 15.5711 10.4289 17.25 12.5 17.25V15.75ZM10.25 13.5C10.25 12.2574 11.2574 11.25 12.5 11.25V9.75C10.4289 9.75 8.75 11.4289 8.75 13.5H10.25ZM12.5 11.25C13.7426 11.25 14.75 12.2574 14.75 13.5H16.25C16.25 11.4289 14.5711 9.75 12.5 9.75V11.25ZM8.12404 6.41603L9.5303 4.30662L8.28223 3.47457L6.87596 5.58397L8.12404 6.41603ZM10.5704 3.75H14.4296V2.25H10.5704V3.75ZM15.4697 4.30662L16.876 6.41603L18.124 5.58397L16.7178 3.47457L15.4697 4.30662ZM14.4296 3.75C14.8476 3.75 15.2379 3.95888 15.4697 4.30662L16.7178 3.47457C16.2077 2.70953 15.3491 2.25 14.4296 2.25V3.75ZM9.5303 4.30662C9.76214 3.95888 10.1524 3.75 10.5704 3.75V2.25C9.6509 2.25 8.79226 2.70953 8.28223 3.47457L9.5303 4.30662ZM21.75 10V17H23.25V10H21.75ZM18.5 20.25H6.5V21.75H18.5V20.25ZM3.25 17V10H1.75V17H3.25ZM6.5 20.25C4.70507 20.25 3.25 18.7949 3.25 17H1.75C1.75 19.6234 3.87665 21.75 6.5 21.75V20.25ZM21.75 17C21.75 18.7949 20.2949 20.25 18.5 20.25V21.75C21.1233 21.75 23.25 19.6234 23.25 17H21.75ZM18.5 6.75C20.2949 6.75 21.75 8.20507 21.75 10H23.25C23.25 7.37665 21.1233 5.25 18.5 5.25V6.75ZM6.5 5.25C3.87665 5.25 1.75 7.37665 1.75 10H3.25C3.25 8.20507 4.70507 6.75 6.5 6.75V5.25ZM6.5 6.75H7.5V5.25H6.5V6.75ZM18.5 5.25H17.5V6.75H18.5V5.25Z" />
+      <ellipse cx="12.5" cy="6" rx="1" ry="1" />
     </svg>
   );
 }

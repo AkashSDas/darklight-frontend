@@ -2,6 +2,7 @@ import { ReactElement } from "react";
 
 import BasicUserInfoSettings from "@components/settings/basic-user-info-settings";
 import OAuthProviderInfo from "@components/settings/oauth-provider-info";
+import UserRoles from "@components/settings/user-roles";
 import UserSettingsLayout from "@components/shared/user-settings-layout";
 
 export default function BasicSettingsPage(): JSX.Element {
@@ -15,6 +16,8 @@ export default function BasicSettingsPage(): JSX.Element {
         <BasicUserInfoSettings />
         <Divider />
         <OAuthProviderInfo />
+        <Divider />
+        <UserRoles />
       </div>
     </main>
   );

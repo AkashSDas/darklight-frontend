@@ -1,4 +1,3 @@
-import { Navbar } from "@components/bar/navbar";
 import About from "@components/buy-course/about";
 import Banner from "@components/buy-course/banner";
 import DynamicHeader from "@components/buy-course/dynamic-header";
@@ -14,7 +13,6 @@ export default function CoursePage() {
 
   return (
     <div>
-      <Navbar />
       <CourseView />
     </div>
   );

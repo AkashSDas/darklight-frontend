@@ -3,9 +3,9 @@ import { ReactElement } from "react";
 
 import { AuthGif } from "@components/auth/auth-gifs";
 import LoginForm from "@components/auth/login-form";
-import { LoginWithGoogle } from "@components/button/google-auth";
-import { LoginWithFacebook, LoginWithTwitter } from "@components/button/oauth";
 import BaseLayout from "@components/shared/base-layout";
+import { LoginWithGoogle } from "@components/shared/google-auth-btns";
+import { LoginWithFacebook, LoginWithTwitter } from "@components/shared/oauth-btns";
 import { TextBadge } from "@components/shared/text-badge";
 
 export default function LoginPage(): JSX.Element {

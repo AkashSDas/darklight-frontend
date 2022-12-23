@@ -2,11 +2,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 import { useEditableCourse } from "../../lib/hooks.lib";
-import { IconButton } from "../button/icons";
-import { AnnouncementIcon } from "../icons/announcment";
-import { MenuIcon } from "../icons/menu";
-import { NotificationIcon } from "../icons/notification";
-import { SearchIcon } from "../icons/search";
 import { TextBadge } from "../shared/text-badge";
 
 dayjs.extend(relativeTime);
@@ -25,10 +20,10 @@ export default function Navbar() {
         <div className="text-sm flex items-center justify-center h-[34px] px-2 text-[#BFBFBF]">
           {dayjs(new Date(course?.lastEditedOn)).fromNow()}
         </div>
-        <IconButton icon={<NotificationIcon size="20" />} />
+        {/* <IconButton icon={<NotificationIcon size="20" />} />
         <IconButton icon={<AnnouncementIcon size="20" />} />
         <IconButton icon={<SearchIcon size="20" />} />
-        <IconButton icon={<MenuIcon size="20" />} />
+        <IconButton icon={<MenuIcon size="20" />} /> */}
       </div>
     </nav>
   );

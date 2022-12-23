@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-import { RegularButton } from "@components/button/regular";
 import { useAppSelector, useBuyCourse } from "@lib/hooks.lib";
 
 export default function DynamicHeader() {
@@ -36,9 +35,9 @@ export default function DynamicHeader() {
         {info?.title}
       </h2>
 
-      <RegularButton variant="contained">
+      {/* <RegularButton variant="contained">
         <>Enroll for ₹{info?.price}</>
-      </RegularButton>
+      </RegularButton> */}
     </motion.div>
   );
 }

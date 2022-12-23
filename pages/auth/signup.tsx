@@ -5,9 +5,9 @@ import { cancelOAuth } from "services/auth.service";
 import { AuthGif } from "@components/auth/auth-gifs";
 import CompleteOAuthForm from "@components/auth/complete-oauth-form";
 import SignupForm from "@components/auth/signup-form";
-import { SignupWithGoogle } from "@components/button/google-auth";
-import { SignupWithFacebook, SignupWithTwitter } from "@components/button/oauth";
 import BaseLayout from "@components/shared/base-layout";
+import { SignupWithGoogle } from "@components/shared/google-auth-btns";
+import { SignupWithFacebook, SignupWithTwitter } from "@components/shared/oauth-btns";
 import { TextBadge } from "@components/shared/text-badge";
 import { useUser } from "@lib/hooks.lib";
 

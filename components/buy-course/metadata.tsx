@@ -3,7 +3,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
 
-import { RegularButton } from "@components/button/regular";
 import { useAppDispatch, useBuyCourse } from "@lib/hooks.lib";
 import { setShowDynamicHeader } from "@store/buy-course/slice";
 
@@ -47,9 +46,9 @@ export default function Metadata() {
           <Badge>{info?.enrolled + " enrolled"}</Badge>
         </div>
 
-        <RegularButton variant="contained">
+        {/* <RegularButton variant="contained">
           <>Enroll for ₹{info?.price}</>
-        </RegularButton>
+        </RegularButton> */}
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import { updateLessonSettings } from "services/lesson.service";
 
-import EmojiPicker from "@components/emoji/picker";
+import EmojiPicker from "@components/shared/emoji-picker";
 import { useDropdown, useEditableGroup, useEditableLesson, useUser } from "@lib/hooks.lib";
 
 export default function LessonEmojiInput() {

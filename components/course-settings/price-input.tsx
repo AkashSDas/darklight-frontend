@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 
 import { useEditableCourse, useUser } from "../../lib/hooks.lib";
 import { updateCourseSettings } from "../../services/course.service";
-import { TextBadge } from "../badges/text";
+import { TextBadge } from "../shared/text-badge";
 
 export default function PriceInput() {
   var { course, mutateCourse, courseId } = useEditableCourse();

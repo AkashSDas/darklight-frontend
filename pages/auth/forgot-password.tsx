@@ -3,8 +3,8 @@ import { ReactElement } from "react";
 
 import { AuthGif } from "@components/auth/auth-gifs";
 import ForgotPasswordForm from "@components/auth/forgot-password-form";
-import { TextBadge } from "@components/badges/text";
 import BaseLayout from "@components/shared/base-layout";
+import { TextBadge } from "@components/shared/text-badge";
 
 export default function ForgotPasswordPage(): JSX.Element {
   return (

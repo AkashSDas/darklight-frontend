@@ -3,8 +3,8 @@ import { ReactElement } from "react";
 
 import { AuthGif } from "@components/auth/auth-gifs";
 import PasswordResetForm from "@components/auth/password-reset-form";
-import { TextBadge } from "@components/badges/text";
 import BaseLayout from "@components/shared/base-layout";
+import { TextBadge } from "@components/shared/text-badge";
 
 export default function PasswordResetPage(): JSX.Element {
   return (

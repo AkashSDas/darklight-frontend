@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { useDropdown, useEditableCourse, useEditableGroup, useUser } from "../../lib/hooks.lib";
 import { updateCourseSettings } from "../../services/course.service";
 import { updateGroupSettings } from "../../services/group.service";
-import EmojiPicker from "../emoji/picker";
+import EmojiPicker from "../shared/emoji-picker";
 
 export default function GroupEmojiInput() {
   var { isOpen, setIsOpen, wrapperRef } = useDropdown();

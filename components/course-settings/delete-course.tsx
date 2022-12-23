@@ -1,4 +1,4 @@
-import { TextBadge } from "../badges/text";
+import { TextBadge } from "../shared/text-badge";
 
 export default function DeleteCourse() {
   return (

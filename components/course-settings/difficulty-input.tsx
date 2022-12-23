@@ -1,7 +1,7 @@
 import { useDropdown, useEditableCourse, useUser } from "../../lib/hooks.lib";
 import { updateCourseSettings } from "../../services/course.service";
-import { TextBadge } from "../badges/text";
 import { ArrowDownIcon } from "../icons/arrow-down";
+import { TextBadge } from "../shared/text-badge";
 
 export default function DifficultyLevelInput() {
   var { isOpen, setIsOpen, wrapperRef } = useDropdown();

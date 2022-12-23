@@ -5,10 +5,10 @@ import { cancelOAuth } from "services/auth.service";
 import { AuthGif } from "@components/auth/auth-gifs";
 import CompleteOAuthForm from "@components/auth/complete-oauth-form";
 import SignupForm from "@components/auth/signup-form";
-import { TextBadge } from "@components/badges/text";
 import { SignupWithGoogle } from "@components/button/google-auth";
 import { SignupWithFacebook, SignupWithTwitter } from "@components/button/oauth";
 import BaseLayout from "@components/shared/base-layout";
+import { TextBadge } from "@components/shared/text-badge";
 import { useUser } from "@lib/hooks.lib";
 
 export default function SignupPage(): JSX.Element {

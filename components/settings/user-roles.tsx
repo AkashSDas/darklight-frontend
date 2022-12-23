@@ -1,4 +1,4 @@
-import { TextBadge } from "@components/badges/text";
+import { TextBadge } from "@components/shared/text-badge";
 import { useUser } from "@lib/hooks.lib";
 
 export default function UserRoles(): JSX.Element {

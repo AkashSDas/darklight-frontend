@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { createCourse } from "services/course.service";
 import { instructorSignup } from "services/user.service";
 
-import { TextBadge } from "@components/badges/text";
+import { TextBadge } from "@components/shared/text-badge";
 import UserSettingsLayout from "@components/shared/user-settings-layout";
 import { useUser } from "@lib/hooks.lib";
 

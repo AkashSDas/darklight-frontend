@@ -1,8 +1,8 @@
 import { updateCourseStatus } from "services/course.service";
 
 import { useEditableCourse, useUser } from "../../lib/hooks.lib";
-import { TextBadge } from "../badges/text";
 import SwitchButton from "../button/switch";
+import { TextBadge } from "../shared/text-badge";
 
 export default function PublishCourse() {
   var { course } = useEditableCourse();

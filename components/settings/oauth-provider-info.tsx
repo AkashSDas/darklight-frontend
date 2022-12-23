@@ -1,6 +1,6 @@
 import { toast } from "react-hot-toast";
 
-import { TextBadge } from "@components/badges/text";
+import { TextBadge } from "@components/shared/text-badge";
 import { useUser } from "@lib/hooks.lib";
 import FacebookLogo from "@public/social-icons/facebook.svg";
 import GoogleLogo from "@public/social-icons/google.svg";

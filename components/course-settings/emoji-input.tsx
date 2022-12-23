@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 import { useDropdown, useEditableCourse, useUser } from "../../lib/hooks.lib";
 import { updateCourseSettings } from "../../services/course.service";
-import EmojiPicker from "../emoji/picker";
+import EmojiPicker from "../shared/emoji-picker";
 
 export default function CourseEmojiInput() {
   var { isOpen, setIsOpen, wrapperRef } = useDropdown();

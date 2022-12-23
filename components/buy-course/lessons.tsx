@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { TextBadge } from "@components/badges/text";
 import { ArrowDownIcon } from "@components/icons/arrow-down";
+import { TextBadge } from "@components/shared/text-badge";
 import { useBuyCourse } from "@lib/hooks.lib";
 
 export default function Lessons() {

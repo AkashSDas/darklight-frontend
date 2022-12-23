@@ -3,10 +3,10 @@ import { ReactElement } from "react";
 
 import { AuthGif } from "@components/auth/auth-gifs";
 import LoginForm from "@components/auth/login-form";
-import { TextBadge } from "@components/badges/text";
 import { LoginWithGoogle } from "@components/button/google-auth";
 import { LoginWithFacebook, LoginWithTwitter } from "@components/button/oauth";
 import BaseLayout from "@components/shared/base-layout";
+import { TextBadge } from "@components/shared/text-badge";
 
 export default function LoginPage(): JSX.Element {
   return (

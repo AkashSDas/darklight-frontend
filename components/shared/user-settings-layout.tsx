@@ -10,8 +10,12 @@ interface Props {
 export default function UserSettingLayout({ children }: Props): JSX.Element {
   var { user, error, isLoading } = useUser();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error || !user) return <div>Unauthorized</div>;
+  function DisplayContent(): JSX.Element {
+    if (isLoading) return <div>Loading...</div>;
+    if (error || !user) return <div>Unauthorized</div>;
+
+    return <>{children}</>;
+  }
 
   return (
     <div className="font-urbanist font-medium">
@@ -19,7 +23,7 @@ export default function UserSettingLayout({ children }: Props): JSX.Element {
 
       <div className="ml-[300px]">
         <SidebarNavbar />
-        {children}
+        <DisplayContent />
       </div>
     </div>
   );

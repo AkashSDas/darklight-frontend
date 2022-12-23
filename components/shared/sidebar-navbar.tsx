@@ -7,6 +7,8 @@ import { VerticalLine } from "./base-navbar";
 import { SettingsIcon } from "./icons";
 
 export default function SidebarNavbar(): JSX.Element {
+  var { user } = useUser();
+
   return (
     <nav className="h-[70px] px-4 w-full flex items-center justify-end">
       <div className="flex gap-3 items-center">
@@ -24,15 +26,39 @@ export default function SidebarNavbar(): JSX.Element {
 
         <VerticalLine />
 
-        <Link href="/settings/basic">
-          <button className="icon_btn">
-            <SettingsIcon size="size_5" />
-          </button>
-        </Link>
-
-        <ProfileImage />
+        {!user ? <LoggedOutActions /> : <LoggedInActions />}
       </div>
     </nav>
+  );
+}
+
+function LoggedInActions(): JSX.Element {
+  return (
+    <>
+      <Link href="/settings/basic">
+        <button className="icon_btn">
+          <SettingsIcon size="size_5" />
+        </button>
+      </Link>
+
+      <ProfileImage />
+    </>
+  );
+}
+
+function LoggedOutActions(): JSX.Element {
+  return (
+    <>
+      <Link href="/auth/login">
+        <button>Login</button>
+      </Link>
+
+      <Link href="/auth/signup">
+        <button className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]">
+          Signup
+        </button>
+      </Link>
+    </>
   );
 }
 

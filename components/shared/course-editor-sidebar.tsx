@@ -369,7 +369,7 @@ function AddGroupButton(): JSX.Element {
     <button
       disabled={loading}
       onClick={createGroup}
-      className="bottom-0 fixed bg-[#E1E4FF] w-[300px] h-11 flex items-center justify-center text-primary hover:brightness-95 active:brightness-90"
+      className="bottom-0 fixed bg-[#E1E4FF] w-[300px] h-11 flex items-center justify-center text-primary rounded-none hover:bg-[#D6DAFF] active:bg-[#C2C8FF]"
     >
       {loading ? "Creating..." : "Add group"}
     </button>

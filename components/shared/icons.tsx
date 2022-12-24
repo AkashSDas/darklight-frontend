@@ -103,3 +103,97 @@ export function CameraIcon({ size }: IconProps): JSX.Element {
     </svg>
   );
 }
+
+export function EyeIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={`${size} stroke`}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M21.1303 9.8531C22.2899 11.0732 22.2899 12.9268 21.1303 14.1469C19.1745 16.2047 15.8155 19 12 19C8.18448 19 4.82549 16.2047 2.86971 14.1469C1.7101 12.9268 1.7101 11.0732 2.86971 9.8531C4.82549 7.79533 8.18448 5 12 5C15.8155 5 19.1745 7.79533 21.1303 9.8531Z"
+        stroke-width="1.5"
+      />
+      <circle cx="12" cy="12" r="3" stroke-width="1.5" />
+    </svg>
+  );
+}
+
+export function MobileIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={`${size} stroke`}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="5"
+        y="2"
+        width="14"
+        height="20"
+        rx="3"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+      <path d="M11 19H13" stroke-width="1.5" stroke-linecap="round" />
+    </svg>
+  );
+}
+
+export function ArrowIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={`${size} stroke`}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M17 10L12 14L7 10"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function AddIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={`${size} fill`}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M12.75 6C12.75 5.58579 12.4142 5.25 12 5.25C11.5858 5.25 11.25 5.58579 11.25 6V11.25H6C5.58579 11.25 5.25 11.5858 5.25 12C5.25 12.4142 5.58579 12.75 6 12.75H11.25V18C11.25 18.4142 11.5858 18.75 12 18.75C12.4142 18.75 12.75 18.4142 12.75 18V12.75H18C18.4142 12.75 18.75 12.4142 18.75 12C18.75 11.5858 18.4142 11.25 18 11.25H12.75V6Z"
+      />
+    </svg>
+  );
+}
+
+export function MoreIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={`${size} fill`}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_22_788)">
+        <path d="M6 10C4.9 10 4 10.9 4 12C4 13.1 4.9 14 6 14C7.1 14 8 13.1 8 12C8 10.9 7.1 10 6 10ZM18 10C16.9 10 16 10.9 16 12C16 13.1 16.9 14 18 14C19.1 14 20 13.1 20 12C20 10.9 19.1 10 18 10ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" />
+      </g>
+      <defs>
+        <clipPath id="clip0_22_788">
+          <rect width="24" height="24" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}

@@ -24,6 +24,7 @@ svg.stroke {
 .icon svg.size_5 {
   @apply h-5 w-5;
 }
+.icon_btn svg.size_4,
 .icon svg.size_4 {
   @apply h-[18px] w-[18px];
 }

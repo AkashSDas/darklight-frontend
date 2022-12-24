@@ -136,20 +136,16 @@ function GroupItem(props: any): JSX.Element {
     );
   }
 
-  function GroupEmoji(): JSX.Element {
+  function Emoji({ emoji }: { emoji: string }): JSX.Element {
     return (
       <span className="px-[3px] py-[1px] text-sm rounded-sm bg-background3">
-        {props.group.emoji ?? "🌑"}
+        {emoji}
       </span>
     );
   }
 
-  function GroupTitle(): JSX.Element {
-    return (
-      <span className="text-sm flex-grow">
-        {props.group.title ?? "Untitled"}
-      </span>
-    );
+  function Title({ title }: { title: string }): JSX.Element {
+    return <span className="text-sm flex-grow">{title}</span>;
   }
 
   function AddLessonButton(): JSX.Element {
@@ -198,6 +194,14 @@ function GroupItem(props: any): JSX.Element {
     );
   }
 
+  function navigateToLesson(lessonId: string) {
+    return () => {
+      router.push(
+        `/courses/${course._id}/groups/${props.group._id}/lessons/${lessonId}`
+      );
+    };
+  }
+
   return (
     <>
       <div
@@ -205,14 +209,42 @@ function GroupItem(props: any): JSX.Element {
         className="group h-9 px-2 flex gap-3 items-center cursor-pointer hover:bg-background3 active:bg-border"
       >
         <DisplayGroupLessons />
-        <GroupEmoji />
-        <GroupTitle />
+        <Emoji emoji={props.group.emoji ?? "🌑"} />
+        <Title title={props.group.title ?? "Untitled"} />
 
         <div className="hidden group-hover:flex items-center gap-1 ">
           <AddLessonButton />
           <MoreDropdownButton />
         </div>
       </div>
+
+      {openLessons && (
+        <div>
+          {props.group.lessons.map((lesson: any) => (
+            <div
+              key={lesson._id}
+              onClick={navigateToLesson(lesson._id)}
+              className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
+            >
+              <span className="w-[18px] h-[18px] opacity-0"></span>
+
+              {/* Circle svg */}
+              <svg
+                className="fill-current text-text2"
+                width={20}
+                height={16}
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M11.75 8a1.75 1.75 0 1 1-3.5 0 1.75 1.75 0 0 1 3.5 0Z" />
+              </svg>
+
+              <Emoji emoji={lesson.emoji ?? "🌑"} />
+              <Title title={lesson.title ?? "Untitled"} />
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }

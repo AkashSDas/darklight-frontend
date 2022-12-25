@@ -26,7 +26,7 @@ export async function getEditableCourse(id: string) {
   if (response.statusCode == 200) {
     return { success: response.success, course: response.data };
   }
-  return { success: false, error: response.error };
+  return { success: false, error: response.error, course: null };
 }
 
 export async function updateCourseSettings(

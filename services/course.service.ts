@@ -58,7 +58,7 @@ export async function updateCourseCover(
   });
 
   if (response.statusCode == 200) {
-    return { success: response.success };
+    return { success: response.success, URL: response.data.URL };
   }
   return { success: false };
 }

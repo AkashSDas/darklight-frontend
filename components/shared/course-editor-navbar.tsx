@@ -14,7 +14,7 @@ export default function CourseEditorNavbar(): JSX.Element {
 
   if (!course) {
     return (
-      <nav className="sticky top-0 z-10 pt-4 px-4 w-full flex items-center justify-between bg-background1"></nav>
+      <nav className="sticky top-0 z-10 pt-4 px-4 h-[76px] w-full flex items-center justify-between bg-background1"></nav>
     );
   }
 

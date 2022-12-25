@@ -1,13 +1,15 @@
 import { ReactElement } from "react";
 
-import CourseEditorLayout from "../../../components/course-editor/layout";
+import CourseEditorLayout from "@components/shared/course-editor-layout";
 
-function PreviewPage() {
-  return <div></div>;
+export default function PreviewCoursePage(): JSX.Element {
+  return (
+    <div>
+      <h1>Preview Course</h1>
+    </div>
+  );
 }
 
-PreviewPage.getLayout = function getLayout(page: ReactElement) {
-  return <CourseEditorLayout>{page}</CourseEditorLayout>;
+PreviewCoursePage.getLayout = function getLayout(page: ReactElement) {
+  return <CourseEditorLayout context="course">{page}</CourseEditorLayout>;
 };
-
-export default PreviewPage;

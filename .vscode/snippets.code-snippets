@@ -66,5 +66,18 @@
       "};"
     ],
     "description": "Add user settings layout to a page"
+  },
+  "Add course editor layout": {
+    "scope": "typescriptreact",
+    "prefix": "editorLayout",
+    "body": [
+      "import { ReactElement } from 'react';",
+      "import CourseEditorLayout from '@components/shared/course-editor-layout';",
+      "",
+      "$1Page.getLayout = function getLayout(page: ReactElement) {",
+      "  return <CourseEditorLayout context='course'>{page}</CourseEditorLayout>;",
+      "};"
+    ],
+    "description": "Add course editor layout to a page"
   }
 }

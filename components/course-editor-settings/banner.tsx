@@ -9,7 +9,7 @@ import { useEditableCourse, useUser } from "@lib/hooks.lib";
 import CourseEmojiInput from "./course-emoji-input";
 
 export default function Banner(): JSX.Element {
-  var { course } = useEditableCourse();
+  var { course, mutateCourse } = useEditableCourse();
   var { accessToken } = useUser();
   var inputRef = useRef<any>(null);
   var [image, setImage] = useState<any>();
@@ -22,13 +22,24 @@ export default function Banner(): JSX.Element {
 
     var formData = new FormData();
     formData.append("coverImage", file);
-    var { success } = await updateCourseCover(
+    var { success, URL } = await updateCourseCover(
       accessToken,
       course._id,
       formData
     );
 
-    if (success) toast.success("Cover image updated");
+    if (success) {
+      toast.success("Cover image updated");
+      await mutateCourse(
+        () => ({
+          success: true,
+          error: null,
+          course: { ...course, coverImage: { URL } },
+        }),
+        false
+      );
+      setImage(null);
+    }
     setUploading(false);
   }
 

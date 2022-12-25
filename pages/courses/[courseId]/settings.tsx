@@ -6,6 +6,7 @@ import CourseTagsSetting from "@components/course-editor-settings/course-tags-se
 import DeleteCourseSetting from "@components/course-editor-settings/delete-course-setting";
 import DescriptionInput from "@components/course-editor-settings/description-input";
 import PriceInputSetting from "@components/course-editor-settings/price-input-setting";
+import PublishCourseSetting from "@components/course-editor-settings/publish-course-setting";
 import TitleInput from "@components/course-editor-settings/title-input";
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 
@@ -26,6 +27,8 @@ export default function CourseSettingsPage(): JSX.Element {
         <CourseDifficultySetting />
         <Divider />
         <PriceInputSetting />
+        <Divider />
+        <PublishCourseSetting />
         <Divider />
         <DeleteCourseSetting />
       </div>

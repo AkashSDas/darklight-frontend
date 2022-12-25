@@ -357,7 +357,7 @@ function AddGroupButton(): JSX.Element {
             ...oldData?.course,
             groups: [...oldData?.course.groups, response.group],
           },
-        };
+        } as any;
       });
 
       setLoading(false);

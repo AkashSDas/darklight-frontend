@@ -38,7 +38,7 @@ export default function CourseEditorLayout(props: Props): JSX.Element {
   }
 
   return (
-    <div className="flex font-urbanist font-medium">
+    <div className="mb-8 flex font-urbanist font-medium">
       <CourseEditorSidebar />
 
       <div className="ml-[300px] w-full">

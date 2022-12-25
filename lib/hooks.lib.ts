@@ -73,7 +73,7 @@ export function useEditableCourse() {
   var router = useRouter();
   var courseId = router.query.courseId as string;
   var { data, error, mutate, isValidating } = useSWR(
-    courseId,
+    ["edit-course", courseId],
     () => getEditableCourse(courseId),
     { revalidateOnFocus: false }
   );

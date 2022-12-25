@@ -79,7 +79,7 @@ export function useEditableCourse() {
   );
 
   return {
-    loading: !data && !error,
+    loading: !data || !error,
     course: data?.course,
     success: data?.success,
     error,

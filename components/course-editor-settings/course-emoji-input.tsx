@@ -1,10 +1,9 @@
 import debounce from "lodash.debounce";
 import { useCallback } from "react";
 import { updateCourseSettings } from "services/course.service";
-import { useSWRConfig } from "swr";
 
 import EmojiPicker from "@components/shared/emoji-picker";
-import { useCourse, useDropdown, useEditableCourse, useUser } from "@lib/hooks.lib";
+import { useDropdown, useEditableCourse, useUser } from "@lib/hooks.lib";
 
 export default function CourseEmojiInput(): JSX.Element {
   var { accessToken } = useUser();

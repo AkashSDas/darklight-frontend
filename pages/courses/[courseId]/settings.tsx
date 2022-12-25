@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 
 import Banner from "@components/course-editor-settings/banner";
+import CourseTagsSetting from "@components/course-editor-settings/course-tags-settings";
 import DeleteCourseSetting from "@components/course-editor-settings/delete-course-setting";
 import DescriptionInput from "@components/course-editor-settings/description-input";
 import TitleInput from "@components/course-editor-settings/title-input";
@@ -17,6 +18,8 @@ export default function CourseSettingsPage(): JSX.Element {
         <Banner />
         <TitleInput />
         <DescriptionInput />
+        <Divider />
+        <CourseTagsSetting />
         <Divider />
         <DeleteCourseSetting />
       </div>

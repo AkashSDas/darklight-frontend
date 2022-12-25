@@ -2,14 +2,14 @@ import { ReactElement } from "react";
 
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 
-export default function CourseBillingPage(): JSX.Element {
+export default function CourseMembersPage(): JSX.Element {
   return (
     <div>
-      <h1>Services & Billings for the Course</h1>
+      <h1>Members included in the Course</h1>
     </div>
   );
 }
 
-CourseBillingPage.getLayout = function getLayout(page: ReactElement) {
+CourseMembersPage.getLayout = function getLayout(page: ReactElement) {
   return <CourseEditorLayout context="course">{page}</CourseEditorLayout>;
 };

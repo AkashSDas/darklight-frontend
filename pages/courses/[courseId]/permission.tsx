@@ -1,13 +1,15 @@
 import { ReactElement } from "react";
 
-import CourseEditorLayout from "../../../components/course-editor/layout";
+import CourseEditorLayout from "@components/shared/course-editor-layout";
 
-function PermissionPage() {
-  return <div></div>;
+export default function CoursePremissionPage(): JSX.Element {
+  return (
+    <div>
+      <h1>Course Permissions</h1>
+    </div>
+  );
 }
 
-PermissionPage.getLayout = function getLayout(page: ReactElement) {
-  return <CourseEditorLayout>{page}</CourseEditorLayout>;
+CoursePremissionPage.getLayout = function getLayout(page: ReactElement) {
+  return <CourseEditorLayout context="course">{page}</CourseEditorLayout>;
 };
-
-export default PermissionPage;

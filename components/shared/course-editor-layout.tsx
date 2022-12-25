@@ -43,7 +43,10 @@ export default function CourseEditorLayout(props: Props): JSX.Element {
 
       <div className="ml-[300px] w-full">
         <CourseEditorNavbar />
-        <DisplayContent />
+
+        <div className="px-4">
+          <DisplayContent />
+        </div>
       </div>
     </div>
   );

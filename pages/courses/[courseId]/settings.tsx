@@ -2,6 +2,7 @@ import { ReactElement } from "react";
 
 import Banner from "@components/course-editor-settings/banner";
 import DeleteCourseSetting from "@components/course-editor-settings/delete-course-setting";
+import TitleInput from "@components/course-editor-settings/title-input";
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 
 export default function CourseSettingsPage(): JSX.Element {
@@ -13,6 +14,7 @@ export default function CourseSettingsPage(): JSX.Element {
     <main className="w-full flex flex-col gap-2 items-center">
       <div className="w-full max-w-[800px] flex flex-col gap-2 items-center">
         <Banner />
+        <TitleInput />
         <Divider />
         <DeleteCourseSetting />
       </div>

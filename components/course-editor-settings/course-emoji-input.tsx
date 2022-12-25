@@ -4,13 +4,12 @@ import { updateCourseSettings } from "services/course.service";
 import { useSWRConfig } from "swr";
 
 import EmojiPicker from "@components/shared/emoji-picker";
-import { useDropdown, useEditableCourse, useUser } from "@lib/hooks.lib";
+import { useCourse, useDropdown, useEditableCourse, useUser } from "@lib/hooks.lib";
 
 export default function CourseEmojiInput(): JSX.Element {
   var { accessToken } = useUser();
   var { isOpen, setIsOpen, wrapperRef } = useDropdown();
   var { course, mutateCourse, courseId } = useEditableCourse();
-  var { mutate } = useSWRConfig();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var emojiCallback = useCallback(

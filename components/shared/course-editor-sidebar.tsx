@@ -330,6 +330,10 @@ function AddGroupButton(): JSX.Element {
   var [loading, setLoading] = useState(false);
 
   async function createGroup() {
+    if (!accessToken) {
+      toast.error("You must be logged in to create a group");
+    }
+
     if (courseId && accessToken) {
       setLoading(true);
 

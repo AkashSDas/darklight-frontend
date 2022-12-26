@@ -1,7 +1,9 @@
 import { ReactElement } from "react";
 
+import ContentBlockOptions from "@components/lesson-editor/content-block-options";
 import EditContentBlocks from "@components/lesson-editor/edit-content-blocks";
 import LessonEmojiInput from "@components/lesson-editor/emoji-input";
+import SearchBlockInput from "@components/lesson-editor/search-block-input";
 import LessonTitleInput from "@components/lesson-editor/title-input";
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 
@@ -25,7 +27,10 @@ export default function EditLessonPage(): JSX.Element {
 
   function ActionPanel(): JSX.Element {
     return (
-      <aside className="pb-8 w-full right-0 max-w-[300px] flex flex-col gap-2 py-4 fixed overflow-y-scroll h-full border-l border-solid border-l-border"></aside>
+      <aside className="pb-24 w-full right-0 max-w-[300px] flex flex-col gap-6 py-4 fixed overflow-y-scroll h-full border-l border-solid border-l-border">
+        <SearchBlockInput />
+        <ContentBlockOptions />
+      </aside>
     );
   }
 

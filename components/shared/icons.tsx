@@ -265,3 +265,21 @@ export function DragIcon({ size }: IconProps): JSX.Element {
     </svg>
   );
 }
+
+export function GridIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={`${size} stroke`}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 3H17C19.2091 3 21 4.79086 21 7V8.82353M12 3H7C4.79086 3 3 4.79086 3 7V8.82353M12 3V21M12 21H7C4.79086 21 3 19.2091 3 17V15.1765M12 21H17C19.2091 21 21 19.2091 21 17V15.1765M3 15.1765H21M3 15.1765V11.4706V8.82353M21 15.1765V11.4706V8.82353M3 8.82353H21"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

@@ -5,16 +5,16 @@ import useSWR from "swr";
 
 import { useEditableCourse, useResizeTextareaHeight, useUser } from "@lib/hooks.lib";
 
-export default function DescriptionInput(): JSX.Element {
+export default function CourseTitleInput(): JSX.Element {
   var { accessToken } = useUser();
   var { course, mutateCourse } = useEditableCourse();
-  var { ref } = useResizeTextareaHeight(course.description ?? "");
+  var { ref } = useResizeTextareaHeight(course.title ?? "");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  var descriptionCallback = useCallback(
+  var titleCallback = useCallback(
     debounce(async (value) => {
       if (value && course && accessToken) {
-        let update = { description: value };
+        let update = { title: value };
         await updateCourseSettings(accessToken, course._id, update);
       }
     }, 500),
@@ -27,12 +27,12 @@ export default function DescriptionInput(): JSX.Element {
       (data) =>
         ({
           ...data,
-          course: { ...data?.course, description: e.target.value },
+          course: { ...data?.course, title: e.target.value },
         } as any),
       false
     );
 
-    await descriptionCallback(e.target.value);
+    await titleCallback(e.target.value);
   }
 
   return (
@@ -41,10 +41,10 @@ export default function DescriptionInput(): JSX.Element {
       onKeyDown={(e) => {
         if (e.key == "Enter") e.preventDefault();
       }}
-      value={course.description}
+      value={course.title}
       onChange={handleChange}
-      placeholder="Add a description"
-      className="w-full placeholder:text-border text-[18px] outline-none resize-none"
+      placeholder="Untitled"
+      className="w-full leading-[100%] text-text1 placeholder:text-border text-[40px] font-gilroy font-extrabold outline-none resize-none"
     />
   );
 }

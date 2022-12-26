@@ -8,7 +8,7 @@ import { useEditableCourse, useUser } from "@lib/hooks.lib";
 
 import CourseEmojiInput from "./course-emoji-input";
 
-export default function Banner(): JSX.Element {
+export default function CourseBanner(): JSX.Element {
   var { course, mutateCourse } = useEditableCourse();
   var { accessToken } = useUser();
   var inputRef = useRef<any>(null);

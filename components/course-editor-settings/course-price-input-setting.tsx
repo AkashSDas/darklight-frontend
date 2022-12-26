@@ -6,7 +6,7 @@ import { useEditableCourse, useUser } from "@lib/hooks.lib";
 
 import SettingSection from "./setting-section";
 
-export default function PriceInputSetting(): JSX.Element {
+export default function CoursePriceInputSetting(): JSX.Element {
   var emoji = "💰";
   var title = "Price";
   var description = "Amount to charge your customers";

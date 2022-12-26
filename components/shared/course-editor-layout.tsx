@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback } from "react";
 
 import CourseEditorSidebar from "@components/shared/course-editor-sidebar";
-import { useEditableCourse, useEditableGroup, useEditableLesson, useUser } from "@lib/hooks.lib";
+import { useEditableCourse, useEditableGroup, useEditableLesson, useRenderedCheck, useUser } from "@lib/hooks.lib";
 
 import CourseEditorNavbar from "./course-editor-navbar";
 
@@ -37,7 +37,7 @@ export default function CourseEditorLayout(props: Props): JSX.Element {
 
     return <div>Loading...</div>;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lessonLoading, group, loading, user]);
+  }, [lessonLoading, loading, user]);
 
   return (
     <div className="mb-8 flex font-urbanist font-medium">

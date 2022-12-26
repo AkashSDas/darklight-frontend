@@ -261,3 +261,9 @@ export function useBuyCourse() {
     error: data?.error || error,
   };
 }
+
+export function useRenderedCheck(where: string) {
+  useEffect(() => {
+    console.count(`[${where}] rendered`);
+  }, [where]);
+}

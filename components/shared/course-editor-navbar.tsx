@@ -100,7 +100,7 @@ function BreadCrum(): JSX.Element {
 
     return (
       <Link
-        href={`/courses/${course.id}/group/${group._id}/lesson/${lesson._id}`}
+        href={`/courses/${course.id}/groups/${group._id}/lessons/${lesson._id}`}
       >
         <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
           <TextBadge variant="regular">{lesson.emoji ?? "🍈"}</TextBadge>{" "}

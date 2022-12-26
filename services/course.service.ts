@@ -32,7 +32,16 @@ export async function getEditableCourse(id: string) {
 export async function updateCourseSettings(
   accessToken: string,
   id: string,
-  data: any
+  data: {
+    emoji?: string;
+    title?: string;
+    description?: string;
+    stage?: "published" | "draft";
+    price?: number;
+    difficulty?: "beginner" | "intermediate" | "advanced";
+    tags?: string[];
+    faqs?: { question: string; answer: string }[];
+  }
 ) {
   var response = await fetchFromCourse(`${id}/settings`, {
     method: "PUT",

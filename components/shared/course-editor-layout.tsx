@@ -23,15 +23,15 @@ export default function CourseEditorLayout(props: Props): JSX.Element {
 
     if (props.context == "lesson" && router.query?.lessonId) {
       if (lesson) return <>{props.children}</>;
-      else if (lessonLoading) return <div>Loading...</div>;
+      else if (lessonLoading) return <div>Lesson Loading...</div>;
       else return <div>Lesson not found</div>;
     } else if (props.context == "group" && router.query?.groupId) {
       if (group) return <>{props.children}</>;
-      else if (courseLoading) return <div>Loading...</div>;
+      else if (courseLoading) return <div>Group Loading...</div>;
       else return <div>Group not found</div>;
     } else if (props.context == "course" && router.query?.courseId) {
       if (course) return <>{props.children}</>;
-      else if (loading) return <div>Loading...</div>;
+      else if (loading) return <div>Course Loading...</div>;
       else return <div>Course not found</div>;
     }
 

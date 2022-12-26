@@ -25,7 +25,7 @@ export async function addGroup(courseId: string, accessToken: string) {
 export async function updateGroupSettings(
   courseId: string,
   groupId: string,
-  input: any,
+  input: { emoji?: string; title?: string; description?: string },
   accessToken: string
 ) {
   var response = await fetchFromGroup(courseId, `${groupId}`, {

@@ -4,6 +4,7 @@ import { reorderContent } from "services/lesson-content.service";
 import { DragIcon } from "@components/shared/icons";
 import { useEditableLesson, useUser } from "@lib/hooks.lib";
 
+import ImageBlock from "./image-block";
 import ParagraphBlock from "./paragraph-block";
 
 export default function EditContentBlocks(): JSX.Element {
@@ -94,7 +95,7 @@ interface DisplayBlockProps {
 
 function DisplayBlock({ block }: DisplayBlockProps): JSX.Element | null {
   if (block.type == "paragraph") return <ParagraphBlock id={block.id} />;
-  if (block.type == "image") return <p>Images</p>;
+  if (block.type == "image") return <ImageBlock id={block.id} />;
 
   return null;
 }

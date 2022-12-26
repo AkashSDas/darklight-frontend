@@ -15,7 +15,7 @@ export default function EditLessonPage(): JSX.Element {
   function MainContent(): JSX.Element {
     return (
       <main className="mr-[300px] w-full flex flex-col gap-2 items-center">
-        <div className="w-full max-w-[800px] flex flex-col gap-2 items-start">
+        <div className="px-16 w-full max-w-[800px] flex flex-col gap-2 items-start">
           <LessonEmojiInput />
           <LessonTitleInput />
           <Divider />

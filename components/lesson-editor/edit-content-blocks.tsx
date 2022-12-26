@@ -41,7 +41,6 @@ export default function EditContentBlocks(): JSX.Element {
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="lesson-content-block">
         {(provided) => {
-          console.log(lesson?.content);
           return (
             <div
               className="w-full flex flex-col gap-3 mb-6"
@@ -56,13 +55,13 @@ export default function EditContentBlocks(): JSX.Element {
                     index={index}
                   >
                     {(provided) => (
-                      <div className="relative">
+                      <div className="relative group">
                         {/* Drag handler */}
                         <div
                           {...provided.dragHandleProps}
-                          className="absolute -left-8 top-2 rounded-sm p-[2px] flex justify-center items-center cursor-pointer hover:bg-background3 active:bg-border"
+                          className="icon hidden group-hover:flex absolute -left-5 top-1 rounded-sm p-[2px] justify-center items-center cursor-pointer hover:bg-background3 active:bg-border"
                         >
-                          <DragIcon size="size_5" />
+                          <DragIcon size="size_4" />
                         </div>
 
                         {/* Block */}

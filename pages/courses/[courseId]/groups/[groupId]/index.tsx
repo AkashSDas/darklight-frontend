@@ -1,17 +1,17 @@
 import { ReactElement } from "react";
 
+import GroupDescriptionInput from "@components/course-editor-settings/group-description-input";
 import GroupEmojiInput from "@components/course-editor-settings/group-emoji-input";
+import GroupTitleInput from "@components/course-editor-settings/group-title-input";
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 
 export default function GroupSettingsPage(): JSX.Element {
-  function Divider(): JSX.Element {
-    return <hr className="my-4 bg-border opacity-50 w-full" />;
-  }
-
   return (
     <main className="w-full flex flex-col gap-2 items-center">
       <div className="w-full max-w-[800px] flex flex-col gap-2 items-start">
         <GroupEmojiInput />
+        <GroupTitleInput />
+        <GroupDescriptionInput />
       </div>
     </main>
   );

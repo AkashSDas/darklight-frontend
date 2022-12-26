@@ -1,5 +1,6 @@
 import debounce from "lodash.debounce";
 import { useCallback } from "react";
+import { toast } from "react-hot-toast";
 import { updateGroupSettings } from "services/group.service";
 
 import EmojiPicker from "@components/shared/emoji-picker";
@@ -16,7 +17,14 @@ export default function GroupEmojiInput(): JSX.Element {
     debounce(async (value) => {
       // Makes request to the backend to update the emoji
       let update = { emoji: value };
-      await updateGroupSettings(course._id, group?._id, update, accessToken);
+      var { success } = await updateGroupSettings(
+        course._id,
+        group?._id,
+        update,
+        accessToken
+      );
+
+      if (success) toast.success("Group emoji updated");
     }, 500),
     []
   );

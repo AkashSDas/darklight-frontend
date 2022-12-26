@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 
+import GroupEmojiInput from "@components/course-editor-settings/group-emoji-input";
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 
 export default function GroupSettingsPage(): JSX.Element {
@@ -9,7 +10,9 @@ export default function GroupSettingsPage(): JSX.Element {
 
   return (
     <main className="w-full flex flex-col gap-2 items-center">
-      <div className="w-full max-w-[800px] flex flex-col gap-2 items-center"></div>
+      <div className="w-full max-w-[800px] flex flex-col gap-2 items-start">
+        <GroupEmojiInput />
+      </div>
     </main>
   );
 }

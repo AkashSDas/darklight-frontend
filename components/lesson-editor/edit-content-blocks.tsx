@@ -4,6 +4,8 @@ import { reorderContent } from "services/lesson-content.service";
 import { DragIcon } from "@components/shared/icons";
 import { useEditableLesson, useUser } from "@lib/hooks.lib";
 
+import ParagraphBlock from "./paragraph-block";
+
 export default function EditContentBlocks(): JSX.Element {
   var { accessToken } = useUser();
   var { lesson, mutateLesson, courseId, groupId } = useEditableLesson();
@@ -38,36 +40,46 @@ export default function EditContentBlocks(): JSX.Element {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="lesson-content-block">
-        {(provided) => (
-          <div
-            className="flex flex-col gap-3 mb-6"
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-            {lesson?.content.map((block: any, index: number) => {
-              return (
-                <Draggable key={block.id} draggableId={block.id} index={index}>
-                  {(provided) => (
-                    <div className="relative">
-                      {/* Drag handler */}
-                      <div
-                        {...provided.dragHandleProps}
-                        className="absolute -left-8 top-2 rounded-sm p-[2px] flex justify-center items-center cursor-pointer hover:bg-background3 active:bg-border"
-                      >
-                        <DragIcon size="size_5" />
-                      </div>
+        {(provided) => {
+          console.log(lesson?.content);
+          return (
+            <div
+              className="w-full flex flex-col gap-3 mb-6"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {lesson?.content?.map((block: any, index: number) => {
+                return (
+                  <Draggable
+                    key={block.id}
+                    draggableId={block.id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div className="relative">
+                        {/* Drag handler */}
+                        <div
+                          {...provided.dragHandleProps}
+                          className="absolute -left-8 top-2 rounded-sm p-[2px] flex justify-center items-center cursor-pointer hover:bg-background3 active:bg-border"
+                        >
+                          <DragIcon size="size_5" />
+                        </div>
 
-                      {/* Block */}
-                      <div ref={provided.innerRef} {...provided.draggableProps}>
-                        <DisplayBlock block={block} />
+                        {/* Block */}
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                        >
+                          <DisplayBlock block={block} />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </Draggable>
-              );
-            })}
-          </div>
-        )}
+                    )}
+                  </Draggable>
+                );
+              })}
+            </div>
+          );
+        }}
       </Droppable>
     </DragDropContext>
   );
@@ -82,7 +94,7 @@ interface DisplayBlockProps {
 }
 
 function DisplayBlock({ block }: DisplayBlockProps): JSX.Element | null {
-  if (block.type == "paragraph") return <p>Paragraphs</p>;
+  if (block.type == "paragraph") return <ParagraphBlock id={block.id} />;
   if (block.type == "image") return <p>Images</p>;
 
   return null;

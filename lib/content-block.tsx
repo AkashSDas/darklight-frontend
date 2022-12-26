@@ -9,6 +9,18 @@ export enum ContentBlockType {
   CODE = "code",
 }
 
+export function getBlock(lesson: any, blockId: string) {
+  var block = lesson.content.find((block: any) => block.id == blockId);
+  if (!block) throw new Error("Block not found");
+  return block;
+}
+
+export function getBlockDataValue(block: any, key: string) {
+  var data = block.data.find((block: any) => block.key == key);
+  if (!data) throw new Error("Block data not found");
+  return data.value;
+}
+
 export var contentBlocks = [
   {
     type: ContentBlockType.PARAGRAPH,

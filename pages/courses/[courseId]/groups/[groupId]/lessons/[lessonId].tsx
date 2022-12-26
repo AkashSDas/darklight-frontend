@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 
 import LessonEmojiInput from "@components/lesson-editor/emoji-input";
+import LessonTitleInput from "@components/lesson-editor/title-input";
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 
 export default function EditLessonPage(): JSX.Element {
@@ -9,6 +10,7 @@ export default function EditLessonPage(): JSX.Element {
       <main className="mr-[300px] w-full flex flex-col gap-2 items-center">
         <div className="w-full max-w-[800px] flex flex-col gap-2 items-start">
           <LessonEmojiInput />
+          <LessonTitleInput />
         </div>
       </main>
     );
@@ -29,5 +31,5 @@ export default function EditLessonPage(): JSX.Element {
 }
 
 EditLessonPage.getLayout = function getLayout(page: ReactElement) {
-  return <CourseEditorLayout context="course">{page}</CourseEditorLayout>;
+  return <CourseEditorLayout context="lesson">{page}</CourseEditorLayout>;
 };

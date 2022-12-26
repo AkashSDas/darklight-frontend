@@ -37,7 +37,7 @@ export default function CourseEditorLayout(props: Props): JSX.Element {
 
     return <div>Loading...</div>;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lessonLoading, loading, user, props.context, props.children]);
+  }, [lessonLoading, loading, !!group, user, props.context, props.children]);
 
   return (
     <div className="mb-8 flex font-urbanist font-medium">

@@ -18,5 +18,5 @@ export default function GroupSettingsPage(): JSX.Element {
 }
 
 GroupSettingsPage.getLayout = function getLayout(page: ReactElement) {
-  return <CourseEditorLayout context="course">{page}</CourseEditorLayout>;
+  return <CourseEditorLayout context="group">{page}</CourseEditorLayout>;
 };

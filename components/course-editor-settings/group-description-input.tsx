@@ -10,7 +10,7 @@ export default function GroupDescriptionInput(): JSX.Element {
   var { accessToken } = useUser();
   var { course, mutateCourse } = useEditableCourse();
   var { group } = useEditableGroup();
-  var { ref } = useResizeTextareaHeight(course.title ?? "");
+  var { ref } = useResizeTextareaHeight(group.description ?? "");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var descriptionCallback = useCallback(

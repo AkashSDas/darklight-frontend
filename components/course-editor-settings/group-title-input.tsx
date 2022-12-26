@@ -10,7 +10,7 @@ export default function GroupTitleInput(): JSX.Element {
   var { accessToken } = useUser();
   var { course, mutateCourse } = useEditableCourse();
   var { group } = useEditableGroup();
-  var { ref } = useResizeTextareaHeight(course.title ?? "");
+  var { ref } = useResizeTextareaHeight(group.title ?? "");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var titleCallback = useCallback(

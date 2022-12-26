@@ -252,7 +252,7 @@ export function useBuyCourse() {
   }
 
   return {
-    loading: !data && !error,
+    loading: !data || error,
     course: data?.course,
     info: getMainInfo(),
     instructors: data?.course?.instructors,

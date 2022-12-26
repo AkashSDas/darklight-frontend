@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { useAppSelector, useBuyCourse } from "@lib/hooks.lib";
 
-export default function DynamicHeader() {
+export default function DynamicHeader(): JSX.Element {
   var { info } = useBuyCourse();
   var show = useAppSelector((state) => state.buyCourse.showDynamicHeader);
   var variants = {
@@ -11,14 +11,8 @@ export default function DynamicHeader() {
     visible: { opacity: 1, y: 0 },
   };
 
-  return (
-    <motion.div
-      variants={variants}
-      initial="hidden"
-      animate={show ? "visible" : "hidden"}
-      transition={{ duration: 0.3 }}
-      className="flex fixed z-20 top-0 w-full max-w-[800px] items-center gap-4 py-2 bg-background1 border-b border-solid border-b-border"
-    >
+  function CoverImage(): JSX.Element {
+    return (
       <div className="w-[240px] h-[120px] relative">
         <Image
           src={
@@ -30,14 +24,26 @@ export default function DynamicHeader() {
           className="object-cover rounded-2xl"
         />
       </div>
+    );
+  }
 
-      <h2 className="font-gilroy text-[25px] font-extrabold text-text1 flex-grow">
+  return (
+    <motion.div
+      variants={variants}
+      initial="hidden"
+      animate={show ? "visible" : "hidden"}
+      transition={{ duration: 0.3 }}
+      className="fixed z-20 top-0 py-2 w-full max-w-[800px] flex gap-4 items-center bg-background1 border-b border-solid border-b-border"
+    >
+      <CoverImage />
+
+      <h2 className="flex-grow font-gilroy text-[25px] font-extrabold text-text1">
         {info?.title}
       </h2>
 
-      {/* <RegularButton variant="contained">
-        <>Enroll for ₹{info?.price}</>
-      </RegularButton> */}
+      <button className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]">
+        Enroll for {info?.price}
+      </button>
     </motion.div>
   );
 }

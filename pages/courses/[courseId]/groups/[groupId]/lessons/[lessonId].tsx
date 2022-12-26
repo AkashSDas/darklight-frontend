@@ -1,16 +1,23 @@
 import { ReactElement } from "react";
 
+import EditContentBlocks from "@components/lesson-editor/edit-content-blocks";
 import LessonEmojiInput from "@components/lesson-editor/emoji-input";
 import LessonTitleInput from "@components/lesson-editor/title-input";
 import CourseEditorLayout from "@components/shared/course-editor-layout";
 
 export default function EditLessonPage(): JSX.Element {
+  function Divider(): JSX.Element {
+    return <hr className="bg-border my-2 h-[1px] w-full" />;
+  }
+
   function MainContent(): JSX.Element {
     return (
       <main className="mr-[300px] w-full flex flex-col gap-2 items-center">
         <div className="w-full max-w-[800px] flex flex-col gap-2 items-start">
           <LessonEmojiInput />
           <LessonTitleInput />
+          <Divider />
+          <EditContentBlocks />
         </div>
       </main>
     );

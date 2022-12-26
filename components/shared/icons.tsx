@@ -25,7 +25,6 @@ export function CollectionIcon({ size }: IconProps): JSX.Element {
     >
       <path
         d="M20 11H4M20 11C21.1046 11 22 11.8954 22 13V17C22 19.2091 20.2091 21 18 21H6C3.79086 21 2 19.2091 2 17V13C2 11.8954 2.89543 11 4 11M20 11V9C20 7.89543 19.1046 7 18 7M4 11V9C4 7.89543 4.89543 7 6 7M18 7H6M18 7V5C18 3.89543 17.1046 3 16 3H8C6.89543 3 6 3.89543 6 5V7M10 14H14"
-        // stroke="#555555"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -114,9 +113,9 @@ export function EyeIcon({ size }: IconProps): JSX.Element {
     >
       <path
         d="M21.1303 9.8531C22.2899 11.0732 22.2899 12.9268 21.1303 14.1469C19.1745 16.2047 15.8155 19 12 19C8.18448 19 4.82549 16.2047 2.86971 14.1469C1.7101 12.9268 1.7101 11.0732 2.86971 9.8531C4.82549 7.79533 8.18448 5 12 5C15.8155 5 19.1745 7.79533 21.1303 9.8531Z"
-        stroke-width="1.5"
+        strokeWidth="1.5"
       />
-      <circle cx="12" cy="12" r="3" stroke-width="1.5" />
+      <circle cx="12" cy="12" r="3" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -135,10 +134,10 @@ export function MobileIcon({ size }: IconProps): JSX.Element {
         width="14"
         height="20"
         rx="3"
-        stroke-width="1.5"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
       />
-      <path d="M11 19H13" stroke-width="1.5" stroke-linecap="round" />
+      <path d="M11 19H13" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -154,8 +153,8 @@ export function ArrowIcon({ size }: IconProps): JSX.Element {
       <path
         d="M17 10L12 14L7 10"
         stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -170,8 +169,8 @@ export function AddIcon({ size }: IconProps): JSX.Element {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M12.75 6C12.75 5.58579 12.4142 5.25 12 5.25C11.5858 5.25 11.25 5.58579 11.25 6V11.25H6C5.58579 11.25 5.25 11.5858 5.25 12C5.25 12.4142 5.58579 12.75 6 12.75H11.25V18C11.25 18.4142 11.5858 18.75 12 18.75C12.4142 18.75 12.75 18.4142 12.75 18V12.75H18C18.4142 12.75 18.75 12.4142 18.75 12C18.75 11.5858 18.4142 11.25 18 11.25H12.75V6Z"
       />
     </svg>
@@ -221,9 +220,9 @@ export function DiscussionIcon({ size }: IconProps): JSX.Element {
     >
       <path
         d="M14.1601 15.9282L16.3071 19.6469C16.7213 20.3643 16.4755 21.2817 15.758 21.6959C15.0406 22.1101 14.1232 21.8643 13.709 21.1469L11.0555 16.5508M19.4543 4.83011L19.8203 3.46408M21.4543 8.29422L22.8203 8.66025M8.09809 17.1603L18.7168 14.7288C20.0285 14.4284 20.6753 12.9446 20.0025 11.7792L15.7104 4.34513C15.0376 3.1798 13.4291 2.998 12.5132 3.98376L5.09809 11.9641L8.09809 17.1603ZM5.34812 12.3971L7.84812 16.7272C8.26233 17.4447 8.01652 18.362 7.29908 18.7763C6.58164 19.1905 5.66425 18.9447 5.25004 18.2272L2.75004 13.8971C2.33583 13.1797 2.58164 12.2623 3.29908 11.8481C4.01652 11.4338 4.9339 11.6797 5.34812 12.3971Z"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -240,8 +239,8 @@ export function SearchIcon({ size }: IconProps): JSX.Element {
       <path
         d="M22 22L20 20M2 11.5C2 6.25329 6.25329 2 11.5 2C16.7467 2 21 6.25329 21 11.5C21 16.7467 16.7467 21 11.5 21C6.25329 21 2 16.7467 2 11.5Z"
         stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

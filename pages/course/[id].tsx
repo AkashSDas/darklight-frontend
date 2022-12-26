@@ -1,74 +1,64 @@
+import { ReactElement } from "react";
+
 import About from "@components/buy-course/about";
 import Banner from "@components/buy-course/banner";
+import CourseMetadata from "@components/buy-course/course-metadata";
 import DynamicHeader from "@components/buy-course/dynamic-header";
-import Instructor from "@components/buy-course/instructor";
+import Instructors from "@components/buy-course/instructors";
 import Lessons from "@components/buy-course/lessons";
-import Metadata from "@components/buy-course/metadata";
+import BaseLayout from "@components/shared/base-layout";
 import { useBuyCourse } from "@lib/hooks.lib";
 
-export default function CoursePage() {
+export default function CourseBuyPage(): JSX.Element {
   var { loading } = useBuyCourse();
 
-  if (loading) return <div>Loading...</div>;
-
   return (
-    <div>
-      <CourseView />
+    <div className="px-8 font-urbanist font-medium">
+      {loading ? <div>Loading...</div> : <DisplayCourse />}
     </div>
   );
 }
 
-function CourseView() {
+function DisplayCourse(): JSX.Element {
+  function Divider(): JSX.Element {
+    return <hr className="bg-border h-[1px] w-full my-4" />;
+  }
+
   return (
-    <main className="flex justify-between mx-8 mt-4">
+    <main className="mx-8 flex justify-between">
       <div className="w-full max-w-[800px] flex flex-col gap-3">
         <DynamicHeader />
         <Banner />
-        <Metadata />
-
-        <hr className="bg-border h-[1px] w-full my-4" />
+        <CourseMetadata />
+        <Divider />
 
         {/* Content Tabbar */}
-        <div className="flex items-center gap-3">
-          <div className="h-11 cursor-pointer rounded-2xl hover:bg-background3 active:bg-border px-5 flex justify-center items-center font-urbanist font-medium">
+        <div className="flex gap-3 items-center">
+          <div className="px-5 h-11 flex justify-center items-center cursor-pointer rounded-2xl hover:bg-background3 active:bg-border">
             About
           </div>
-          <div className="h-11 cursor-pointer rounded-2xl hover:bg-background3 active:bg-border px-5 flex justify-center items-center font-urbanist font-medium">
+          <div className="px-5 h-11 flex justify-center items-center cursor-pointer rounded-2xl hover:bg-background3 active:bg-border">
             Instructors
           </div>
-          <div className="h-11 cursor-pointer rounded-2xl hover:bg-background3 active:bg-border px-5 flex justify-center items-center font-urbanist font-medium">
+          <div className="px-5 h-11 flex justify-center items-center cursor-pointer rounded-2xl hover:bg-background3 active:bg-border">
             Syllabus
           </div>
-          <div className="h-11 cursor-pointer rounded-2xl hover:bg-background3 active:bg-border px-5 flex justify-center items-center font-urbanist font-medium">
+          <div className="px-5 h-11 flex justify-center items-center cursor-pointer rounded-2xl hover:bg-background3 active:bg-border">
             FAQs
           </div>
         </div>
 
-        <hr className="bg-border h-[1px] w-full my-4" />
+        <Divider />
         <About />
-        <hr className="bg-border h-[1px] w-full my-8" />
+        <Divider />
         <Instructors />
-        <hr className="bg-border h-[1px] w-full my-8" />
+        <Divider />
         <Lessons />
       </div>
     </main>
   );
 }
 
-function Instructors() {
-  var { instructors } = useBuyCourse();
-
-  return (
-    <section className="flex flex-col gap-4">
-      <h2 className="font-gilroy text-[25px] font-extrabold text-text1">
-        Instructors
-      </h2>
-
-      <div className="flex flex-wrap gap-8">
-        {instructors?.map((instructor: any) => (
-          <Instructor key={instructor._id} instructor={instructor} />
-        ))}
-      </div>
-    </section>
-  );
-}
+CourseBuyPage.getLayout = function getLayout(page: ReactElement) {
+  return <BaseLayout>{page}</BaseLayout>;
+};

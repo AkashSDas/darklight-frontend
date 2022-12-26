@@ -1,11 +1,11 @@
 import { useBuyCourse } from "@lib/hooks.lib";
 
-export default function About() {
+export default function About(): JSX.Element {
   var { info } = useBuyCourse();
 
   function SkillBadge({ skill }: { skill: string }) {
     return (
-      <span className="h-[32px] bg-background3 px-[10px] rounded-xl flex items-center justify-center">
+      <span className="px-[10px] h-[32px] flex items-center justify-center bg-background3 rounded-xl">
         {skill[0].toUpperCase() + skill.slice(1)}
       </span>
     );
@@ -17,15 +17,11 @@ export default function About() {
         About
       </h2>
 
-      <p className="leading-[140%] font-medium font-urbanist">
-        {info?.description}
-      </p>
+      <p className="leading-[140%]">{info?.description}</p>
 
       {/* Skills you'll gain */}
       <div className="flex flex-col gap-3">
-        <div className="font-urbanist font-semibold text-[18px]">
-          🧰 Skills {"you'll"} gain
-        </div>
+        <div className="text-[18px]">🧰 Skills {"you'll"} gain</div>
 
         <div className="flex gap-3">
           {info?.tags.map((tag: string) => (

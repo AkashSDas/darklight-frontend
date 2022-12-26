@@ -8,20 +8,23 @@ import { setShowDynamicHeader } from "@store/buy-course/slice";
 
 dayjs.extend(relativeTime);
 
-export default function Metadata() {
-  var { info } = useBuyCourse();
-
+export default function CourseMetadata(): JSX.Element {
   var ref = useRef(null);
   var isInView = useInView(ref);
   var dispatch = useAppDispatch();
+  var { info } = useBuyCourse();
 
-  useEffect(() => {
-    dispatch(setShowDynamicHeader(!isInView));
-  }, [isInView, dispatch]);
+  // update based on whether the element is in view
+  useEffect(
+    function updateDynamicHeader() {
+      dispatch(setShowDynamicHeader(!isInView));
+    },
+    [isInView, dispatch]
+  );
 
-  function Badge({ children }: { children: string }) {
+  function Badge({ children }: { children: string }): JSX.Element {
     return (
-      <span className="flex justify-center items-center px-[3px] py-[1px] bg-background2 rounded-sm">
+      <span className="px-[3px] py-[1px] flex justify-center items-center bg-background2 rounded-sm">
         {children}
       </span>
     );
@@ -35,20 +38,22 @@ export default function Metadata() {
       </h1>
 
       {/* Basic info */}
-      <div ref={ref} className="flex items-center justify-between gap-1">
-        <div className="flex items-center gap-3">
+      <div ref={ref} className="flex gap-1 items-center justify-between">
+        <div className="flex gap-3 items-center">
           <Badge>{dayjs(new Date(info?.lastEditedOn)).fromNow()}</Badge>
-          <Badge>12h</Badge>
+          <Badge>Course duration is 12h</Badge>
           <Badge>
-            {info?.difficulty[0].toUpperCase() + info?.difficulty.slice(1)}
+            {info?.difficulty[0].toUpperCase() +
+              info?.difficulty.slice(1) +
+              " level"}
           </Badge>
           <Badge>{"⭐".repeat(Math.abs(info?.rating ?? 1))}</Badge>
           <Badge>{info?.enrolled + " enrolled"}</Badge>
         </div>
 
-        {/* <RegularButton variant="contained">
-          <>Enroll for ₹{info?.price}</>
-        </RegularButton> */}
+        <button className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]">
+          Enroll for ₹{info?.price}
+        </button>
       </div>
     </>
   );

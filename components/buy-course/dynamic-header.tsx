@@ -42,7 +42,7 @@ export default function DynamicHeader(): JSX.Element {
       </h2>
 
       <button className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]">
-        Enroll for {info?.price}
+        Enroll for ₹{info?.price}
       </button>
     </motion.div>
   );

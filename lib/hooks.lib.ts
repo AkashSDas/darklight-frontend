@@ -270,7 +270,11 @@ export function useRenderedCheck(where: string) {
 
 export function useAuthoredCourses() {
   var { user, accessToken } = useUser();
-  var { data, error } = useSWR(
+  var {
+    data,
+    error,
+    mutate: mutateAuthoredCourse,
+  } = useSWR(
     accessToken || user?._id ? "authored-courses" : null,
     () => getAuthoredCourses(user._id, accessToken),
     { revalidateOnFocus: false }
@@ -283,6 +287,7 @@ export function useAuthoredCourses() {
     hasNext: data?.hasNext,
     hasPrevious: data?.hasPrevious,
     next: data?.next,
+    mutateAuthoredCourse,
     error,
   };
 }

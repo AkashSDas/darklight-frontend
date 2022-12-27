@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { deleteCourse } from "services/course.service";
 import { deleteGroup } from "services/group.service";
 import { deleteLesson } from "services/lesson.service";
 
-import { useDropdown, useEditableCourse, useEditableGroup, useEditableLesson, useUser } from "@lib/hooks.lib";
+import { useAuthoredCourses, useDropdown, useEditableCourse, useEditableGroup, useEditableLesson, useUser } from "@lib/hooks.lib";
 
 import { DiscussionIcon, EyeIcon, MoreIcon, NotificationIcon, SearchIcon, TrashIcon } from "./icons";
 import { TextBadge } from "./text-badge";
@@ -90,9 +91,42 @@ function MoreButton() {
   }
 
   function CoursePanel(): JSX.Element {
+    var { mutateCourse, courseId } = useEditableCourse();
+    var { mutateAuthoredCourse } = useAuthoredCourses();
+    var [loading, setLoading] = useState(false);
+    var { accessToken } = useUser();
+
+    async function removeCourse(e: any) {
+      e.stopPropagation();
+      if (loading) return;
+      setLoading(true);
+
+      mutateCourse((data) => ({ ...data, course: null } as any), false);
+      mutateAuthoredCourse(
+        (data) =>
+          ({
+            ...data,
+            courses: data!.courses.filter((c: any) => c._id != courseId),
+          } as any),
+        false
+      );
+
+      setIsOpen(false);
+      toast.success("Course deleted");
+      router.push(`/settings/teacher`);
+
+      var { success } = await deleteCourse(courseId, accessToken);
+      if (!success) toast.error("Failed to course");
+
+      setLoading(false);
+    }
+
     return (
       <>
-        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+        <div
+          onClick={(e) => removeCourse(e)}
+          className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md"
+        >
           <span className="icon">
             <TrashIcon size="size_4" />
           </span>

@@ -132,3 +132,15 @@ export async function getAuthoredCourses(userId: string, accessToken?: string) {
   }
   return { success: false, error: response.error };
 }
+
+export async function deleteCourse(courseId: string, accessToken: string) {
+  var response = await fetchFromCourse(`${courseId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (response.statusCode == 200) {
+    return { success: response.success };
+  }
+  return { success: false };
+}

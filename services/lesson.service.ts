@@ -73,3 +73,20 @@ export async function updateLessonSettings(
   }
   return { success: false };
 }
+
+export async function deleteLesson(
+  courseId: string,
+  groupId: string,
+  lessonId: string,
+  accessToken: string
+) {
+  var response = await fetchFromLesson(courseId, groupId, `${lessonId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (response.statusCode == 200) {
+    return { success: response.success };
+  }
+  return { success: false };
+}

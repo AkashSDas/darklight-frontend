@@ -3,8 +3,10 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { deleteLesson } from "services/lesson.service";
 
-import { useDropdown, useEditableCourse, useEditableGroup, useEditableLesson } from "@lib/hooks.lib";
+import { useDropdown, useEditableCourse, useEditableGroup, useEditableLesson, useUser } from "@lib/hooks.lib";
 
 import { DiscussionIcon, EyeIcon, MoreIcon, NotificationIcon, SearchIcon, TrashIcon } from "./icons";
 import { TextBadge } from "./text-badge";
@@ -115,14 +117,64 @@ function MoreButton() {
   }
 
   function LessonPanel(): JSX.Element {
+    var { mutateCourse, group, courseId } = useEditableGroup();
+    var { lesson } = useEditableLesson();
+    var [loading, setLoading] = useState(false);
+    var { accessToken } = useUser();
+
+    async function removeLesson() {
+      if (loading) return;
+      setLoading(true);
+
+      mutateCourse(
+        (data) =>
+          ({
+            ...data,
+            course: {
+              ...data!.course,
+              groups: data!.course.groups.map((g: any) => {
+                if (g._id == group!._id) {
+                  return {
+                    ...g,
+                    lessons: g.lessons.filter((l: any) => l._id != lesson!._id),
+                  };
+                }
+
+                return g;
+              }),
+            },
+          } as any),
+        false
+      );
+
+      var { success } = await deleteLesson(
+        courseId,
+        group!._id,
+        lesson!._id,
+        accessToken
+      );
+
+      if (success) {
+        toast.success("Lesson deleted");
+        router.push(`/courses/${courseId}/groups/${group!._id}`);
+      } else toast.error("Failed to delete lesson");
+
+      setLoading(false);
+    }
+
     return (
       <>
-        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+        <div
+          onClick={removeLesson}
+          className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md"
+        >
           <span className="icon">
             <TrashIcon size="size_4" />
           </span>
 
-          <span className="text-sm">Delete lesson</span>
+          <span className="text-sm">
+            {loading ? "Deleting..." : "Delete lesson"}
+          </span>
         </div>
       </>
     );

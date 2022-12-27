@@ -46,9 +46,14 @@ function DisplayAuthoredCourses(): JSX.Element {
           <div
             key={course._id}
             onClick={() => router.push(`/courses/${course._id}/settings`)}
-            className="px-2 py-1 hover:bg-background3 active:bg-border cursor-pointer rounded-md"
+            className="px-2 py-1 flex items-center hover:bg-background3 active:bg-border cursor-pointer rounded-md"
           >
-            {course.title ?? "Untitled"}
+            <span className="flex-grow">{course.title ?? "Untitled"}</span>
+            {course.stage == "published" && (
+              <span className="text-sm">
+                <TextBadge variant="highlight">Public</TextBadge>
+              </span>
+            )}
           </div>
         ))}
       </div>
@@ -56,7 +61,7 @@ function DisplayAuthoredCourses(): JSX.Element {
   }
 
   return (
-    <section className="w-full flex gap-2 justify-between items-center">
+    <section className="w-full flex gap-2 justify-start items-center">
       <div className="w-full flex flex-col gap-2">
         <div>
           <TextBadge variant="regular">📁</TextBadge>{" "}

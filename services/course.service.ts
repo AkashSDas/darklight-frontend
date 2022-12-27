@@ -114,3 +114,21 @@ export async function getCourse(id: string) {
   }
   return { success: false, error: response.error };
 }
+
+export async function getAuthoredCourses(userId: string, accessToken?: string) {
+  var response = await fetchFromCourse(`${userId}/authored-courses`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (response.statusCode == 200) {
+    return {
+      success: response.success,
+      courses: response.data.courses,
+      hasNext: response.data.hasNext,
+      hasPrevious: response.data.hasPrevious,
+      next: response.data.next,
+    };
+  }
+  return { success: false, error: response.error };
+}

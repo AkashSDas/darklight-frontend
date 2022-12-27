@@ -4,7 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import useSWR, { useSWRConfig } from "swr";
 
 import { getNewAccessToken } from "../services/auth.service";
-import { getCourse, getEditableCourse } from "../services/course.service";
+import { getAuthoredCourses, getCourse, getEditableCourse } from "../services/course.service";
 import { getLesson } from "../services/lesson.service";
 import { me } from "../services/user.service";
 import { AppDispatch, RootState } from "../store";
@@ -266,4 +266,23 @@ export function useRenderedCheck(where: string) {
   useEffect(() => {
     console.count(`[${where}] rendered`);
   }, [where]);
+}
+
+export function useAuthoredCourses() {
+  var { user, accessToken } = useUser();
+  var { data, error } = useSWR(
+    accessToken || user?._id ? "authored-courses" : null,
+    () => getAuthoredCourses(user._id, accessToken),
+    { revalidateOnFocus: false }
+  );
+
+  return {
+    isLoading: !data && !error,
+    courses: data?.courses,
+    success: data?.success,
+    hasNext: data?.hasNext,
+    hasPrevious: data?.hasPrevious,
+    next: data?.next,
+    error,
+  };
 }

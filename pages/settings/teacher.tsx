@@ -6,7 +6,7 @@ import { instructorSignup } from "services/user.service";
 
 import { TextBadge } from "@components/shared/text-badge";
 import UserSettingsLayout from "@components/shared/user-settings-layout";
-import { useUser } from "@lib/hooks.lib";
+import { useAuthoredCourses, useUser } from "@lib/hooks.lib";
 
 export default function TeacherSettingsPage(): JSX.Element {
   function Divider(): JSX.Element {
@@ -19,8 +19,59 @@ export default function TeacherSettingsPage(): JSX.Element {
         <InstructorSignup />
         <Divider />
         <CreateCourse />
+        <Divider />
+        <DisplayAuthoredCourses />
       </div>
     </main>
+  );
+}
+
+function DisplayAuthoredCourses(): JSX.Element {
+  var { isLoading, courses } = useAuthoredCourses();
+  var router = useRouter();
+  var { user } = useUser();
+
+  function Content(): JSX.Element | null {
+    if (!user.roles.includes("teacher")) {
+      return <div>Not an instructor yet!</div>;
+    } else if (isLoading) {
+      return <div>Loading...</div>;
+    } else if (!courses || courses.length == 0) {
+      return <div>No courses yet!</div>;
+    }
+
+    return (
+      <div className="flex flex-col w-full">
+        {courses.map((course: any) => (
+          <div
+            key={course._id}
+            onClick={() => router.push(`/courses/${course._id}/settings`)}
+            className="px-2 py-1 hover:bg-background3 active:bg-border cursor-pointer rounded-md"
+          >
+            {course.title ?? "Untitled"}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <section className="w-full flex gap-2 justify-between items-center">
+      <div className="w-full flex flex-col gap-2">
+        <div>
+          <TextBadge variant="regular">📁</TextBadge>{" "}
+          <span className="text-text1">My courses</span>
+        </div>
+
+        <p className="text-sm">
+          Courses you are parth of as an instructor (publised & draft).
+        </p>
+      </div>
+
+      <div className="w-full max-w-[300px] flex gap-1 justify-start">
+        <Content />
+      </div>
+    </section>
   );
 }
 

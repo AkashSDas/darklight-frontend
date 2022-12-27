@@ -113,10 +113,10 @@ function MoreButton() {
 
       setIsOpen(false);
       toast.success("Course deleted");
-      router.push(`/settings/teacher`);
+      router.replace(`/settings/teacher`);
 
       var { success } = await deleteCourse(courseId, accessToken);
-      if (!success) toast.error("Failed to course");
+      if (!success) toast.error("Failed to delete course");
 
       setLoading(false);
     }
@@ -163,11 +163,11 @@ function MoreButton() {
 
       setIsOpen(false);
       toast.success("Group deleted");
-      router.push(`/courses/${courseId}/settings`);
+      router.replace(`/courses/${courseId}/settings`);
 
       var { success } = await deleteGroup(courseId, group!._id, accessToken);
 
-      if (!success) toast.error("Failed to group lesson");
+      if (!success) toast.error("Failed to delete group");
 
       setLoading(false);
     }
@@ -223,7 +223,7 @@ function MoreButton() {
 
       setIsOpen(false);
       toast.success("Lesson deleted");
-      router.push(`/courses/${courseId}/groups/${group!._id}`);
+      router.replace(`/courses/${courseId}/groups/${group!._id}`);
 
       var { success } = await deleteLesson(
         courseId,

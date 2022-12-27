@@ -187,6 +187,10 @@ function MoreButton() {
         false
       );
 
+      setIsOpen(false);
+      toast.success("Lesson deleted");
+      router.push(`/courses/${courseId}/groups/${group!._id}`);
+
       var { success } = await deleteLesson(
         courseId,
         group!._id,
@@ -194,10 +198,7 @@ function MoreButton() {
         accessToken
       );
 
-      if (success) {
-        toast.success("Lesson deleted");
-        router.push(`/courses/${courseId}/groups/${group!._id}`);
-      } else toast.error("Failed to delete lesson");
+      if (!success) toast.error("Failed to delete lesson");
 
       setLoading(false);
     }

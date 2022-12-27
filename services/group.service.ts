@@ -39,3 +39,20 @@ export async function updateGroupSettings(
   }
   return { success: false };
 }
+
+export async function deleteGroup(
+  courseId: string,
+  groupId: string,
+  accessToken: string
+) {
+  var response = await fetchFromGroup(courseId, `${groupId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (response.statusCode == 200) {
+    return { success: response.success };
+  }
+
+  return { success: false };
+}

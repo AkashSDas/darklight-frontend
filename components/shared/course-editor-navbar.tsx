@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { deleteGroup } from "services/group.service";
 import { deleteLesson } from "services/lesson.service";
 
 import { useDropdown, useEditableCourse, useEditableGroup, useEditableLesson, useUser } from "@lib/hooks.lib";
@@ -103,14 +104,53 @@ function MoreButton() {
   }
 
   function GroupPanel(): JSX.Element {
+    var { mutateCourse, group, courseId } = useEditableGroup();
+    var [loading, setLoading] = useState(false);
+    var { accessToken } = useUser();
+
+    async function removeGroup(e: any) {
+      e.stopPropagation();
+      if (loading) return;
+      setLoading(true);
+
+      mutateCourse(
+        (data) =>
+          ({
+            ...data,
+            course: {
+              ...data!.course,
+              groups: data!.course.groups.filter(
+                (g: any) => g._id != group!._id
+              ),
+            },
+          } as any),
+        false
+      );
+
+      setIsOpen(false);
+      toast.success("Group deleted");
+      router.push(`/courses/${courseId}/settings`);
+
+      var { success } = await deleteGroup(courseId, group!._id, accessToken);
+
+      if (!success) toast.error("Failed to group lesson");
+
+      setLoading(false);
+    }
+
     return (
       <>
-        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+        <div
+          onClick={(e) => removeGroup(e)}
+          className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md"
+        >
           <span className="icon">
             <TrashIcon size="size_4" />
           </span>
 
-          <span className="text-sm">Delete group</span>
+          <span className="text-sm">
+            {loading ? "Deleting..." : "Delete group"} {loading.toString()}
+          </span>
         </div>
       </>
     );

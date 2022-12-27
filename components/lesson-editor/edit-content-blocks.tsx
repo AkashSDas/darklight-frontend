@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
-import { reorderContent } from "services/lesson-content.service";
+import { toast } from "react-hot-toast";
+import { deleteContent, reorderContent } from "services/lesson-content.service";
 
-import { DragIcon } from "@components/shared/icons";
+import { DragIcon, TrashIcon } from "@components/shared/icons";
 import { useEditableLesson, useUser } from "@lib/hooks.lib";
 
 import ImageBlock from "./image-block";
@@ -10,6 +12,7 @@ import ParagraphBlock from "./paragraph-block";
 export default function EditContentBlocks(): JSX.Element {
   var { accessToken } = useUser();
   var { lesson, mutateLesson, courseId, groupId } = useEditableLesson();
+  var [loading, setLoading] = useState(false);
 
   async function onDragEnd(dropEvent: DropResult) {
     // Reorder
@@ -38,6 +41,39 @@ export default function EditContentBlocks(): JSX.Element {
     );
   }
 
+  async function deleteContentBlock(blockData: any) {
+    console.log(blockData);
+    if (loading) return;
+    setLoading(true);
+
+    mutateLesson(
+      (data) =>
+        ({
+          ...data,
+          lesson: {
+            ...data!.lesson,
+            content: data!.lesson.content.filter(
+              (block: any) => block.id != blockData.id
+            ),
+          },
+        } as any),
+      false
+    );
+
+    var { success } = await deleteContent(
+      courseId,
+      groupId,
+      lesson._id,
+      { id: blockData.id, type: blockData.type, data: blockData.data },
+      accessToken
+    );
+
+    if (success) toast.success("Content block deleted");
+    else toast.error("Failed to delete content block");
+
+    setLoading(false);
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="lesson-content-block">
@@ -63,6 +99,14 @@ export default function EditContentBlocks(): JSX.Element {
                           className="icon hidden group-hover:flex absolute -left-5 top-1 rounded-sm p-[2px] justify-center items-center cursor-pointer hover:bg-background3 active:bg-border"
                         >
                           <DragIcon size="size_4" />
+                        </div>
+
+                        {/* Delete content block button */}
+                        <div
+                          onClick={() => deleteContentBlock(block)}
+                          className="icon hidden group-hover:flex absolute -left-10 top-1 rounded-sm p-[2px] justify-center items-center cursor-pointer hover:bg-background3 active:bg-border"
+                        >
+                          <TrashIcon size="size_4" />
                         </div>
 
                         {/* Block */}

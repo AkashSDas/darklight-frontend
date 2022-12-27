@@ -77,7 +77,7 @@ function MoreButton() {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="absolute top-11 right-0 px-2 py-1 w-[300px] flex flex-col bg-background1 border border-solid border-border rounded-md shadow-lg"
+        className="absolute top-11 right-0 px-2 py-1 w-[300px] flex flex-col bg-background1 border border-solid border-border rounded-md shadow-xl"
       >
         {context == "course" ? <CoursePanel /> : null}
         {context == "group" ? <GroupPanel /> : null}

@@ -98,3 +98,31 @@ export async function reorderContent(
 
   return { success: false, error: response.error };
 }
+
+export async function deleteContent(
+  courseId: string,
+  groupId: string,
+  lessonId: string,
+  data: {
+    id: string;
+    type: ContentBlockType;
+    data: { key: string; value: string }[];
+  },
+  accessToken: string
+) {
+  var response = await fetchFromContent(
+    courseId,
+    groupId,
+    lessonId,
+    `${data.id}`,
+    {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${accessToken}` },
+      data,
+    }
+  );
+
+  console.log(response);
+  if (response.statusCode == 200) return { success: true };
+  return { success: false, error: response.error };
+}

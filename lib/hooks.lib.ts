@@ -109,14 +109,14 @@ export function useEditableLesson() {
   var { courseId, group } = useEditableGroup();
   var { accessToken } = useUser();
 
-  var { data, error, mutate, isValidating } = useSWR(
-    accessToken && lessonId ? [courseId, group?._id] : null,
+  var { data, error, mutate, isValidating, isLoading } = useSWR(
+    accessToken && lessonId ? [courseId, group?._id, lessonId] : null,
     () => getLesson(courseId, group._id, lessonId, accessToken),
     { revalidateOnFocus: false }
   );
 
   return {
-    loading: !data && !error,
+    loading: (!data && !error) || isLoading,
     lesson: data?.lesson,
     success: data?.success,
     error,

@@ -194,12 +194,8 @@ function GroupItem(props: any): JSX.Element {
     );
   }
 
-  function navigateToLesson(lessonId: string) {
-    return () => {
-      router.push(
-        `/courses/${course._id}/groups/${props.group._id}/lessons/${lessonId}`
-      );
-    };
+  function navigateToLesson(groupId: string, id: string) {
+    router.push(`/courses/${course._id}/groups/${groupId}/lessons/${id}`);
   }
 
   return (
@@ -223,7 +219,10 @@ function GroupItem(props: any): JSX.Element {
           {props.group.lessons.map((lesson: any) => (
             <div
               key={lesson._id}
-              onClick={navigateToLesson(lesson._id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigateToLesson(lesson.group, lesson._id);
+              }}
               className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
             >
               <span className="w-[18px] h-[18px] opacity-0"></span>

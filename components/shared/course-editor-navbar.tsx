@@ -1,10 +1,12 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import { useEditableCourse, useEditableGroup, useEditableLesson } from "@lib/hooks.lib";
+import { useDropdown, useEditableCourse, useEditableGroup, useEditableLesson } from "@lib/hooks.lib";
 
-import { DiscussionIcon, EyeIcon, MoreIcon, NotificationIcon, SearchIcon } from "./icons";
+import { DiscussionIcon, EyeIcon, MoreIcon, NotificationIcon, SearchIcon, TrashIcon } from "./icons";
 import { TextBadge } from "./text-badge";
 
 dayjs.extend(relativeTime);
@@ -41,11 +43,101 @@ export default function CourseEditorNavbar(): JSX.Element {
           <EyeIcon size="size_5" />
         </button>
 
-        <button className="icon_btn">
-          <MoreIcon size="size_5" />
-        </button>
+        <MoreButton />
       </div>
     </nav>
+  );
+}
+
+function MoreButton() {
+  var router = useRouter();
+  var { wrapperRef, isOpen, setIsOpen } = useDropdown();
+  var [context, setContext] = useState<"course" | "group" | "lesson" | null>(
+    null
+  );
+
+  useEffect(
+    function updateContext() {
+      // Order of if statements is important because a lesson route will
+      // have groups and courses
+      if (router.pathname.includes("/lessons/")) {
+        setContext("lesson");
+      } else if (router.pathname.includes("/groups/")) {
+        setContext("group");
+      } else if (router.pathname.includes("/courses/")) {
+        setContext("course");
+      }
+    },
+    [router.pathname]
+  );
+
+  function Dropdown(): JSX.Element {
+    return (
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        className="absolute top-11 right-0 px-2 py-1 w-[300px] flex flex-col bg-background1 border border-solid border-border rounded-md shadow-lg"
+      >
+        {context == "course" ? <CoursePanel /> : null}
+        {context == "group" ? <GroupPanel /> : null}
+        {context == "lesson" ? <LessonPanel /> : null}
+      </div>
+    );
+  }
+
+  function CoursePanel(): JSX.Element {
+    return (
+      <>
+        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+          <span className="icon">
+            <TrashIcon size="size_4" />
+          </span>
+
+          <span className="text-sm">Delete course</span>
+        </div>
+      </>
+    );
+  }
+
+  function GroupPanel(): JSX.Element {
+    return (
+      <>
+        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+          <span className="icon">
+            <TrashIcon size="size_4" />
+          </span>
+
+          <span className="text-sm">Delete group</span>
+        </div>
+      </>
+    );
+  }
+
+  function LessonPanel(): JSX.Element {
+    return (
+      <>
+        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+          <span className="icon">
+            <TrashIcon size="size_4" />
+          </span>
+
+          <span className="text-sm">Delete lesson</span>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <button
+      className="icon_btn relative"
+      ref={wrapperRef}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <MoreIcon size="size_5" />
+
+      {isOpen && context ? <Dropdown /> : null}
+    </button>
   );
 }
 

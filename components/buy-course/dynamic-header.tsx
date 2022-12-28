@@ -1,15 +1,22 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { buyCourse } from "services/enrolled-course.service";
 
-import { useAppSelector, useBuyCourse } from "@lib/hooks.lib";
+import { useAppSelector, useBuyCourse, useUser } from "@lib/hooks.lib";
 
 export default function DynamicHeader(): JSX.Element {
-  var { info } = useBuyCourse();
+  var { info, course } = useBuyCourse();
   var show = useAppSelector((state) => state.buyCourse.showDynamicHeader);
   var variants = {
     hidden: { opacity: 0, y: -20 },
     visible: { opacity: 1, y: 0 },
   };
+  var [loading, setLoading] = useState(false);
+  var { accessToken, user } = useUser();
+  var router = useRouter();
 
   function CoverImage(): JSX.Element {
     return (
@@ -27,6 +34,23 @@ export default function DynamicHeader(): JSX.Element {
     );
   }
 
+  async function handleEnroll() {
+    if (!course || loading) return;
+    if (!user) {
+      toast.error("Please login to enroll");
+      return;
+    }
+
+    setLoading(true);
+    var response = await buyCourse(course._id, accessToken);
+    setLoading(false);
+
+    if (response.success) {
+      toast.success("Enrolled successfully");
+      router.push(`/course/${response.enrolledCourse.course}/learn`);
+    } else toast.error("Something went wrong");
+  }
+
   return (
     <motion.div
       variants={variants}
@@ -41,8 +65,12 @@ export default function DynamicHeader(): JSX.Element {
         {info?.title}
       </h2>
 
-      <button className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]">
-        Enroll for ₹{info?.price}
+      <button
+        onClick={handleEnroll}
+        disabled={loading}
+        className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
+      >
+        {loading ? "Loading..." : ` Enroll for ₹${info?.price}`}
       </button>
     </motion.div>
   );

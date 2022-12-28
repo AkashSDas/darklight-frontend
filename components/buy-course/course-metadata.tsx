@@ -1,10 +1,14 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useInView } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 
-import { useAppDispatch, useBuyCourse } from "@lib/hooks.lib";
+import { useAppDispatch, useBuyCourse, useUser } from "@lib/hooks.lib";
 import { setShowDynamicHeader } from "@store/buy-course/slice";
+
+import { buyCourse } from "../../services/enrolled-course.service";
 
 dayjs.extend(relativeTime);
 
@@ -12,7 +16,10 @@ export default function CourseMetadata(): JSX.Element {
   var ref = useRef(null);
   var isInView = useInView(ref);
   var dispatch = useAppDispatch();
-  var { info } = useBuyCourse();
+  var { info, course } = useBuyCourse();
+  var [loading, setLoading] = useState(false);
+  var { accessToken, user } = useUser();
+  var router = useRouter();
 
   // update based on whether the element is in view
   useEffect(
@@ -28,6 +35,23 @@ export default function CourseMetadata(): JSX.Element {
         {children}
       </span>
     );
+  }
+
+  async function handleEnroll() {
+    if (!course || loading) return;
+    if (!user) {
+      toast.error("Please login to enroll");
+      return;
+    }
+
+    setLoading(true);
+    var response = await buyCourse(course._id, accessToken);
+    setLoading(false);
+
+    if (response.success) {
+      toast.success("Enrolled successfully");
+      router.push(`/course/${response.enrolledCourse.course}/learn`);
+    } else toast.error("Something went wrong");
   }
 
   return (
@@ -51,8 +75,12 @@ export default function CourseMetadata(): JSX.Element {
           <Badge>{info?.enrolled + " enrolled"}</Badge>
         </div>
 
-        <button className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]">
-          Enroll for ₹{info?.price}
+        <button
+          onClick={handleEnroll}
+          disabled={loading}
+          className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
+        >
+          {loading ? "Loading..." : ` Enroll for ₹${info?.price}`}
         </button>
       </div>
     </>

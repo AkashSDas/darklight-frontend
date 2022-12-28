@@ -1,22 +1,217 @@
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { ArrowIcon } from "@components/shared/icons";
-import { useEnrolledCourse, useUser } from "@lib/hooks.lib";
+import { ArrowIcon, DiscussionIcon, MoreIcon, NotificationIcon, SearchIcon, TrashIcon } from "@components/shared/icons";
+import { TextBadge } from "@components/shared/text-badge";
+import { useAppDispatch, useAppSelector, useDropdown, useEnrolledCourse, useUser } from "@lib/hooks.lib";
 import Logo from "@public/logo.svg";
+import { setDropdownContext, setLessonBreadcrum } from "@store/enrolled-course/slice";
+
+dayjs.extend(relativeTime);
+
+function BreadCrum(): JSX.Element {
+  var { course } = useEnrolledCourse();
+
+  function CourseLink(): JSX.Element {
+    return (
+      <Link href={`/courses/${course._id}/settings`}>
+        <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
+          <TextBadge variant="regular">{course.emoji ?? "🎁"}</TextBadge>{" "}
+          <span className="ml-1 pr-1">{course.title ?? "Untitled"} </span>
+        </div>
+      </Link>
+    );
+  }
+
+  function GroupLink(): JSX.Element {
+    var { group } = useAppSelector((state) => state.enrolledCourse.breadcrum);
+
+    return (
+      <Link href={`/courses/${course.id}/groups/${group?._id}`}>
+        <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
+          <TextBadge variant="regular">{group?.emoji ?? "📦"}</TextBadge>{" "}
+          <span className="ml-1 pr-1">{group?.title ?? "Untitled"} </span>
+        </div>
+      </Link>
+    );
+  }
+
+  function LessonLink(): JSX.Element {
+    var { group, lesson } = useAppSelector(
+      (state) => state.enrolledCourse.breadcrum
+    );
+
+    return (
+      <Link
+        href={`/courses/${course.id}/groups/${group?._id}/lessons/${lesson?._id}`}
+      >
+        <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
+          <TextBadge variant="regular">{lesson?.emoji ?? "🍈"}</TextBadge>{" "}
+          <span className="ml-1 pr-1">{lesson?.title ?? "Untitled"} </span>
+        </div>
+      </Link>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      <CourseLink />
+      <div className="text-text2 text-sm opacity-50">/</div>
+      <GroupLink />
+      <div className="text-text2 text-sm opacity-50">/</div>
+      <LessonLink />
+    </div>
+  );
+}
+
+function LastEditedOn(): JSX.Element {
+  return (
+    <div className="px-2 h-[34px] flex items-center justify-center text-sm text-[#BFBFBF]">
+      {/* {dayjs(new Date(getLastEditedOn())).fromNow()} */}
+    </div>
+  );
+}
+
+function Navbar(): JSX.Element {
+  var { enrolledCourse: course } = useEnrolledCourse();
+
+  if (!course) {
+    return (
+      <nav className="sticky top-0 z-10 pt-4 px-4 h-[76px] w-full flex items-center justify-between bg-background1"></nav>
+    );
+  }
+
+  return (
+    <nav className="sticky top-0 z-10 py-4 px-4 w-full flex items-center justify-between bg-background1">
+      <BreadCrum />
+
+      <div className="flex gap-3 items-center">
+        <LastEditedOn />
+
+        <button className="icon_btn">
+          <NotificationIcon size="size_5" />
+        </button>
+
+        <button className="icon_btn">
+          <DiscussionIcon size="size_5" />
+        </button>
+
+        <button className="icon_btn">
+          <SearchIcon size="size_5" />
+        </button>
+
+        <MoreButton />
+      </div>
+    </nav>
+  );
+}
+
+function MoreButton() {
+  var router = useRouter();
+  var { wrapperRef, isOpen, setIsOpen } = useDropdown();
+  var [context, setContext] = useState<"course" | "group" | "lesson" | null>(
+    null
+  );
+  var context = useAppSelector((state) => state.enrolledCourse.dropdownContext);
+
+  function Dropdown(): JSX.Element {
+    return (
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="absolute top-11 right-0 px-2 py-1 w-[300px] flex flex-col bg-background1 border border-solid border-border rounded-md shadow-xl"
+      >
+        {context == "course" ? <CoursePanel /> : null}
+        {context == "group" ? <GroupPanel /> : null}
+        {context == "lesson" ? <LessonPanel /> : null}
+      </div>
+    );
+  }
+
+  function CoursePanel(): JSX.Element {
+    return (
+      <>
+        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+          <span className="icon">
+            <TrashIcon size="size_4" />
+          </span>
+
+          <span className="text-sm">Delete course</span>
+        </div>
+      </>
+    );
+  }
+
+  function GroupPanel(): JSX.Element {
+    return (
+      <>
+        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+          <span className="icon">
+            <TrashIcon size="size_4" />
+          </span>
+
+          <span className="text-sm">Delete group</span>
+        </div>
+      </>
+    );
+  }
+
+  function LessonPanel(): JSX.Element {
+    return (
+      <>
+        <div className="p-2 flex gap-2 items-center hover:bg-background3 active:bg-border rounded-md">
+          <span className="icon">
+            <TrashIcon size="size_4" />
+          </span>
+
+          <span className="text-sm">Delete lesson</span>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <button
+      className="icon_btn relative"
+      ref={wrapperRef}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <MoreIcon size="size_5" />
+
+      {isOpen && context ? <Dropdown /> : null}
+    </button>
+  );
+}
 
 export default function CourseLearnPage(): JSX.Element {
-  var { course, isLoading } = useEnrolledCourse();
+  var { enrolledCourse: course, isLoading } = useEnrolledCourse();
   var router = useRouter();
+  var dispatch = useAppDispatch();
 
   useEffect(() => {
     if (course && course.course) {
-      console.log(course?.course?.groups[0].lessons);
       router.push(
         `/course/${router.query?.id}/learn?lesson=${course.course.groups[0].lessons[0]._id}`,
         undefined,
         { shallow: true }
+      );
+
+      dispatch(setDropdownContext("lesson"));
+      dispatch(
+        setLessonBreadcrum({
+          group: {
+            _id: course.course.groups[0]._id,
+            title: course.course.groups[0].title,
+            emoji: course.course.groups[0].emoji,
+          },
+          lesson: {
+            _id: course.course.groups[0].lessons[0]._id,
+            title: course.course.groups[0].lessons[0].title,
+            emoji: course.course.groups[0].lessons[0].emoji,
+          },
+        })
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -31,7 +226,7 @@ export default function CourseLearnPage(): JSX.Element {
       <Sidebar />
 
       <div className="ml-[300px] w-full">
-        {/* Navbar */}
+        <Navbar />
 
         <div className="px-4">{/* Content */}</div>
       </div>
@@ -72,6 +267,7 @@ function GroupItem(props: any): JSX.Element {
   var [openLessons, setOpenLessons] = useState(false);
   var iconStyle =
     "p-0 h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border";
+  var dispatch = useAppDispatch();
 
   function DisplayGroupLessons(): JSX.Element {
     return (
@@ -101,10 +297,24 @@ function GroupItem(props: any): JSX.Element {
     return <span className="text-sm flex-grow">{title}</span>;
   }
 
-  function navigateToLesson(groupId: string, id: string) {
-    router.push(`/course/${router.query?.id}/learn?lesson=${id}`, undefined, {
-      shallow: true,
-    });
+  function navigateToLesson(lesson: any) {
+    dispatch(
+      setLessonBreadcrum({
+        group: {
+          _id: props.group._id,
+          title: props.group.title,
+          emoji: props.group.emoji,
+        },
+        lesson: { _id: lesson._id, title: lesson.title, emoji: lesson.emoji },
+      })
+    );
+    router.push(
+      `/course/${router.query?.id}/learn?lesson=${lesson._id}`,
+      undefined,
+      {
+        shallow: true,
+      }
+    );
   }
 
   return (
@@ -122,7 +332,7 @@ function GroupItem(props: any): JSX.Element {
               key={lesson._id}
               onClick={(e) => {
                 e.stopPropagation();
-                navigateToLesson(props.group._id, lesson._id);
+                navigateToLesson(lesson);
               }}
               className="h-9 px-2 flex items-center gap-3 group cursor-pointer hover:bg-background3 active:bg-border"
             >
@@ -150,7 +360,7 @@ function GroupItem(props: any): JSX.Element {
 }
 
 function GroupsSection(): JSX.Element {
-  var { course } = useEnrolledCourse();
+  var { enrolledCourse: course } = useEnrolledCourse();
 
   return (
     <ul className="mt-4 flex flex-col">

@@ -308,7 +308,9 @@ export function useEnrolledCourse() {
 
   return {
     isLoading: !data && !error,
-    course: data?.course,
+    enrolledCourse: data?.course,
+    course: data?.course?.course,
+    groups: data?.course?.course?.groups,
     success: data?.success,
     error,
     mutateEnrolledCourse,

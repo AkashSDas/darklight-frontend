@@ -10,7 +10,7 @@ import { TextBadge } from "@components/shared/text-badge";
 
 export default function HomePage(): JSX.Element {
   return (
-    <main className="mt-12 px-8 font-urbanist font-medium">
+    <main className="mt-12 mb-20 px-8 font-urbanist font-medium">
       <TrendingCourses />
 
       <div className="mt-16 flex gap-2 justify-between">

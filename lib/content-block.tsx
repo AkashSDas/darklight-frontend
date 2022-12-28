@@ -16,6 +16,7 @@ export function getBlock(lesson: any, blockId: string) {
 }
 
 export function getBlockDataValue(block: any, key: string) {
+  console.log(block);
   var data = block.data.find((block: any) => block.key == key);
   if (!data) throw new Error("Block data not found");
   return data.value;

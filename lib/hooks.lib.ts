@@ -316,3 +316,28 @@ export function useEnrolledCourse() {
     mutateEnrolledCourse,
   };
 }
+
+export function useLesson(courseId?: string, groupId?: string) {
+  var router = useRouter();
+  var { accessToken } = useUser();
+  var { data, error } = useSWR(
+    router.query?.lesson && courseId && groupId
+      ? `get-lesson/${router.query?.lesson}`
+      : null,
+    () =>
+      getLesson(
+        courseId!,
+        groupId!,
+        router.query?.lesson as string,
+        accessToken
+      ),
+    { revalidateOnFocus: false }
+  );
+
+  return {
+    isLoading: !data && !error,
+    lesson: data?.lesson,
+    success: data?.success,
+    error,
+  };
+}

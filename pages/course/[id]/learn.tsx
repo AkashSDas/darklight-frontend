@@ -1,13 +1,15 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toggleLessonCompletion } from "services/enrolled-course.service";
 
-import { ArrowIcon, AttachmentIcon, DiscussionIcon, DoneIcon, MoreIcon, NotePadIcon, NotificationIcon, SearchIcon, TrashIcon } from "@components/shared/icons";
+import { ArrowIcon, ArrowLeftIcon, ArrowRightIcon, AttachmentIcon, DiscussionIcon, DoneIcon, GridIcon, MoreIcon, NotePadIcon, NotificationIcon, SearchIcon, TrashIcon } from "@components/shared/icons";
 import { TextBadge } from "@components/shared/text-badge";
-import { useAppDispatch, useAppSelector, useDropdown, useEnrolledCourse, useUser } from "@lib/hooks.lib";
+import { getBlockDataValue } from "@lib/content-block";
+import { useAppDispatch, useAppSelector, useDropdown, useEnrolledCourse, useLesson, useUser } from "@lib/hooks.lib";
 import Logo from "@public/logo.svg";
 import { setDropdownContext, setLessonBreadcrum } from "@store/enrolled-course/slice";
 
@@ -229,8 +231,148 @@ export default function CourseLearnPage(): JSX.Element {
       <div className="ml-[300px] w-full">
         <Navbar />
 
-        <div className="px-4">{/* Content */}</div>
+        <main className="w-full flex flex-col gap-2 items-center">
+          <div className="w-full max-w-[800px] flex flex-col gap-2 items-center">
+            <DisplayLessonContent />
+          </div>
+        </main>
       </div>
+    </div>
+  );
+}
+
+function DisplayLessonContent(): JSX.Element {
+  type Tab = "content" | "discussion" | "notes" | "attachments";
+  var [tab, setTab] = useState<Tab>("content");
+
+  function IconButton({
+    icon,
+    label,
+    action,
+  }: {
+    icon: JSX.Element;
+    label: string;
+    action: CallableFunction;
+  }): JSX.Element {
+    return (
+      <button
+        onClick={() => action()}
+        className={`h-9 px-2 flex gap-2 items-center justify-center text-sm rounded-lg ${
+          label.toLowerCase() == tab ? "bg-background3" : ""
+        }`}
+      >
+        <span className="icon">{icon}</span>
+        <span>{label}</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      <section className="flex gap-2 items-center justify-between">
+        <div className="flex gap-2 items-center">
+          <IconButton
+            icon={<GridIcon size="size_4" />}
+            label="Content"
+            action={() => setTab("content")}
+          />
+
+          <IconButton
+            icon={<AttachmentIcon size="size_4" />}
+            label="Attachments"
+            action={() => setTab("attachments")}
+          />
+
+          <IconButton
+            icon={<DiscussionIcon size="size_4" />}
+            label="Discussion"
+            action={() => setTab("discussion")}
+          />
+
+          <IconButton
+            icon={<NotePadIcon size="size_4" />}
+            label="Notes"
+            action={() => setTab("notes")}
+          />
+        </div>
+
+        <div className="flex gap-2 items-center">
+          <IconButton
+            icon={<ArrowLeftIcon size="size_4" />}
+            label="Previous"
+            action={() => {}}
+          />
+
+          <button
+            onClick={() => {}}
+            className="h-9 px-2 flex gap-2 items-center justify-center text-sm rounded-lg"
+          >
+            <span>Next</span>
+            <span className="icon">
+              <ArrowRightIcon size="size_4" />
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <hr className="bg-border h-[1px] w-full my-4" />
+
+      <section className="flex flex-col gap-2">
+        {tab == "content" ? <Content /> : null}
+      </section>
+    </div>
+  );
+}
+
+function Content(): JSX.Element {
+  var { course } = useEnrolledCourse();
+  var { breadcrum } = useAppSelector((state) => state.enrolledCourse);
+  var { lesson, isLoading } = useLesson(course?._id, breadcrum?.group?._id);
+  var router = useRouter();
+
+  return (
+    <div className="flex flex-col gap-4">
+      {isLoading ? <div>Loading...</div> : null}
+      {lesson?.content.map((block: any, index: number) => {
+        return <ContentBlock key={block.id} block={block} />;
+      })}
+    </div>
+  );
+}
+
+function ContentBlock(props: any): JSX.Element | null {
+  var { block } = props;
+
+  if (block.type == "paragraph") {
+    return <ParagraphBlock block={block} />;
+  } else if (block.type == "image") {
+    return <ImageBlock block={block} />;
+  }
+
+  return null;
+}
+
+function ParagraphBlock(props: any): JSX.Element {
+  var { block } = props;
+
+  return (
+    <div className="w-full">
+      <p className="leading-[100%]">{getBlockDataValue(block, "text")}</p>
+    </div>
+  );
+}
+
+function ImageBlock(props: any): JSX.Element {
+  var { block } = props;
+
+  return (
+    <div className="w-full relative h-[500px]">
+      <Image
+        src={getBlockDataValue(block, "URL")}
+        alt="Image content block"
+        fill
+        className="object-cover"
+      />
     </div>
   );
 }

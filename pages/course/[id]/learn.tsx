@@ -17,12 +17,10 @@ function BreadCrum(): JSX.Element {
 
   function CourseLink(): JSX.Element {
     return (
-      <Link href={`/courses/${course._id}/settings`}>
-        <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
-          <TextBadge variant="regular">{course.emoji ?? "🎁"}</TextBadge>{" "}
-          <span className="ml-1 pr-1">{course.title ?? "Untitled"} </span>
-        </div>
-      </Link>
+      <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
+        <TextBadge variant="regular">{course.emoji ?? "🎁"}</TextBadge>{" "}
+        <span className="ml-1 pr-1">{course.title ?? "Untitled"} </span>
+      </div>
     );
   }
 
@@ -30,12 +28,10 @@ function BreadCrum(): JSX.Element {
     var { group } = useAppSelector((state) => state.enrolledCourse.breadcrum);
 
     return (
-      <Link href={`/courses/${course.id}/groups/${group?._id}`}>
-        <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
-          <TextBadge variant="regular">{group?.emoji ?? "📦"}</TextBadge>{" "}
-          <span className="ml-1 pr-1">{group?.title ?? "Untitled"} </span>
-        </div>
-      </Link>
+      <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
+        <TextBadge variant="regular">{group?.emoji ?? "📦"}</TextBadge>{" "}
+        <span className="ml-1 pr-1">{group?.title ?? "Untitled"} </span>
+      </div>
     );
   }
 
@@ -45,14 +41,10 @@ function BreadCrum(): JSX.Element {
     );
 
     return (
-      <Link
-        href={`/courses/${course.id}/groups/${group?._id}/lessons/${lesson?._id}`}
-      >
-        <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
-          <TextBadge variant="regular">{lesson?.emoji ?? "🍈"}</TextBadge>{" "}
-          <span className="ml-1 pr-1">{lesson?.title ?? "Untitled"} </span>
-        </div>
-      </Link>
+      <div className="p-[2px] flex items-center text-sm cursor-pointer rounded-[3px] hover:bg-background3 active:bg-border">
+        <TextBadge variant="regular">{lesson?.emoji ?? "🍈"}</TextBadge>{" "}
+        <span className="ml-1 pr-1">{lesson?.title ?? "Untitled"} </span>
+      </div>
     );
   }
 

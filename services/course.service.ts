@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from "axios";
 import fetchFromAPI from "../lib/axios.lib";
 
 function fetchFromCourse(URL: string, config: AxiosRequestConfig) {
-  return fetchFromAPI(`/course/${URL}`, config);
+  return fetchFromAPI(`/course${URL}`, config);
 }
 
 export async function createCourse(accessToken: string) {
@@ -19,7 +19,7 @@ export async function createCourse(accessToken: string) {
 }
 
 export async function getEditableCourse(id: string) {
-  var response = await fetchFromCourse(`${id}/editable`, {
+  var response = await fetchFromCourse(`/${id}/editable`, {
     method: "GET",
   });
 
@@ -43,7 +43,7 @@ export async function updateCourseSettings(
     faqs?: { question: string; answer: string }[];
   }
 ) {
-  var response = await fetchFromCourse(`${id}/settings`, {
+  var response = await fetchFromCourse(`/${id}/settings`, {
     method: "PUT",
     headers: { Authorization: `Bearer ${accessToken}` },
     data,
@@ -60,7 +60,7 @@ export async function updateCourseCover(
   id: string,
   data: any
 ) {
-  var response = await fetchFromCourse(`${id}/cover`, {
+  var response = await fetchFromCourse(`/${id}/cover`, {
     method: "PUT",
     headers: { Authorization: `Bearer ${accessToken}` },
     data,
@@ -77,7 +77,7 @@ export async function reorderGroups(
   id: string,
   data: any
 ) {
-  var response = await fetchFromCourse(`${id}/reorder`, {
+  var response = await fetchFromCourse(`/${id}/reorder`, {
     method: "PUT",
     headers: { Authorization: `Bearer ${accessToken}` },
     data,
@@ -94,7 +94,7 @@ export async function updateCourseStatus(
   accessToken: string,
   stage: "draft" | "published"
 ) {
-  var response = await fetchFromCourse(`${id}/status`, {
+  var response = await fetchFromCourse(`/${id}/status`, {
     method: "PUT",
     headers: { Authorization: `Bearer ${accessToken}` },
     data: { stage },
@@ -107,7 +107,7 @@ export async function updateCourseStatus(
 }
 
 export async function getCourse(id: string) {
-  var response = await fetchFromCourse(`${id}`, { method: "GET" });
+  var response = await fetchFromCourse(`/${id}`, { method: "GET" });
 
   if (response.statusCode == 200) {
     return { success: response.success, course: response.data };
@@ -116,7 +116,7 @@ export async function getCourse(id: string) {
 }
 
 export async function getAuthoredCourses(userId: string, accessToken?: string) {
-  var response = await fetchFromCourse(`${userId}/authored-courses`, {
+  var response = await fetchFromCourse(`/${userId}/authored-courses`, {
     method: "GET",
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -134,7 +134,7 @@ export async function getAuthoredCourses(userId: string, accessToken?: string) {
 }
 
 export async function deleteCourse(courseId: string, accessToken: string) {
-  var response = await fetchFromCourse(`${courseId}`, {
+  var response = await fetchFromCourse(`/${courseId}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -145,8 +145,10 @@ export async function deleteCourse(courseId: string, accessToken: string) {
   return { success: false };
 }
 
-export async function getCourses() {
-  var response = await fetchFromCourse("", { method: "GET" });
+export async function getCourses(next?: string) {
+  var response = await fetchFromCourse(`?next=${next ?? ""}`, {
+    method: "GET",
+  });
 
   if (response.statusCode == 200) {
     return {

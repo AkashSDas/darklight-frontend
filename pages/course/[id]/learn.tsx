@@ -3,6 +3,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { toggleLessonCompletion } from "services/enrolled-course.service";
 
 import { ArrowIcon, DiscussionIcon, DoneIcon, MoreIcon, NotificationIcon, SearchIcon, TrashIcon } from "@components/shared/icons";
 import { TextBadge } from "@components/shared/text-badge";
@@ -260,7 +261,7 @@ function GroupItem(props: any): JSX.Element {
   var iconStyle =
     "p-0 h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border";
   var dispatch = useAppDispatch();
-  var { enrolledCourse } = useEnrolledCourse();
+  var { enrolledCourse, mutateEnrolledCourse } = useEnrolledCourse();
 
   function DisplayGroupLessons(): JSX.Element {
     return (
@@ -310,6 +311,33 @@ function GroupItem(props: any): JSX.Element {
     );
   }
 
+  var [markLessonAsDone, setMarkLessonAsDone] = useState(false);
+
+  async function handleLessonCompletionStatus(lessonId: string) {
+    var marked = enrolledCourse.doneLessons.includes(lessonId);
+
+    mutateEnrolledCourse(
+      (data) =>
+        ({
+          ...data,
+          course: {
+            ...data!.course,
+            doneLessons: marked
+              ? data!.course!.doneLessons.filter((id: string) => id != lessonId)
+              : [...data!.course!.doneLessons, lessonId],
+          },
+        } as any),
+      false
+    );
+
+    await toggleLessonCompletion(
+      enrolledCourse._id,
+      enrolledCourse.course._id,
+      lessonId,
+      accessToken
+    );
+  }
+
   return (
     <>
       <div className="group h-9 px-2 flex gap-3 items-center">
@@ -331,7 +359,14 @@ function GroupItem(props: any): JSX.Element {
             >
               <span className="w-[18px] h-[18px] opacity-0"></span>
 
-              <span className="icon p-1 rounded-md cursor-pointer hover:bg-background3 active:bg-border">
+              <span
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  if (markLessonAsDone) return;
+                  await handleLessonCompletionStatus(lesson._id);
+                }}
+                className="icon p-1 rounded-md cursor-pointer hover:bg-background3 active:bg-border"
+              >
                 <DoneIcon
                   done={enrolledCourse.doneLessons.includes(lesson._id)}
                 />

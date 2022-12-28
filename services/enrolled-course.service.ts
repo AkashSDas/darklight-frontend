@@ -38,3 +38,25 @@ export async function getEnrolledCourse(
 
   return { success: false };
 }
+
+export async function toggleLessonCompletion(
+  enrolledCourseId: string,
+  courseId: string,
+  lessonId: string,
+  accessToken?: string
+) {
+  var response = await fetchFromEnrolledCourse(
+    `/done/${enrolledCourseId}/course/${courseId}/lesson/${lessonId}`,
+    {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }
+  );
+
+  console.log(response);
+  if (response.statusCode == 200 && response.data) {
+    return { success: response.success };
+  }
+
+  return { success: false };
+}

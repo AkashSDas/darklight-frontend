@@ -22,3 +22,19 @@ export async function buyCourse(courseId: string, accessToken?: string) {
 
   return { success: false };
 }
+
+export async function getEnrolledCourse(
+  courseId: string,
+  accessToken?: string
+) {
+  var response = await fetchFromEnrolledCourse(`/${courseId}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (response.statusCode == 200 && response.data) {
+    return { success: response.success, course: response.data?.course };
+  }
+
+  return { success: false };
+}

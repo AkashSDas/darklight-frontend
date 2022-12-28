@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { getEnrolledCourse } from "services/enrolled-course.service";
 import useSWR, { useSWRConfig } from "swr";
 
 import { getNewAccessToken } from "../services/auth.service";
@@ -289,5 +290,27 @@ export function useAuthoredCourses() {
     next: data?.next,
     mutateAuthoredCourse,
     error,
+  };
+}
+
+export function useEnrolledCourse() {
+  var { user, accessToken } = useUser();
+  var router = useRouter();
+  var {
+    data,
+    error,
+    mutate: mutateEnrolledCourse,
+  } = useSWR(
+    accessToken || user?._id ? `enrolled-course/${router.query?.id}` : null,
+    () => getEnrolledCourse(router.query?.id as string, accessToken),
+    { revalidateOnFocus: false }
+  );
+
+  return {
+    isLoading: !data && !error,
+    course: data?.course,
+    success: data?.success,
+    error,
+    mutateEnrolledCourse,
   };
 }

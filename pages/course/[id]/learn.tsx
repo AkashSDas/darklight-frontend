@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toggleLessonCompletion } from "services/enrolled-course.service";
 
-import { ArrowIcon, DiscussionIcon, DoneIcon, MoreIcon, NotificationIcon, SearchIcon, TrashIcon } from "@components/shared/icons";
+import { ArrowIcon, AttachmentIcon, DiscussionIcon, DoneIcon, MoreIcon, NotePadIcon, NotificationIcon, SearchIcon, TrashIcon } from "@components/shared/icons";
 import { TextBadge } from "@components/shared/text-badge";
 import { useAppDispatch, useAppSelector, useDropdown, useEnrolledCourse, useUser } from "@lib/hooks.lib";
 import Logo from "@public/logo.svg";
@@ -94,6 +94,14 @@ function Navbar(): JSX.Element {
 
         <button className="icon_btn">
           <SearchIcon size="size_5" />
+        </button>
+
+        <button className="icon_btn">
+          <AttachmentIcon size="size_5" />
+        </button>
+
+        <button className="icon_btn">
+          <NotePadIcon size="size_5" />
         </button>
 
         <MoreButton />
@@ -330,12 +338,14 @@ function GroupItem(props: any): JSX.Element {
       false
     );
 
+    setMarkLessonAsDone(true);
     await toggleLessonCompletion(
       enrolledCourse._id,
       enrolledCourse.course._id,
       lessonId,
       accessToken
     );
+    setMarkLessonAsDone(false);
   }
 
   return (

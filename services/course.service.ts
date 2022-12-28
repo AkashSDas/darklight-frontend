@@ -144,3 +144,18 @@ export async function deleteCourse(courseId: string, accessToken: string) {
   }
   return { success: false };
 }
+
+export async function getCourses() {
+  var response = await fetchFromCourse("", { method: "GET" });
+
+  if (response.statusCode == 200) {
+    return {
+      success: response.success,
+      courses: response.data.courses,
+      hasNext: response.data.hasNext,
+      hasPrevious: response.data.hasPrevious,
+      next: response.data.next,
+    };
+  }
+  return { success: false, error: response.error };
+}

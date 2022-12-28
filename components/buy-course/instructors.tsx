@@ -37,7 +37,7 @@ function Instructor(props: InstructorProps) {
       <div className="w-[84px] h-[60px] relative">
         <Image
           src={
-            props.instructor.profileImage.URL ||
+            props.instructor.profileImage?.URL ||
             "https://media.giphy.com/media/Mjl0BsAgMGYTe/giphy.gif"
           }
           alt="Instructor profile image"

@@ -244,6 +244,9 @@ export default function CourseLearnPage(): JSX.Element {
 function DisplayLessonContent(): JSX.Element {
   type Tab = "content" | "discussion" | "notes" | "attachments";
   var [tab, setTab] = useState<Tab>("content");
+  var { getNavigationList } = useEnrolledCourse();
+  var router = useRouter();
+  var dispatch = useAppDispatch();
 
   function IconButton({
     icon,
@@ -300,11 +303,71 @@ function DisplayLessonContent(): JSX.Element {
           <IconButton
             icon={<ArrowLeftIcon size="size_4" />}
             label="Previous"
-            action={() => {}}
+            action={() => {
+              var list = getNavigationList();
+              var index = list.findIndex(
+                (item) => item.id == router.query?.lesson
+              );
+
+              if (index > 0) {
+                dispatch(
+                  setLessonBreadcrum({
+                    group: {
+                      _id: list[index - 1].group._id,
+                      title: list[index - 1].group.title,
+                      emoji: list[index - 1].group.emoji,
+                    },
+                    lesson: {
+                      _id: list[index - 1].id,
+                      title: list[index - 1].title,
+                      emoji: list[index - 1].emoji,
+                    },
+                  })
+                );
+
+                router.push(
+                  `/course/${router.query?.id}/learn?lesson=${
+                    list[index - 1].id
+                  }`,
+                  undefined,
+                  { shallow: true }
+                );
+              }
+            }}
           />
 
           <button
-            onClick={() => {}}
+            onClick={() => {
+              var list = getNavigationList();
+              var index = list.findIndex(
+                (item) => item.id == router.query?.lesson
+              );
+
+              if (index < list.length - 1) {
+                dispatch(
+                  setLessonBreadcrum({
+                    group: {
+                      _id: list[index + 1].group._id,
+                      title: list[index + 1].group.title,
+                      emoji: list[index + 1].group.emoji,
+                    },
+                    lesson: {
+                      _id: list[index + 1].id,
+                      title: list[index + 1].title,
+                      emoji: list[index + 1].emoji,
+                    },
+                  })
+                );
+
+                router.push(
+                  `/course/${router.query?.id}/learn?lesson=${
+                    list[index + 1].id
+                  }`,
+                  undefined,
+                  { shallow: true }
+                );
+              }
+            }}
             className="h-9 px-2 flex gap-2 items-center justify-center text-sm rounded-lg"
           >
             <span>Next</span>

@@ -306,6 +306,25 @@ export function useEnrolledCourse() {
     { revalidateOnFocus: false }
   );
 
+  function getNavigationList(): any[] {
+    if (!data?.course) return [];
+
+    var list: any[] = [];
+    data.course.course.groups.forEach((group: any) => {
+      group.lessons.forEach((lesson: any) => {
+        list.push({
+          title: lesson.title,
+          emoji: lesson.emoji,
+          id: lesson._id,
+          group: group,
+          groupId: group._id,
+        });
+      });
+    });
+
+    return list;
+  }
+
   return {
     isLoading: !data && !error,
     enrolledCourse: data?.course,
@@ -313,6 +332,7 @@ export function useEnrolledCourse() {
     groups: data?.course?.course?.groups,
     success: data?.success,
     error,
+    getNavigationList,
     mutateEnrolledCourse,
   };
 }

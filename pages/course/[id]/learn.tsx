@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { ArrowIcon, DiscussionIcon, MoreIcon, NotificationIcon, SearchIcon, TrashIcon } from "@components/shared/icons";
+import { ArrowIcon, DiscussionIcon, DoneIcon, MoreIcon, NotificationIcon, SearchIcon, TrashIcon } from "@components/shared/icons";
 import { TextBadge } from "@components/shared/text-badge";
 import { useAppDispatch, useAppSelector, useDropdown, useEnrolledCourse, useUser } from "@lib/hooks.lib";
 import Logo from "@public/logo.svg";
@@ -260,6 +260,7 @@ function GroupItem(props: any): JSX.Element {
   var iconStyle =
     "p-0 h-[20px] w-[20px] rounded-sm hover:bg-background3 active:bg-border";
   var dispatch = useAppDispatch();
+  var { enrolledCourse } = useEnrolledCourse();
 
   function DisplayGroupLessons(): JSX.Element {
     return (
@@ -330,16 +331,11 @@ function GroupItem(props: any): JSX.Element {
             >
               <span className="w-[18px] h-[18px] opacity-0"></span>
 
-              {/* Circle svg */}
-              <svg
-                className="fill-current text-text2"
-                width={20}
-                height={16}
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M11.75 8a1.75 1.75 0 1 1-3.5 0 1.75 1.75 0 0 1 3.5 0Z" />
-              </svg>
+              <span className="icon p-1 rounded-md cursor-pointer hover:bg-background3 active:bg-border">
+                <DoneIcon
+                  done={enrolledCourse.doneLessons.includes(lesson._id)}
+                />
+              </span>
 
               <Emoji emoji={lesson.emoji ?? "🌑"} />
               <Title title={lesson.title ?? "Untitled"} />

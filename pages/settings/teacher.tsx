@@ -70,7 +70,7 @@ function DisplayAuthoredCourses(): JSX.Element {
         </div>
 
         <p className="text-sm">
-          Courses you are parth of as an instructor (publised & draft).
+          Courses you are part of as an instructor (publised & draft).
         </p>
       </div>
 

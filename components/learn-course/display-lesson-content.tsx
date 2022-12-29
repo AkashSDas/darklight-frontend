@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector, useEnrolledCourse, useLesson } from "@l
 import { setLessonBreadcrum } from "@store/enrolled-course/slice";
 
 import ContentBlock from "./content-block";
+import VideoPlayer from "./video-player";
 
 export default function DisplayLessonContent(): JSX.Element {
   type Tab = "content" | "discussion" | "notes" | "attachments";
@@ -38,6 +39,8 @@ export default function DisplayLessonContent(): JSX.Element {
 
   return (
     <div className="w-full">
+      <VideoPlayer />
+
       <section className="flex gap-2 items-center justify-between">
         <div className="flex gap-2 items-center">
           <IconButton

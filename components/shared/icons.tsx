@@ -389,3 +389,44 @@ export function ArrowRightIcon({ size }: IconProps): JSX.Element {
     </svg>
   );
 }
+
+export function AddVideoIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={`${size} stroke`}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2 8C2 5.79086 3.79086 4 6 4H13C15.2091 4 17 5.79086 17 8V16C17 18.2091 15.2091 20 13 20H6C3.79086 20 2 18.2091 2 16V8Z"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M17 9.33333L18.5409 7.68968C19.781 6.36697 22 7.24449 22 9.05756V14.9424C22 16.7555 19.781 17.633 18.5409 16.3103L17 14.6667V9.33333Z"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M13 10C13 11.1046 12.1046 12 11 12C9.89543 12 9 11.1046 9 10C9 8.89543 9.89543 8 11 8C12.1046 8 13 8.89543 13 10Z"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+}
+
+export function RemoveVideoIcon({ size }: IconProps): JSX.Element {
+  return (
+    <svg
+      className={`${size} stroke`}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2 2L22 22M17 9.33333L18.5409 7.68968C19.781 6.36697 22 7.24449 22 9.05756V14.9424C22 15.8287 21.4698 16.4914 20.7829 16.7829M17 9.33333V8C17 5.79086 15.2091 4 13 4H8M17 9.33333V13M4.24948 4.40237C2.91764 5.05162 2 6.41865 2 8V16C2 18.2091 3.79086 20 6 20H13C14.8638 20 16.4299 18.7252 16.874 17"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

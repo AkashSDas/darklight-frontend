@@ -60,3 +60,24 @@ export async function toggleLessonCompletion(
 
   return { success: false };
 }
+
+export async function getEnrolledCourses(accessToken?: string) {
+  var response = await fetchFromEnrolledCourse(`/`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  console.log(response.data?.courses);
+
+  if (response.statusCode == 200 && response.data) {
+    return {
+      success: response.success,
+      courses: response.data?.courses,
+      hasPrevious: response.data?.hasPrevious,
+      hasNext: response.data?.hasNext,
+      next: response.data?.next,
+    };
+  }
+
+  return { success: false };
+}

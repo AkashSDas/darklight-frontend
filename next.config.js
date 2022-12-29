@@ -19,19 +19,16 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "media.giphy.com",
-        port: "",
         pathname: "/media/**",
       },
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
-        port: "",
         pathname: "/akashsdas/**",
       },
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
-        port: "",
         pathname: "/**",
       },
     ],

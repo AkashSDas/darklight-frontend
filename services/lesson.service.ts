@@ -90,3 +90,26 @@ export async function deleteLesson(
   }
   return { success: false };
 }
+
+export async function updateLessonVideo(
+  courseId: string,
+  groupId: string,
+  lessonId: string,
+  accessToken: string,
+  data: FormData
+) {
+  var response = await fetchFromLesson(courseId, groupId, `${lessonId}/video`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data,
+  });
+
+  if (response.statusCode == 200) {
+    return {
+      success: response.success,
+      videoURL: response.data?.videoURL,
+    };
+  }
+
+  return { success: false };
+}

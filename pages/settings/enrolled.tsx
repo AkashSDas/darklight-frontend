@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 
 import { TextBadge } from "@components/shared/text-badge";
 import UserSettingsLayout from "@components/shared/user-settings-layout";
@@ -17,7 +17,7 @@ export default function CoursesEnrolledInPage(): JSX.Element {
 
 function UserEnrolledInCourses(): JSX.Element {
   var router = useRouter();
-  var { courses, isLoading } = useEnrolledCourses();
+  var { courses, isLoading, hasNext, goToNext } = useEnrolledCourses();
 
   return (
     <section className="w-full">
@@ -28,9 +28,7 @@ function UserEnrolledInCourses(): JSX.Element {
       <hr className="bg-border h-[1px] w-full my-4" />
 
       <div className="flex flex-col w-full">
-        {isLoading && <div className="text-text1 text-sm">Loading...</div>}
-
-        {courses?.length == 0 && (
+        {!isLoading && courses?.length == 0 && (
           <div className="text-text1 text-sm">
             {"You're"} not enrolled in any courses yet!
           </div>
@@ -67,6 +65,27 @@ function UserEnrolledInCourses(): JSX.Element {
             </div>
           );
         })}
+
+        {hasNext && (
+          <button
+            className="mt-6 px-4 py-2 flex justify-start bg-background3 rounded-md"
+            onClick={goToNext}
+          >
+            Load more
+          </button>
+        )}
+
+        {!isLoading && !hasNext && courses?.length > 0 && (
+          <div className="mt-6 px-4 py-2 bg-background3 rounded-md">
+            No more courses
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="mt-6 px-4 py-2 bg-background3 rounded-md">
+            Loading...
+          </div>
+        )}
       </div>
     </section>
   );

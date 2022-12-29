@@ -61,8 +61,8 @@ export async function toggleLessonCompletion(
   return { success: false };
 }
 
-export async function getEnrolledCourses(accessToken?: string) {
-  var response = await fetchFromEnrolledCourse(`/`, {
+export async function getEnrolledCourses(accessToken?: string, next?: string) {
+  var response = await fetchFromEnrolledCourse(`?next=${next ? next : ""}`, {
     method: "GET",
     headers: { Authorization: `Bearer ${accessToken}` },
   });

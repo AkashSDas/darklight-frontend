@@ -2,7 +2,8 @@ import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { getEnrolledCourse, getEnrolledCourses } from "services/enrolled-course.service";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 
 import { getNewAccessToken } from "../services/auth.service";
 import { getAuthoredCourses, getCourse, getEditableCourse } from "../services/course.service";
@@ -364,19 +365,30 @@ export function useLesson(courseId?: string, groupId?: string) {
 
 export function useEnrolledCourses() {
   var { user, accessToken } = useUser();
-  var { data, error, mutate } = useSWR(
-    user?._id ? "enrolled-courses" : user?._id,
-    () => getEnrolledCourses(accessToken),
-    { revalidateOnFocus: false }
+  var [next, setNext] = useState<string>();
+  var [courses, setCourses] = useState<any[]>([]);
+  var { data, error } = useSWRImmutable(
+    user?._id ? ["enrolled-courses", next] : user?._id,
+    () => getEnrolledCourses(accessToken, next)
   );
+
+  useEffect(() => {
+    console.log(data);
+    if (data && data?.courses) {
+      setCourses((prev) => [...prev, ...data?.courses]);
+    }
+  }, [data]);
+
+  function goToNext() {
+    if (data?.hasNext) setNext(data?.next);
+  }
 
   return {
     isLoading: !data && !error,
-    courses: data?.courses,
+    courses,
     success: data?.success,
     hasNext: data?.hasNext,
     hasPrevious: data?.hasPrevious,
-    next: data?.next,
-    mutateEnrolledCourses: mutate,
+    goToNext,
   };
 }

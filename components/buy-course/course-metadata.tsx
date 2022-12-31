@@ -9,6 +9,9 @@ import { useAppDispatch, useBuyCourse, useUser } from "@lib/hooks.lib";
 import { setShowDynamicHeader } from "@store/buy-course/slice";
 
 import { buyCourse } from "../../services/enrolled-course.service";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { StripeCardElement } from "@stripe/stripe-js";
+import { createPaymentIntentAndCharge } from "services/payments.service";
 
 dayjs.extend(relativeTime);
 
@@ -18,8 +21,16 @@ export default function CourseMetadata(): JSX.Element {
   var dispatch = useAppDispatch();
   var { info, course } = useBuyCourse();
   var [loading, setLoading] = useState(false);
+  var [paymentLoading, setPaymentLoading] = useState(false);
   var { accessToken, user } = useUser();
   var router = useRouter();
+  var [displayPaymentForm, setDisplayPaymentForm] = useState(false);
+
+  var stripe = useStripe();
+  var elements = useElements();
+
+  // response from the back-end from the payment intent
+  var [paymentIntent, setPaymentIntent] = useState<any>();
 
   // update based on whether the element is in view
   useEffect(
@@ -38,19 +49,66 @@ export default function CourseMetadata(): JSX.Element {
   }
 
   async function handleEnroll() {
-    if (!course || loading) return;
+    var response = await buyCourse(course._id, accessToken);
+
+    if (response.success) {
+      toast.success("Enrolled successfully");
+      router.push(`/course/${response.enrolledCourse.course}/learn`);
+    } else toast.error("Something went wrong");
+  }
+
+  async function createPaymentIntent() {
+    if (!stripe || !elements || !course) return;
     if (!user) {
       toast.error("Please login to enroll");
       return;
     }
 
-    setLoading(true);
-    var response = await buyCourse(course._id, accessToken);
-    setLoading(false);
+    var amountToCharge = Math.min(Math.max(course.price, 50), 99999999);
 
-    if (response.success) {
-      toast.success("Enrolled successfully");
-      router.push(`/course/${response.enrolledCourse.course}/learn`);
+    setLoading(true);
+
+    var response = await createPaymentIntentAndCharge(
+      amountToCharge,
+      accessToken
+    );
+
+    if (!response.success) {
+      toast.error("Something went wrong");
+      setLoading(false);
+      return;
+    }
+
+    var pi = response.paymentIntent;
+    setPaymentIntent(pi);
+    setLoading(false);
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!stripe || !elements || !paymentIntent) return;
+
+    setPaymentLoading(true);
+
+    var response = await stripe.confirmCardPayment(
+      paymentIntent.client_secret,
+      {
+        payment_method: {
+          card: elements.getElement(CardElement) as StripeCardElement,
+          billing_details: { name: user?.name, email: user?.email },
+        },
+      }
+    );
+
+    setPaymentLoading(false);
+
+    if (response.error) {
+      toast.error(response.error.message ?? "Something went wrong");
+      return;
+    }
+
+    if (response.paymentIntent?.status == "succeeded") {
+      await handleEnroll();
     } else toast.error("Something went wrong");
   }
 
@@ -76,12 +134,24 @@ export default function CourseMetadata(): JSX.Element {
         </div>
 
         <button
-          onClick={handleEnroll}
+          onClick={createPaymentIntent}
           disabled={loading}
+          hidden={paymentIntent}
           className="text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
         >
           {loading ? "Loading..." : ` Enroll for ₹${info?.price}`}
         </button>
+
+        <form hidden={!paymentIntent} onSubmit={handleSubmit}>
+          <CardElement />
+
+          <button
+            type="submit"
+            disabled={!stripe || !elements || paymentLoading}
+          >
+            {paymentLoading ? "Loading..." : "Pay"}
+          </button>
+        </form>
       </div>
     </>
   );

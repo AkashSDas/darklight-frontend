@@ -6,10 +6,15 @@ function fetchFromEnrolledCourse(URL: string, config: AxiosRequestConfig) {
   return fetchFromAPI(`/enrolled${URL}`, config);
 }
 
-export async function buyCourse(courseId: string, accessToken?: string) {
+export async function buyCourse(
+  courseId: string,
+  paymentMethod: string,
+  accessToken?: string
+) {
   var response = await fetchFromEnrolledCourse(`/buy/${courseId}`, {
     method: "POST",
     headers: { Authorization: `Bearer ${accessToken}` },
+    data: { paymentMethod },
   });
 
   console.log(response);

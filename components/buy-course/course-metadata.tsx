@@ -24,7 +24,6 @@ export default function CourseMetadata(): JSX.Element {
   var [paymentLoading, setPaymentLoading] = useState(false);
   var { accessToken, user } = useUser();
   var router = useRouter();
-  var [displayPaymentForm, setDisplayPaymentForm] = useState(false);
 
   var stripe = useStripe();
   var elements = useElements();
@@ -95,7 +94,7 @@ export default function CourseMetadata(): JSX.Element {
       {
         payment_method: {
           card: elements.getElement(CardElement) as StripeCardElement,
-          billing_details: { name: user?.name, email: user?.email },
+          billing_details: { name: user?.username, email: user?.email },
         },
       }
     );
@@ -141,18 +140,28 @@ export default function CourseMetadata(): JSX.Element {
         >
           {loading ? "Loading..." : ` Enroll for ₹${info?.price}`}
         </button>
+      </div>
 
-        <form hidden={!paymentIntent} onSubmit={handleSubmit}>
-          <CardElement />
+      {paymentIntent && (
+        <form
+          className="flex gap-4 items-center w-full"
+          hidden={!paymentIntent}
+          onSubmit={handleSubmit}
+        >
+          <CardElement
+            options={{ hidePostalCode: true }}
+            className="w-full font-urbanist font-medium"
+          />
 
           <button
+            className="px-16 text-text3 bg-primary hover:bg-[#3446E5] active:bg-[#2E3ECC]"
             type="submit"
             disabled={!stripe || !elements || paymentLoading}
           >
-            {paymentLoading ? "Loading..." : "Pay"}
+            {paymentLoading ? "Loading..." : "Pay"}{" "}
           </button>
         </form>
-      </div>
+      )}
     </>
   );
 }

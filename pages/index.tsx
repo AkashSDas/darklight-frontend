@@ -32,7 +32,12 @@ function CoursesForYou(): JSX.Element {
 
   useEffect(() => {
     if (data) {
-      setCourses((courses) => [...courses, ...data?.courses]);
+      setCourses((courses) => {
+        if (data && data.courses) {
+          return [...courses, ...data.courses];
+        }
+        return courses;
+      });
     }
   }, [data]);
 

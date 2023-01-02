@@ -4,6 +4,8 @@ DarkLight is a web application where you can enroll in courses and learn from th
 
 This is the web frontend for DarkLight. It is built using React, NextJS, Redux, and TailwindCSS.
 
+![](docs/cover.jpg)
+
 ## Getting Started
 
 First, get it in your system:

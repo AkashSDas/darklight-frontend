@@ -6,7 +6,7 @@ This is the web frontend for DarkLight. It is built using React, NextJS, Redux, 
 
 ## Getting Started
 
-First, run the development server:
+First, get it in your system:
 
 ```bash
 git clone https://github.com/AkashSDas/camps-for-champs-frontend.git

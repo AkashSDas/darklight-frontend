@@ -1,34 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# darklight-frontend
+
+DarkLight is a web application where you can enroll in courses and learn from them. If you are aspired to be a teacher, you can create your own courses and teach them to the world.
+
+This is the web frontend for DarkLight. It is built using React, NextJS, Redux, and TailwindCSS.
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
+git clone https://github.com/AkashSDas/camps-for-champs-frontend.git
+cd camps-for-champs-frontend
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then polulate the .env file with the following variables. You can find the example of the .env file in the .env.example file.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Backend URL (update this if you are using a different backend URL)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```.env
+NEXT_PUBLIC_BACKEND_URL=http://localhost:5002/api/v2
+```
 
-## Learn More
+You would need [Stripe](https://stripe.com/en-in) account to get a `publishable key`.
 
-To learn more about Next.js, take a look at the following resources:
+```.env
+NEXT_PUBLIC_STRIPE_PUBLIC=pk_test_...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- ReactJS & NextJS
+- Tailwind CSS
+- Redux
+- SWR & Axios
+- Framer Motion
+- Stripe
+- React Beautiful DND
+- Formik & Yup
+- Debounce
+- Jest, Jest DOM & Testing Library
 
-## Deploy on Vercel
+## Testing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Currently testing has only been setup and no tests have been written. To run the tests, run the following command:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+npm run test
+```
+
+### Important tests
+
+- [ ] Authentication
+- [ ] Course enrollment
+- [ ] Course editor - course, group, & lesson
+- [ ] Course learn page - course, group, & lesson
+
+## TODO
+
+- [ ] Add tests
+- [ ] Refactor code
+- [ ] Make a design system
+- [ ] Make it responsive
+- [ ] Add SEO
+- [ ] Optimize API requests
+- [ ] Add search functionality for browsing courses
+- [ ] Add search functionality for browsing course (learn & editor)
+
+## License
+
+[MIT](./LICENSE)
